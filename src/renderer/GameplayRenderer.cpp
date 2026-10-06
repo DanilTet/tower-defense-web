@@ -8,7 +8,7 @@
 #include "../game/ui/BuildPanel.h"
 #include "../game/ui/PlacementUI.h"
 #include "../game/ui/PathRenderer.h"
-#include "../game/ui/statsPanel.h"
+#include "../game/ui/StatsPanel.h"
 #include "../game/ui/TowerMenuUI.h"
 #include "../game/ui/UICommon.h"
 #include "../game/entities/Tower.h"
