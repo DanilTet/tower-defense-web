@@ -37,7 +37,11 @@ MainMenuState::MenuLayout MainMenuState::calculateLayout() const {
     layout.btnW = std::clamp(280.0f * uiScale, 180.0f, static_cast<float>(m_width) - 40.0f);
     layout.btnX = (m_width - layout.btnW) * 0.5f;
 
+#ifdef __EMSCRIPTEN__
+    float totalH = 3.0f * btnSpacing + layout.btnH;
+#else
     float totalH = 4.0f * btnSpacing + layout.btnH;
+#endif
     layout.startBtnY = (m_height - totalH) * 0.5f + 30.0f * uiScale;
     layout.loadBtnY = layout.startBtnY + btnSpacing;
     layout.editorBtnY = layout.startBtnY + 2.0f * btnSpacing;
@@ -120,11 +124,13 @@ void MainMenuState::processInput(GLFWwindow* window, float dt) {
             return;
         }
 
+#ifndef __EMSCRIPTEN__
         // если выход
         if (isButtonClicked(mouseX, mouseY, layout.btnX, layout.exitBtnY, layout.btnW, layout.btnH)) {
             std::cout << "[MainMenu] Clicked 'Exit' (mouse=" << mouseX << "," << mouseY << ") -> Closing game" << std::endl;
             glfwSetWindowShouldClose(window, true);
         }
+#endif
     }
     else if (mouseState == GLFW_RELEASE) {
         m_mousePressedLastFrame = false;
@@ -152,7 +158,9 @@ void MainMenuState::render() {
     renderBtnText("> " + LOC("BTN_LOAD_GAME") + " <", layout.loadBtnY, glm::vec3(0.2f, 0.8f, 1.0f));
     renderBtnText("> " + LOC("BTN_MAP_EDITOR") + " <", layout.editorBtnY, glm::vec3(0.9f, 0.8f, 0.2f));
     renderBtnText("> " + LOC("BTN_SETTINGS") + " <", layout.settingsBtnY, glm::vec3(0.75f, 0.88f, 1.0f));
+#ifndef __EMSCRIPTEN__
     renderBtnText("> " + LOC("BTN_EXIT") + " <", layout.exitBtnY, glm::vec3(1.0f, 0.3f, 0.3f));
+#endif
 
     if (CampaignManager::isDevMode()) {
         float fDev = std::clamp(0.44f * SettingsManager::getUIScaleMultiplier(), 0.32f, 0.55f);

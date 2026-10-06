@@ -56,6 +56,11 @@ static float g_timeAccumulator = 0.0f;
 static const float FIXED_DT = 1.0f / 60.0f;
 
 static void emscriptenMainLoopStep() {
+    if (g_webWindow && glfwWindowShouldClose(g_webWindow)) {
+        std::cout << "[Web] Warning: Window close request ignored to keep application running in browser." << std::endl;
+        glfwSetWindowShouldClose(g_webWindow, GLFW_FALSE);
+    }
+
     double currentFrame = glfwGetTime();
     float frameTime = static_cast<float>(currentFrame - g_lastFrameTime);
     g_lastFrameTime = currentFrame;
