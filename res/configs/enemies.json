@@ -1,0 +1,162 @@
+{
+  "Basic": {
+    "speed": 0.5,
+    "Maxhealth": 100,
+    "sizeScale": 0.6,
+    "reward": 10,
+    "textureId": "enemyAtlas",
+    "color": [ 1.0, 1.0, 1.0 ],
+    "deathSound": "res/sounds/enemy_death.wav",
+    "deathParticle": "BloodSplatter",
+    "atlasWidth": 256,
+    "atlasHeight": 256,
+    "animations": {
+      "Walk": {
+        "loop": true,
+        "frames": [
+          {
+            "x": 0,
+            "y": 0,
+            "w": 64,
+            "h": 64,
+            "duration": 0.15
+          },
+          {
+            "x": 64,
+            "y": 0,
+            "w": 64,
+            "h": 64,
+            "duration": 0.15
+          },
+          {
+            "x": 128,
+            "y": 0,
+            "w": 64,
+            "h": 64,
+            "duration": 0.15
+          },
+          {
+            "x": 192,
+            "y": 0,
+            "w": 64,
+            "h": 64,
+            "duration": 0.15
+          }
+        ]
+      }
+    }
+  },
+  "Fast": {
+    "speed": 1.5,
+    "Maxhealth": 50,
+    "sizeScale": 0.5,
+    "reward": 15,
+    "textureId": "enemyAtlas",
+    "color": [ 1.0, 1.0, 1.0 ],
+    "deathSound": "res/sounds/enemy_death.wav",
+    "deathParticle": "BloodSplatter",
+    "atlasWidth": 256,
+    "atlasHeight": 256,
+    "animations": {
+      "Walk": {
+        "loop": true,
+        "frames": [
+          {
+            "x": 0,
+            "y": 64,
+            "w": 64,
+            "h": 64,
+            "duration": 0.08
+          },
+          {
+            "x": 64,
+            "y": 64,
+            "w": 64,
+            "h": 64,
+            "duration": 0.08
+          },
+          {
+            "x": 128,
+            "y": 64,
+            "w": 64,
+            "h": 64,
+            "duration": 0.08
+          },
+          {
+            "x": 192,
+            "y": 64,
+            "w": 64,
+            "h": 64,
+            "duration": 0.08
+          }
+        ]
+      }
+    }
+  },
+  "Tank": {
+    "speed": 0.3,
+    "Maxhealth": 500,
+    "sizeScale": 0.7,
+    "reward": 30,
+    "textureId": "enemyAtlas",
+    "color": [ 1.0, 1.0, 1.0 ],
+    "deathSound": "res/sounds/enemy_death.wav",
+    "deathParticle": "BloodSplatter",
+    "atlasWidth": 256,
+    "atlasHeight": 256,
+    "animations": {
+      "Walk": {
+        "loop": true,
+        "frames": [
+          {
+            "x": 0,
+            "y": 128,
+            "w": 64,
+            "h": 64,
+            "duration": 0.25
+          },
+          {
+            "x": 64,
+            "y": 128,
+            "w": 64,
+            "h": 64,
+            "duration": 0.25
+          },
+          {
+            "x": 128,
+            "y": 128,
+            "w": 64,
+            "h": 64,
+            "duration": 0.25
+          },
+          {
+            "x": 192,
+            "y": 128,
+            "w": 64,
+            "h": 64,
+            "duration": 0.25
+          }
+        ]
+      },
+      "Hit": {
+        "loop": false,
+        "frames": [
+          {
+            "x": 0,
+            "y": 192,
+            "w": 64,
+            "h": 64,
+            "duration": 0.1
+          },
+          {
+            "x": 64,
+            "y": 192,
+            "w": 64,
+            "h": 64,
+            "duration": 0.1
+          }
+        ]
+      }
+    }
+  }
+}

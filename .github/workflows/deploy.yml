@@ -1,0 +1,55 @@
+name: Deploy WebAssembly to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.64
+
+      - name: Verify Emscripten
+        run: |
+          emcc -v
+
+      - name: Configure CMake
+        run: |
+          emcmake cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build WebAssembly
+        run: |
+          cmake --build build --config Release -j$(nproc)
+
+      - name: Prepare Artifacts
+        run: |
+          mkdir -p dist
+          cp build/TD.html dist/TD.html
+          cp build/TD.js dist/TD.js
+          cp build/TD.wasm dist/TD.wasm
+          cp build/TD.data dist/TD.data
+          if [ -f build/index.html ]; then
+            cp build/index.html dist/index.html
+          else
+            cp build/TD.html dist/index.html
+          fi
+          echo "=== Build Artifacts ==="
+          ls -lh dist/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages

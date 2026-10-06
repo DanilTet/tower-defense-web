@@ -1,0 +1,102 @@
+{
+  "BloodSplatter": {
+    "velocityDir": [ 0.0, 0.0 ],
+    "velocityVariation": 140.0,
+    "startColor": [ 0.8, 0.1, 0.1 ],
+    "endColor": [ 0.2, 0.0, 0.0 ],
+    "startSize": 18.0,
+    "endSize": 2.0,
+    "lifeTime": 2.5,
+    "spawnCount": 35
+  },
+  "SmokeExplosion": {
+    "velocityDir": [ 0.0, 0.0 ],
+    "velocityVariation": 50.0,
+    "startColor": [ 0.45, 0.45, 0.45 ],
+    "endColor": [ 0.15, 0.15, 0.15 ],
+    "startSize": 15.0,
+    "endSize": 36.0,
+    "lifeTime": 3.5,
+    "spawnCount": 30
+  },
+  "MuzzleSpark": {
+    "velocityDir": [ 0.0, -180.0 ],
+    "velocityVariation": 90.0,
+    "startColor": [ 1.0, 0.9, 0.4 ],
+    "endColor": [ 1.0, 0.2, 0.0 ],
+    "startSize": 12.0,
+    "endSize": 1.0,
+    "lifeTime": 1.0,
+    "spawnCount": 15
+  },
+  "BulletTrail": {
+    "velocityDir": [ 0.0, -30.0 ],
+    "velocityVariation": 15.0,
+    "startColor": [ 0.95, 0.95, 0.8 ],
+    "endColor": [ 0.5, 0.5, 0.5 ],
+    "startSize": 6.0,
+    "endSize": 0.0,
+    "lifeTime": 0.8,
+    "spawnCount": 1
+  },
+  "SparkImpact": {
+    "velocityDir": [ 0.0, 80.0 ],
+    "velocityVariation": 100.0,
+    "startColor": [ 1.0, 0.8, 0.3 ],
+    "endColor": [ 0.4, 0.1, 0.0 ],
+    "startSize": 10.0,
+    "endSize": 1.0,
+    "lifeTime": 1.5,
+    "spawnCount": 25
+  },
+  "ShotgunMuzzle": {
+    "velocityDir": [ 0.0, -350.0 ],
+    "velocityVariation": 180.0,
+    "startColor": [ 1.0, 0.95, 0.6 ],
+    "endColor": [ 0.9, 0.3, 0.0 ],
+    "startSize": 22.0,
+    "endSize": 2.0,
+    "lifeTime": 0.8,
+    "spawnCount": 35
+  },
+  "ShotgunTrail": {
+    "velocityDir": [ 0.0, -60.0 ],
+    "velocityVariation": 40.0,
+    "startColor": [ 1.0, 0.8, 0.4 ],
+    "endColor": [ 0.3, 0.3, 0.3 ],
+    "startSize": 6.0,
+    "endSize": 0.5,
+    "lifeTime": 0.6,
+    "spawnCount": 3
+  },
+  "ShotgunImpact": {
+    "velocityDir": [ 0.0, 150.0 ],
+    "velocityVariation": 220.0,
+    "startColor": [ 1.0, 1.0, 0.7 ],
+    "endColor": [ 0.5, 0.1, 0.0 ],
+    "startSize": 12.0,
+    "endSize": 1.0,
+    "lifeTime": 1.2,
+    "spawnCount": 40
+  },
+  "SniperMuzzle": {
+    "velocityDir": [ 0.0, -500.0 ],
+    "velocityVariation": 150.0,
+    "startColor": [ 1.0, 1.0, 0.3 ],
+    "endColor": [ 1.0, 0.9, 0.0 ],
+    "startSize": 12.0,
+    "endSize": 1.0,
+    "lifeTime": 0.35,
+    "spawnCount": 45
+  },
+  "SniperSmoke": {
+    "velocityDir": [ 0.0, -350.0 ],
+    "velocityVariation": 30.0,
+    "startColor": [ 0.6, 0.6, 0.6 ],
+    "endColor": [ 0.2, 0.2, 0.2 ],
+    "startSize": 8.0,
+    "endSize": 20.0,
+    "lifeTime": 1.0,
+    "spawnCount": 15
+  }
+}

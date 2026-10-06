@@ -1,0 +1,223 @@
+{
+  "map": {
+    "width": 20,
+    "height": 12,
+    "cellSize": 64.0,
+    "offsetX": 20.0,
+    "offsetY": 20.0,
+    "layout": [
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+      [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+    ],
+    "spawners": [
+      {
+        "x": 0,
+        "y": 0,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 1,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 2,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 3,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 4,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 5,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 6,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 7,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 8,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 9,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 10,
+        "targetBaseIndex": -1
+      },
+      {
+        "x": 0,
+        "y": 11,
+        "targetBaseIndex": -1
+      }
+    ],
+    "bases": [
+      {
+        "x": 19,
+        "y": 0
+      },
+      {
+        "x": 19,
+        "y": 1
+      },
+      {
+        "x": 19,
+        "y": 2
+      },
+      {
+        "x": 19,
+        "y": 3
+      },
+      {
+        "x": 19,
+        "y": 4
+      },
+      {
+        "x": 19,
+        "y": 5
+      },
+      {
+        "x": 19,
+        "y": 6
+      },
+      {
+        "x": 19,
+        "y": 7
+      },
+      {
+        "x": 19,
+        "y": 8
+      },
+      {
+        "x": 19,
+        "y": 9
+      },
+      {
+        "x": 19,
+        "y": 10
+      },
+      {
+        "x": 19,
+        "y": 11
+      }
+    ]
+  },
+  "waves": [
+    {
+      "parts": [
+        {
+          "type": "Fast",
+          "count": 100,
+          "interval": 0.0,
+          "delayAfter": 2.0
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "type": "Basic",
+          "count": 8,
+          "interval": 0.8,
+          "delayAfter": 2.0
+        },
+        {
+          "type": "Fast",
+          "count": 10,
+          "interval": 0.3,
+          "delayAfter": 0.0
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "type": "Tank",
+          "count": 2,
+          "interval": 2.0,
+          "delayAfter": 3.0
+        },
+        {
+          "type": "Basic",
+          "count": 15,
+          "interval": 0.5,
+          "delayAfter": 0.0
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "type": "Fast",
+          "count": 20,
+          "interval": 0.15,
+          "delayAfter": 4.0
+        },
+        {
+          "type": "Tank",
+          "count": 4,
+          "interval": 1.5,
+          "delayAfter": 1.0
+        },
+        {
+          "type": "Fast",
+          "count": 10,
+          "interval": 0.2,
+          "delayAfter": 0.0
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "type": "Tank",
+          "count": 8,
+          "interval": 1.0,
+          "delayAfter": 2.0
+        },
+        {
+          "type": "Basic",
+          "count": 30,
+          "interval": 0.2,
+          "delayAfter": 2.0
+        },
+        {
+          "type": "Fast",
+          "count": 25,
+          "interval": 0.1,
+          "delayAfter": 0.0
+        }
+      ]
+    }
+  ]
+}

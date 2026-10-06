@@ -1,0 +1,8 @@
+build/
+out/
+bin/
+dist/
+.cache/
+.vscode/
+.vs/
+*.user

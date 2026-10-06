@@ -1,0 +1,83 @@
+{
+  "texture_atlases": {
+    "main_atlas": {
+      "file_path": "res/textures/mainAtlas.png",
+      "width": 1472,
+      "height": 832,
+      "regions": {
+        "grass": {
+          "x": 64,
+          "y": 64,
+          "w": 64,
+          "h": 64
+        },
+        "background": {
+          "x": 704,
+          "y": 640,
+          "w": 64,
+          "h": 64
+        },
+        "path": {
+          "x": 64,
+          "y": 256,
+          "w": 64,
+          "h": 64
+        },
+        "platform": {
+          "x": 704,
+          "y": 256,
+          "w": 64,
+          "h": 64
+        },
+        "scenery": {
+          "x": 1408,
+          "y": 320,
+          "w": 64,
+          "h": 64
+        },
+        "tower_basic": {
+          "x": 1216,
+          "y": 640,
+          "w": 64,
+          "h": 64
+        },
+        "tower_mercury": {
+          "x": 1280,
+          "y": 640,
+          "w": 64,
+          "h": 64
+        },
+        "tower_piston": {
+          "x": 1344,
+          "y": 640,
+          "w": 64,
+          "h": 64
+        },
+        "bullet_basic": {
+          "x": 1408,
+          "y": 704,
+          "w": 64,
+          "h": 64
+        },
+        "bullet_sniper": {
+          "x": 1408,
+          "y": 704,
+          "w": 64,
+          "h": 64
+        },
+        "bullet_cannon": {
+          "x": 1408,
+          "y": 704,
+          "w": 64,
+          "h": 64
+        },
+        "bullet_minigun": {
+          "x": 1408,
+          "y": 704,
+          "w": 64,
+          "h": 64
+        }
+      }
+    }
+  }
+}

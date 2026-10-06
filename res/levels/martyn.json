@@ -1,0 +1,248 @@
+{
+  "isCampaign": true,
+  "map": {
+    "bases": [
+      {
+        "id": 0,
+        "x": 15,
+        "y": 0
+      },
+      {
+        "id": 0,
+        "x": 15,
+        "y": 1
+      },
+      {
+        "id": 0,
+        "x": 15,
+        "y": 2
+      },
+      {
+        "id": 0,
+        "x": 15,
+        "y": 3
+      },
+      {
+        "id": 0,
+        "x": 15,
+        "y": 4
+      }
+    ],
+    "cellSize": 80.0,
+    "height": 5,
+    "layout": [
+      [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "offsetX": 0.0,
+    "offsetY": 153.0,
+    "spawners": [
+      {
+        "targetBaseIndex": -1,
+        "x": 0,
+        "y": 0
+      },
+      {
+        "targetBaseIndex": -1,
+        "x": 0,
+        "y": 1
+      },
+      {
+        "targetBaseIndex": -1,
+        "x": 0,
+        "y": 2
+      },
+      {
+        "targetBaseIndex": -1,
+        "x": 0,
+        "y": 3
+      },
+      {
+        "targetBaseIndex": -1,
+        "x": 0,
+        "y": 4
+      }
+    ],
+    "width": 16
+  },
+  "name": "Мартин",
+  "tags": [
+    "Кампания"
+  ],
+  "waves": [
+    {
+      "parts": [
+        {
+          "count": 100,
+          "delayAfter": 2.0,
+          "interval": 0.0,
+          "type": "Fast"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 8,
+          "delayAfter": 2.0,
+          "interval": 0.800000011920929,
+          "type": "Basic"
+        },
+        {
+          "count": 10,
+          "delayAfter": 0.0,
+          "interval": 0.30000001192092896,
+          "type": "Fast"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 2,
+          "delayAfter": 3.0,
+          "interval": 2.0,
+          "type": "Tank"
+        },
+        {
+          "count": 15,
+          "delayAfter": 0.0,
+          "interval": 0.5,
+          "type": "Basic"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 20,
+          "delayAfter": 4.0,
+          "interval": 0.15000000596046448,
+          "type": "Fast"
+        },
+        {
+          "count": 4,
+          "delayAfter": 1.0,
+          "interval": 1.5,
+          "type": "Tank"
+        },
+        {
+          "count": 10,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "type": "Fast"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 8,
+          "delayAfter": 2.0,
+          "interval": 1.0,
+          "type": "Tank"
+        },
+        {
+          "count": 30,
+          "delayAfter": 2.0,
+          "interval": 0.20000000298023224,
+          "type": "Basic"
+        },
+        {
+          "count": 25,
+          "delayAfter": 0.0,
+          "interval": 0.10000000149011612,
+          "type": "Fast"
+        }
+      ]
+    }
+  ]
+}
