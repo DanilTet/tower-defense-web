@@ -11,7 +11,9 @@ TextRenderer::TextRenderer(std::shared_ptr<ShaderProgram> shader, int windowWidt
     // настройка стартовой матрицы
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(windowWidth), static_cast<float>(windowHeight), 0.0f);
     TextShader->use();
-    glUniformMatrix4fv(glGetUniformLocation(TextShader->getId(), "projection"), 1, GL_FALSE, &projection[0][0]);
+    projectionLocation = glGetUniformLocation(TextShader->getId(), "projection");
+    textColorLocation = glGetUniformLocation(TextShader->getId(), "textColor");
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 
     // Создаем VAO и VBO для квадратного полигона, на котором будет рисоваться буква
     glGenVertexArrays(1, &VAO);
@@ -27,19 +29,60 @@ TextRenderer::TextRenderer(std::shared_ptr<ShaderProgram> shader, int windowWidt
     glBindVertexArray(0);
 }
 
+void TextRenderer::releaseGlyphTextures() {
+    for (auto& entry : Characters) {
+        glDeleteTextures(1, &entry.second.TextureID);
+    }
+    Characters.clear();
+}
+
+char32_t TextRenderer::decodeUtf8(const std::string& text, size_t& i) {
+    unsigned char c = static_cast<unsigned char>(text[i]);
+
+    if (c < 0x80) {
+        i += 1;
+        return c;
+    }
+
+    if ((c & 0xE0) == 0xC0) {
+        if (i + 1 >= text.length()) {
+            i = text.length();
+            return U'?';
+        }
+        unsigned char c1 = static_cast<unsigned char>(text[i + 1]);
+        i += 2;
+        return ((c & 0x1F) << 6) | (c1 & 0x3F);
+    }
+
+    if ((c & 0xF0) == 0xE0) {
+        if (i + 2 >= text.length()) {
+            i = text.length();
+            return U'?';
+        }
+        unsigned char c1 = static_cast<unsigned char>(text[i + 1]);
+        unsigned char c2 = static_cast<unsigned char>(text[i + 2]);
+        i += 3;
+        return ((c & 0x0F) << 12) | ((c1 & 0x3F) << 6) | (c2 & 0x3F);
+    }
+
+    i += 1;
+    return U'?';
+}
+
 TextRenderer::~TextRenderer() {
+    releaseGlyphTextures();
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }
 
 void TextRenderer::updateProjection(const glm::mat4& projection) {
     TextShader->use();
-    glUniformMatrix4fv(glGetUniformLocation(TextShader->getId(), "projection"), 1, GL_FALSE, &projection[0][0]);
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 }
 
 bool TextRenderer::Load(const std::string& fontPath, unsigned int fontSize) {
     // очищаем старые символы, если грузим новый шрифт
-    Characters.clear();
+    releaseGlyphTextures();
 
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
@@ -50,6 +93,7 @@ bool TextRenderer::Load(const std::string& fontPath, unsigned int fontSize) {
     FT_Face face;
     if (FT_New_Face(ft, fontPath.c_str(), 0, &face)) {
         std::cerr << "ERROR::FREETYPE: Failed to load font: " << fontPath << std::endl;
+        FT_Done_FreeType(ft);
         return false;
     }
 
@@ -109,8 +153,14 @@ bool TextRenderer::Load(const std::string& fontPath, unsigned int fontSize) {
     loadRange(8210, 8230);
     // Знак номера № (U+2116)
     loadRange(8470, 8470);
+    // Символы интерфейса: ✕ (U+2715), ★ (U+2605), ✓ (U+2713)
+    const char32_t codepointsToLoad[] = { 0x2715, 0x2605, 0x2713 };
+    for (char32_t cp : codepointsToLoad) {
+        loadRange(cp, cp);
+    }
 
     glBindTexture(GL_TEXTURE_2D, 0);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
 
@@ -119,17 +169,12 @@ bool TextRenderer::Load(const std::string& fontPath, unsigned int fontSize) {
 
 void TextRenderer::RenderText(const std::string& text, float x, float y, float scale, glm::vec3 color) {
     TextShader->use();
-    glUniform3f(glGetUniformLocation(TextShader->getId(), "textColor"), color.x, color.y, color.z);
+    glUniform3f(textColorLocation, color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
     for (size_t i = 0; i < text.length(); ) {
-        char32_t codepoint = 0;
-        unsigned char c = text[i];
-        if (c < 0x80) { codepoint = c; i++; }
-        else if ((c & 0xE0) == 0xC0) { codepoint = ((c & 0x1F) << 6) | (text[i + 1] & 0x3F); i += 2; }
-        else if ((c & 0xF0) == 0xE0) { codepoint = ((c & 0x0F) << 12) | ((text[i + 1] & 0x3F) << 6) | (text[i + 2] & 0x3F); i += 3; }
-        else { codepoint = '?'; i++; }
+        char32_t codepoint = decodeUtf8(text, i);
 
         if (Characters.find(codepoint) == Characters.end()) continue; // Пропускаем неизвестные символы
         Character ch = Characters[codepoint];
@@ -167,13 +212,7 @@ float TextRenderer::CalculateTextWidth(const std::string& text, float scale) {
     float width = 0.0f;
 
     for (size_t i = 0; i < text.length(); ) {
-        // читаем UTF-8 кодировку
-        char32_t codepoint = 0;
-        unsigned char c = text[i];
-        if (c < 0x80) { codepoint = c; i++; }
-        else if ((c & 0xE0) == 0xC0) { codepoint = ((c & 0x1F) << 6) | (text[i + 1] & 0x3F); i += 2; }
-        else if ((c & 0xF0) == 0xE0) { codepoint = ((c & 0x0F) << 12) | ((text[i + 1] & 0x3F) << 6) | (text[i + 2] & 0x3F); i += 3; }
-        else { codepoint = '?'; i++; }
+        char32_t codepoint = decodeUtf8(text, i);
 
         // если символ есть в базе то добавляем его ширину к общей
         if (Characters.find(codepoint) != Characters.end()) {

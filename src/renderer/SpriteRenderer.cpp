@@ -129,7 +129,12 @@ void SpriteRenderer::flush() {
 
     // загружаем наш массив вершин в память видеокарты
     glEnable(GL_BLEND);
-    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    if (m_additiveBlending) {
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ONE);
+    }
+    else {
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    }
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, m_spriteCount * 4 * sizeof(SpriteVertex), m_vertices.data());
@@ -143,16 +148,52 @@ void SpriteRenderer::flush() {
     m_spriteCount = 0;
 }
 
-void SpriteRenderer::drawSprite(const std::shared_ptr<Texture2D>& texture, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color, SpriteUV uv) {
+void SpriteRenderer::setAdditiveBlending(bool enabled) {
+    if (m_additiveBlending != enabled) {
+        flush();
+        m_additiveBlending = enabled;
+    }
+}
+
+void SpriteRenderer::drawSprite(const Texture2D* texture, glm::vec2 position, glm::vec2 size, float rotation, glm::vec3 color, SpriteUV uv) {
     // перенаправляем на RGBA
     drawSpriteRGBA(texture, position, size, rotation, glm::vec4(color, 1.0f), uv);
 }
 
-void SpriteRenderer::drawSpriteRGBA(const std::shared_ptr<Texture2D>& texture, glm::vec2 position, glm::vec2 size, float rotation, glm::vec4 color, SpriteUV uv) {
+void SpriteRenderer::drawSpriteRGBA(const Texture2D* texture, glm::vec2 position, glm::vec2 size, float rotation, glm::vec4 color, SpriteUV uv) {
     // рисуем то, что накопили
     if (m_currentTexture != texture || m_spriteCount >= MAX_SPRITES) {
         flush();
         m_currentTexture = texture;
+    }
+
+    // записываем 4 вершины в массив оперативной памяти
+    int index = m_spriteCount * 4;
+
+    if (rotation == 0.0f) {
+        float x0 = position.x;
+        float y0 = position.y;
+        float x1 = position.x + size.x;
+        float y1 = position.y + size.y;
+
+        m_vertices[index + 0].position = glm::vec2(x0, y0);
+        m_vertices[index + 0].texCoords = glm::vec2(uv.uvMin.x, uv.uvMin.y);
+        m_vertices[index + 0].color = color;
+
+        m_vertices[index + 1].position = glm::vec2(x1, y0);
+        m_vertices[index + 1].texCoords = glm::vec2(uv.uvMax.x, uv.uvMin.y);
+        m_vertices[index + 1].color = color;
+
+        m_vertices[index + 2].position = glm::vec2(x1, y1);
+        m_vertices[index + 2].texCoords = glm::vec2(uv.uvMax.x, uv.uvMax.y);
+        m_vertices[index + 2].color = color;
+
+        m_vertices[index + 3].position = glm::vec2(x0, y1);
+        m_vertices[index + 3].texCoords = glm::vec2(uv.uvMin.x, uv.uvMax.y);
+        m_vertices[index + 3].color = color;
+
+        m_spriteCount++;
+        return;
     }
 
     // вручную считаем трансформацию матрицы
@@ -177,9 +218,6 @@ void SpriteRenderer::drawSpriteRGBA(const std::shared_ptr<Texture2D>& texture, g
             center.y + (p.x * sinA + p.y * cosA)
         );
     };
-
-    // записываем 4 вершины в массив оперативной памяти
-    int index = m_spriteCount * 4;
 
     m_vertices[index + 0].position = transform(tl);
     m_vertices[index + 0].texCoords = glm::vec2(uv.uvMin.x, uv.uvMin.y);

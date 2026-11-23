@@ -56,6 +56,10 @@ Texture2D* ResourceManager::getTexture(const std::string& name) {
 	return nullptr;
 }
 
+bool ResourceManager::hasTexture(const std::string& name) {
+	return m_textures.find(name) != m_textures.end();
+}
+
 Texture2D* ResourceManager::getWhiteTexture() {
 	auto it = m_textures.find("whitePixel");
 	if (it != m_textures.end()) {

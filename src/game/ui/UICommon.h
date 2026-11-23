@@ -80,12 +80,13 @@ struct UIRect {
 };
 
 struct TimeControlUI {
-    // Единый верхний правый HUD: Статистика (HP базы, Деньги, Волна) + Управление временем (||, 1x, 2x, 4x)
-    static constexpr float PANEL_W        = 284.0f;
+    // Единый верхний правый HUD: Статистика (HP базы, Деньги, Волна) + Управление временем (||, 1x, 2x, 4x) + Кнопка волны
+    static constexpr float PANEL_W        = 400.0f;
     static constexpr float STATS_ROW_H    = 24.0f;
     static constexpr float ROW_GAP        = 5.0f;
     static constexpr float BTN_H          = 28.0f;
     static constexpr float BTN_GAP        = 4.0f;
+    static constexpr float TIME_BTN_W     = 38.0f;
     static constexpr float PANEL_PAD_X    = 8.0f;
     static constexpr float PANEL_PAD_Y    = 6.0f;
     // Полная высота панели: 6 + 24 + 5 + 28 + 6 = 69.0f
@@ -108,11 +109,13 @@ struct TimeControlUI {
         return p.y + p.height + 8.0f * scale;
     }
 
-    static float getButtonWidth(int screenWidth, int screenHeight) {
+    static float getTimeButtonWidth(int screenWidth, int screenHeight) {
         float scale = GetUIScale(screenWidth, screenHeight);
-        UIRect panel = getPanelRect(screenWidth, screenHeight);
-        float innerW = panel.width - PANEL_PAD_X * 2.0f * scale;
-        return (innerW - BTN_GAP * 3.0f * scale) / 4.0f;
+        return TIME_BTN_W * scale;
+    }
+
+    static float getButtonWidth(int screenWidth, int screenHeight) {
+        return getTimeButtonWidth(screenWidth, screenHeight);
     }
 
     static float getButtonY(int screenWidth, int screenHeight) {
@@ -124,7 +127,7 @@ struct TimeControlUI {
     static UIRect getPauseButtonRect(int screenWidth, int screenHeight) {
         float scale = GetUIScale(screenWidth, screenHeight);
         UIRect panel = getPanelRect(screenWidth, screenHeight);
-        float bw = getButtonWidth(screenWidth, screenHeight);
+        float bw = getTimeButtonWidth(screenWidth, screenHeight);
         float bh = BTN_H * scale;
         float bx = panel.x + PANEL_PAD_X * scale;
         float by = getButtonY(screenWidth, screenHeight);
@@ -149,15 +152,28 @@ struct TimeControlUI {
         return { p0.x + (p0.width + BTN_GAP * scale) * 3.0f, p0.y, p0.width, p0.height };
     }
 
+    // Кнопка вызова волны (Early Wave Call) справа от 4x под индикатором волны
+    static UIRect getWaveButtonRect(int screenWidth, int screenHeight) {
+        float scale = GetUIScale(screenWidth, screenHeight);
+        UIRect panel = getPanelRect(screenWidth, screenHeight);
+        UIRect s4 = getSpeed4xButtonRect(screenWidth, screenHeight);
+        float bx = s4.x + s4.width + BTN_GAP * scale;
+        float by = s4.y;
+        float rightEdge = panel.x + panel.width - PANEL_PAD_X * scale;
+        float bw = std::max(0.0f, rightEdge - bx);
+        float bh = s4.height;
+        return { bx, by, bw, bh };
+    }
+
     // Хелперы для 3 бейджей статистики в верхней строке: HP, Деньги, Волна
     static UIRect getStatsBadgeRect(int index, int screenWidth, int screenHeight) {
         float scale = GetUIScale(screenWidth, screenHeight);
         UIRect panel = getPanelRect(screenWidth, screenHeight);
         float innerW = panel.width - PANEL_PAD_X * 2.0f * scale;
         float gap = 4.0f * scale;
-        // Пропорции: HP 31%, Деньги 38% (для больших сумм), Волна 31%
-        float b0w = std::floor((innerW - gap * 2.0f) * 0.31f);
-        float b1w = std::floor((innerW - gap * 2.0f) * 0.38f);
+        // Пропорции: HP 28%, Деньги 36%, Волна 36%
+        float b0w = std::floor((innerW - gap * 2.0f) * 0.28f);
+        float b1w = std::floor((innerW - gap * 2.0f) * 0.36f);
         float b2w = (innerW - gap * 2.0f) - b0w - b1w;
         float by = panel.y + PANEL_PAD_Y * scale;
         float bh = STATS_ROW_H * scale;

@@ -1,7 +1,9 @@
 #include "ConfigManager.h"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include "../../audio/AudioManager.h"
 
 using json = nlohmann::json;
 
@@ -15,6 +17,7 @@ bool ConfigManager::loadTextureConfig(const std::string& filepath) {
 	std::ifstream file(filepath);
 	if (!file.is_open()) return false;
 
+	try {
 	nlohmann::json j;
 	file >> j;
 
@@ -35,6 +38,11 @@ bool ConfigManager::loadTextureConfig(const std::string& filepath) {
 		s_atlases[atlasName] = atlas;
 	}
 	return true;
+	}
+	catch (const std::exception& e) {
+		std::cerr << "ConfigManager::loadTextureConfig error in " << filepath << ": " << e.what() << std::endl;
+		return false;
+	}
 }
 
 // функция получения готового UV для рендерера
@@ -62,6 +70,8 @@ bool ConfigManager::hasUV(const std::string& atlasName, const std::string& regio
 bool ConfigManager::loadConfigs(const std::string& towerPath, const std::string& enemiesPath, const std::string& particlesPath) {
 	s_towerStats.clear();
 	s_enemyStats.clear();
+
+	try {
 	
 	//загрузка башен
 	std::ifstream tFile(towerPath); // откріваем файл
@@ -127,9 +137,30 @@ bool ConfigManager::loadConfigs(const std::string& towerPath, const std::string&
 					stats.slowDuration = lvlJson.value("slowDuration", 0.0f);
 					stats.slowPercent = lvlJson.value("slowPercent", 0.0f);
 					stats.poisonDuration = lvlJson.value("poisonDuration", 0.0f);
-					stats.poisonInterval = lvlJson.value("poisonInterval", 0.5f);
+					stats.poisonInterval = std::max(0.05f, lvlJson.value("poisonInterval", 0.5f));
 					stats.poisonDamagePerTick = lvlJson.value("poisonDamagePerTick", 0);
 					stats.knockbackForce = lvlJson.value("knockbackForce", 0.0f);
+
+					// баланс Поршня (опционально, с безопасными значениями по умолчанию)
+					if (lvlJson.contains("piston") && lvlJson["piston"].is_object()) {
+						const auto& pj = lvlJson["piston"];
+						stats.piston.pushDistance = pj.value("pushDistance", 1.0f);
+						stats.piston.heavyPushDistance = pj.value("heavyPushDistance", -1.0f);
+						stats.piston.impactDamage = pj.value("impactDamage", 0);
+						stats.piston.bleedDuration = pj.value("bleedDuration", 0.0f);
+						stats.piston.bleedInterval = std::max(0.05f, pj.value("bleedInterval", 0.5f));
+						stats.piston.bleedDamagePerTick = pj.value("bleedDamagePerTick", 0);
+						stats.piston.vulnerableDuration = pj.value("vulnerableDuration", 0.0f);
+						stats.piston.vulnerableMultiplier = pj.value("vulnerableMultiplier", 1.0f);
+						stats.piston.immunityCooldown = pj.value("immunityCooldown", 5.0f);
+						if (pj.contains("heavyEnemyTypes") && pj["heavyEnemyTypes"].is_array()) {
+							for (const auto& typeJson : pj["heavyEnemyTypes"]) {
+								if (typeJson.is_string()) {
+									stats.piston.heavyEnemyTypes.push_back(typeJson.get<std::string>());
+								}
+							}
+						}
+					}
 
 					// записываем статы в словарь по имени башни
 					s_towerStats[towerName].push_back(stats);
@@ -161,6 +192,16 @@ bool ConfigManager::loadConfigs(const std::string& towerPath, const std::string&
 			stats.textureId = eData.value("textureId", "towerTexture");
 			stats.deathSound = eData.value("deathSound", "");
 			stats.deathParticle = eData.value("deathParticle", "BloodSplatter");
+			stats.splitChildType = eData.value("splitChildType", "");
+			stats.splitCount = eData.value("splitCount", 0);
+			stats.splitScatterRadius = eData.value("splitScatterRadius", 14.0f);
+
+			if (eData.contains("splitOnDeath") && eData["splitOnDeath"].is_object()) {
+				const auto& sData = eData["splitOnDeath"];
+				stats.splitChildType = sData.value("childType", stats.splitChildType);
+				stats.splitCount = sData.value("count", stats.splitCount);
+				stats.splitScatterRadius = sData.value("scatterOffset", stats.splitScatterRadius);
+			}
 
 			stats.color = glm::vec3(1.0f);
 			if (eData.contains("color") && eData["color"].is_array() && eData["color"].size() >= 3) {
@@ -251,23 +292,37 @@ bool ConfigManager::loadConfigs(const std::string& towerPath, const std::string&
 
 	std::cout << "Configs loaded successfully!" << std::endl;
 	return true;
+	}
+	catch (const std::exception& e) {
+		std::cerr << "ConfigManager::loadConfigs error: " << e.what() << std::endl;
+		return false;
+	}
 }
 
-TowerStats ConfigManager::getTowerStats(const std::string& type, int level) {
+const TowerStats& ConfigManager::getTowerStats(const std::string& type, int level) {
+	static const TowerStats s_emptyTowerStats{};
 	auto it = s_towerStats.find(type);
 	if (it != s_towerStats.end() && !it->second.empty()) {
 		// защита от выхода за границы вектора уровней
 		int idx = level - 1;
-		if (idx >= (int)it->second.size()) {
+		if (idx < 0) {
+			idx = 0;
+		}
+		if (idx >= static_cast<int>(it->second.size())) {
 			return it->second.back(); // если запросили уровень выше максимального то возвращаем последний
 		}
 		return it->second[idx];
 	}
-	return TowerStats{}; // возвращаем пустую структуру в случае ошибки
+	return s_emptyTowerStats; // возвращаем пустую структуру в случае ошибки
 }
 
-EnemyStats ConfigManager::getEnemyStats(const std::string& type) {
-	return s_enemyStats[type];
+const EnemyStats& ConfigManager::getEnemyStats(const std::string& type) {
+	static const EnemyStats s_emptyEnemyStats{};
+	auto it = s_enemyStats.find(type);
+	if (it != s_enemyStats.end()) {
+		return it->second;
+	}
+	return s_emptyEnemyStats;
 }
 
 std::vector<std::string> ConfigManager::getAllTowerTypes() {
@@ -284,4 +339,22 @@ ParticleEmitterProps ConfigManager::getParticleProps(const std::string& name) {
 		return it->second;
 	}
 	return ParticleEmitterProps{};
+}
+
+void ConfigManager::preloadAllSounds() {
+	for (const auto& pair : s_towerStats) {
+		for (const auto& stats : pair.second) {
+			if (!stats.buildSound.empty()) {
+				AudioManager::preloadSound(stats.buildSound);
+			}
+			if (!stats.attackSound.empty()) {
+				AudioManager::preloadSound(stats.attackSound);
+			}
+		}
+	}
+	for (const auto& pair : s_enemyStats) {
+		if (!pair.second.deathSound.empty()) {
+			AudioManager::preloadSound(pair.second.deathSound);
+		}
+	}
 }

@@ -1,0 +1,2598 @@
+{
+  "allowedTowers": [
+    "Basic"
+  ],
+  "background": "mine_entrance",
+  "camera": {
+    "isCustom": true,
+    "tileX": 8.448737144470215,
+    "tileY": 4.514925956726074,
+    "viewTilesH": 13.991201400756836,
+    "viewTilesW": 26.163240432739258,
+    "x": 8.448737144470215,
+    "y": 4.514925956726074,
+    "zoom": 0.8842725157737732
+  },
+  "enemyBountyRules": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 2,
+        "toWave": 3
+      },
+      {
+        "fromWave": 4,
+        "reward": 1,
+        "rewardStep": 3,
+        "toWave": 6
+      },
+      {
+        "fromWave": 7,
+        "reward": 1,
+        "rewardStep": 6,
+        "toWave": 10
+      },
+      {
+        "fromWave": 11,
+        "reward": 1,
+        "rewardStep": 10,
+        "toWave": 14
+      },
+      {
+        "fromWave": 15,
+        "reward": 1,
+        "rewardStep": 12,
+        "toWave": 18
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 4
+      },
+      {
+        "fromWave": 5,
+        "reward": 1,
+        "rewardStep": 3,
+        "toWave": 9
+      },
+      {
+        "fromWave": 10,
+        "reward": 1,
+        "rewardStep": 5,
+        "toWave": 13
+      },
+      {
+        "fromWave": 14,
+        "reward": 1,
+        "rewardStep": 6,
+        "toWave": 18
+      }
+    ]
+  },
+  "enemyGlobalBounties": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 2,
+        "toWave": 3
+      },
+      {
+        "fromWave": 4,
+        "reward": 1,
+        "rewardStep": 3,
+        "toWave": 6
+      },
+      {
+        "fromWave": 7,
+        "reward": 1,
+        "rewardStep": 6,
+        "toWave": 10
+      },
+      {
+        "fromWave": 11,
+        "reward": 1,
+        "rewardStep": 10,
+        "toWave": 14
+      },
+      {
+        "fromWave": 15,
+        "reward": 1,
+        "rewardStep": 12,
+        "toWave": 18
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 4
+      },
+      {
+        "fromWave": 5,
+        "reward": 1,
+        "rewardStep": 3,
+        "toWave": 9
+      },
+      {
+        "fromWave": 10,
+        "reward": 1,
+        "rewardStep": 5,
+        "toWave": 13
+      },
+      {
+        "fromWave": 14,
+        "reward": 1,
+        "rewardStep": 6,
+        "toWave": 18
+      }
+    ]
+  },
+  "enemyHpRules": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "hp": 18,
+        "toWave": 4
+      },
+      {
+        "fromWave": 5,
+        "hp": 28,
+        "toWave": 8
+      },
+      {
+        "fromWave": 9,
+        "hp": 40,
+        "toWave": 12
+      },
+      {
+        "fromWave": 13,
+        "hp": 50,
+        "toWave": 15
+      },
+      {
+        "fromWave": 16,
+        "hp": 55,
+        "toWave": 18
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "hp": 6,
+        "toWave": 4
+      },
+      {
+        "fromWave": 5,
+        "hp": 10,
+        "toWave": 8
+      },
+      {
+        "fromWave": 9,
+        "hp": 16,
+        "toWave": 12
+      },
+      {
+        "fromWave": 13,
+        "hp": 18,
+        "toWave": 15
+      },
+      {
+        "fromWave": 16,
+        "hp": 24,
+        "toWave": 18
+      }
+    ]
+  },
+  "hasSidePockets": true,
+  "isCampaign": true,
+  "map": {
+    "allowedTowers": [
+      "Basic"
+    ],
+    "bases": [
+      {
+        "enableFadeOut": true,
+        "id": 0,
+        "visibleInGame": false,
+        "x": 19,
+        "y": 4
+      }
+    ],
+    "cellSize": 132.55555725097656,
+    "decorations": [
+      {
+        "destructible": true,
+        "id": 9,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 0.7400000095367432,
+        "scaleY": 0.6200000047683716,
+        "tilePos": {
+          "x": -1.067463755607605,
+          "y": 7.204949378967285
+        },
+        "tileX": -1.067463755607605,
+        "tileY": 7.204949378967285,
+        "type": "scrap_debris",
+        "worldPos": {
+          "x": 11.779449462890625,
+          "y": 1017.0560913085938
+        },
+        "zIndex": -1
+      },
+      {
+        "destructible": true,
+        "id": 52,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 0.8999999761581421,
+        "scaleY": 0.7099999785423279,
+        "tilePos": {
+          "x": 12.986384391784668,
+          "y": 12.100802421569824
+        },
+        "tileX": 12.986384391784668,
+        "tileY": 12.100802421569824,
+        "type": "scrap_debris",
+        "worldPos": {
+          "x": 1874.6951904296875,
+          "y": 1666.028564453125
+        },
+        "zIndex": -1
+      },
+      {
+        "destructible": false,
+        "id": 1,
+        "opacity": 0.8999999761581421,
+        "rotation": 90.0,
+        "scale": 1.0,
+        "scaleX": 2.690000057220459,
+        "scaleY": 1.7599999904632568,
+        "tilePos": {
+          "x": -5.110772609710693,
+          "y": 4.3117170333862305
+        },
+        "tileX": -5.110772609710693,
+        "tileY": 4.3117170333862305,
+        "type": "fog",
+        "worldPos": {
+          "x": -524.18359375,
+          "y": 633.5420532226563
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 2,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -1.1868618726730347,
+          "y": 6.566798686981201
+        },
+        "tileX": -1.1868618726730347,
+        "tileY": 6.566798686981201,
+        "type": "wooden_crate",
+        "worldPos": {
+          "x": -4.04742431640625,
+          "y": 932.4656372070313
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 3,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.100000023841858,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -0.4137803018093109,
+          "y": 6.43901252746582
+        },
+        "tileX": -0.4137803018093109,
+        "tileY": 6.43901252746582,
+        "type": "wooden_crate",
+        "worldPos": {
+          "x": 98.4288330078125,
+          "y": 915.5269165039063
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 4,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -0.45001837611198425,
+          "y": 7.212345123291016
+        },
+        "tileX": -0.45001837611198425,
+        "tileY": 7.212345123291016,
+        "type": "wooden_crate",
+        "worldPos": {
+          "x": 93.62527465820313,
+          "y": 1018.0364379882813
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 5,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -0.5731340646743774,
+          "y": 2.339064836502075
+        },
+        "tileX": -0.5731340646743774,
+        "tileY": 2.339064836502075,
+        "type": "wooden_crate",
+        "worldPos": {
+          "x": 77.30560302734375,
+          "y": 372.0560302734375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 6,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 14.729880332946777,
+          "y": 11.727907180786133
+        },
+        "tileX": 14.729880332946777,
+        "tileY": 11.727907180786133,
+        "type": "broken_mercury_cart",
+        "worldPos": {
+          "x": 2105.80517578125,
+          "y": 1616.5992431640625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 7,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 4.387050151824951,
+          "y": -1.0745981931686401
+        },
+        "tileX": 4.387050151824951,
+        "tileY": -1.0745981931686401,
+        "type": "scrap_debris",
+        "worldPos": {
+          "x": 734.8056030273438,
+          "y": -80.4439697265625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 8,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.699999988079071,
+        "scaleX": 1.350000023841858,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 6.4521965980529785,
+          "y": 9.846673011779785
+        },
+        "tileX": 6.4521965980529785,
+        "tileY": 9.846673011779785,
+        "type": "scrap_debris",
+        "worldPos": {
+          "x": 1008.55224609375,
+          "y": 1367.231201171875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 10,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -2.553435802459717,
+          "y": 0.01928282529115677
+        },
+        "tileX": -2.553435802459717,
+        "tileY": 0.01928282529115677,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -185.19439697265625,
+          "y": 64.55604553222656
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 11,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 3.4462711811065674,
+          "y": 11.329761505126953
+        },
+        "tileX": 3.4462711811065674,
+        "tileY": 11.329761505126953,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 610.10009765625,
+          "y": 1563.8228759765625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 12,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -1.6741046905517578,
+          "y": 10.176935195922852
+        },
+        "tileX": -1.6741046905517578,
+        "tileY": 10.176935195922852,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -68.63417053222656,
+          "y": 1411.00927734375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 13,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 0.8999999761581421,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 7.008592128753662,
+          "y": -1.055738091468811
+        },
+        "tileX": 7.008592128753662,
+        "tileY": -1.055738091468811,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 1082.3055419921875,
+          "y": -77.94395446777344
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 14,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 0.916807234287262,
+          "y": -2.017599105834961
+        },
+        "tileX": 0.916807234287262,
+        "tileY": -2.017599105834961,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 274.80560302734375,
+          "y": -205.4439697265625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 15,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 11.270956039428711,
+          "y": 10.052810668945313
+        },
+        "tileX": 11.270956039428711,
+        "tileY": 10.052810668945313,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 1647.3055419921875,
+          "y": 1394.555908203125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 16,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.100000023841858,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 13.397270202636719,
+          "y": 10.274687767028809
+        },
+        "tileX": 13.397270202636719,
+        "tileY": 10.274687767028809,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 1929.1602783203125,
+          "y": 1423.9669189453125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 17,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 7.481321811676025,
+          "y": 11.07191276550293
+        },
+        "tileX": 7.481321811676025,
+        "tileY": 11.07191276550293,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 1144.968505859375,
+          "y": 1529.6435546875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 18,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 5.332272529602051,
+          "y": 10.73021125793457
+        },
+        "tileX": 5.332272529602051,
+        "tileY": 10.73021125793457,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 860.1000366210938,
+          "y": 1484.34912109375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 19,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 9.067547798156738,
+          "y": -2.0495524406433105
+        },
+        "tileX": 9.067547798156738,
+        "tileY": -2.0495524406433105,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 1355.2315673828125,
+          "y": -209.6795654296875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 20,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.2000000476837158,
+        "scaleX": 1.2999999523162842,
+        "scaleY": 1.2999999523162842,
+        "tilePos": {
+          "x": 12.603070259094238,
+          "y": -2.277008533477783
+        },
+        "tileX": 12.603070259094238,
+        "tileY": -2.277008533477783,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 1823.884765625,
+          "y": -239.83013916015625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 21,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.100000023841858,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 5.5509352684021,
+          "y": -2.300499439239502
+        },
+        "tileX": 5.5509352684021,
+        "tileY": -2.300499439239502,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 889.0850219726563,
+          "y": -242.94400024414063
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 22,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.2000000476837158,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 3.0559773445129395,
+          "y": -1.3843467235565186
+        },
+        "tileX": 3.0559773445129395,
+        "tileY": -1.3843467235565186,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 558.364501953125,
+          "y": -121.50285339355469
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 23,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -2.7231760025024414,
+          "y": -1.8478587865829468
+        },
+        "tileX": -2.7231760025024414,
+        "tileY": -1.8478587865829468,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -207.69439697265625,
+          "y": -182.94395446777344
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 24,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -5.872798919677734,
+          "y": -0.9048579931259155
+        },
+        "tileX": -5.872798919677734,
+        "tileY": -0.9048579931259155,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -625.1943969726563,
+          "y": -57.94395446777344
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 25,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -4.420577526092529,
+          "y": 2.1881844997406006
+        },
+        "tileX": -4.420577526092529,
+        "tileY": 2.1881844997406006,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -432.69439697265625,
+          "y": 352.0560302734375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 26,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -5.057705402374268,
+          "y": 6.512276649475098
+        },
+        "tileX": -5.057705402374268,
+        "tileY": 6.512276649475098,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -517.1492309570313,
+          "y": 925.2384643554688
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 27,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -2.434034824371338,
+          "y": 6.939916610717773
+        },
+        "tileX": -2.434034824371338,
+        "tileY": 6.939916610717773,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -169.36712646484375,
+          "y": 981.9244995117188
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 28,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.8999999761581421,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -2.233901262283325,
+          "y": 8.606780052185059
+        },
+        "tileX": -2.233901262283325,
+        "tileY": 8.606780052185059,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -142.83831787109375,
+          "y": 1202.8765869140625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 29,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.100000023841858,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -3.9718127250671387,
+          "y": 10.621587753295898
+        },
+        "tileX": -3.9718127250671387,
+        "tileY": 10.621587753295898,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -373.2081298828125,
+          "y": 1469.950439453125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 30,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.100000023841858,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -0.26938921213150024,
+          "y": 11.2760648727417
+        },
+        "tileX": -0.26938921213150024,
+        "tileY": 11.2760648727417,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 117.56867218017578,
+          "y": 1556.705078125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 31,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 1.5311994552612305,
+          "y": 10.648436546325684
+        },
+        "tileX": 1.5311994552612305,
+        "tileY": 10.648436546325684,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 356.2467041015625,
+          "y": 1473.5093994140625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 32,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 15.156120300292969,
+          "y": 10.354570388793945
+        },
+        "tileX": 15.156120300292969,
+        "tileY": 10.354570388793945,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 2162.3056640625,
+          "y": 1434.555908203125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 33,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.2000000476837158,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -4.977847099304199,
+          "y": 8.748629570007324
+        },
+        "tileX": -4.977847099304199,
+        "tileY": 8.748629570007324,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": -506.5635986328125,
+          "y": 1221.679443359375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 34,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.8999999761581421,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 11.936820983886719,
+          "y": 11.6555814743042
+        },
+        "tileX": 11.936820983886719,
+        "tileY": 11.6555814743042,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 1735.5697021484375,
+          "y": 1607.0120849609375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 35,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 9.705574035644531,
+          "y": 10.807210922241211
+        },
+        "tileX": 9.705574035644531,
+        "tileY": 10.807210922241211,
+        "type": "dead_tree",
+        "worldPos": {
+          "x": 1439.8055419921875,
+          "y": 1494.555908203125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 37,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.6000000238418579,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -5.70305871963501,
+          "y": -0.6030977368354797
+        },
+        "tileX": -5.70305871963501,
+        "tileY": -0.6030977368354797,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": -602.6943969726563,
+          "y": -17.943954467773438
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 38,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.6000000238418579,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -2.628875970840454,
+          "y": 2.5088047981262207
+        },
+        "tileX": -2.628875970840454,
+        "tileY": 2.5088047981262207,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": -195.19439697265625,
+          "y": 394.5560302734375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 39,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.699999988079071,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 4.267755508422852,
+          "y": 9.574789047241211
+        },
+        "tileX": 4.267755508422852,
+        "tileY": 9.574789047241211,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 718.992431640625,
+          "y": 1331.1915283203125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 40,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.699999988079071,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -0.08659940958023071,
+          "y": 0.025417510420084
+        },
+        "tileX": -0.08659940958023071,
+        "tileY": 0.025417510420084,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 141.79847717285156,
+          "y": 65.36923217773438
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 41,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.699999988079071,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -3.7933287620544434,
+          "y": 10.903402328491211
+        },
+        "tileX": -3.7933287620544434,
+        "tileY": 10.903402328491211,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": -349.5491027832031,
+          "y": 1507.3065185546875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 44,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.4000000059604645,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -4.9351959228515625,
+          "y": 6.782601356506348
+        },
+        "tileX": -4.9351959228515625,
+        "tileY": 6.782601356506348,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": -500.909912109375,
+          "y": 961.0714721679688
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 45,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.5,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 1.303412675857544,
+          "y": 9.601493835449219
+        },
+        "tileX": 1.303412675857544,
+        "tileY": 9.601493835449219,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 326.05230712890625,
+          "y": 1334.7313232421875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 46,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.6000000238418579,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": -5.243995666503906,
+          "y": 6.759297847747803
+        },
+        "tileX": -5.243995666503906,
+        "tileY": 6.759297847747803,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": -541.8430786132813,
+          "y": 957.9824829101563
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 47,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 0.550000011920929,
+        "scaleY": 0.550000011920929,
+        "tilePos": {
+          "x": 12.277445793151855,
+          "y": -1.89536452293396
+        },
+        "tileX": 12.277445793151855,
+        "tileY": -1.89536452293396,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 1780.721435546875,
+          "y": -189.24110412597656
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 48,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.6000000238418579,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 9.17697525024414,
+          "y": -1.8236565589904785
+        },
+        "tileX": 9.17697525024414,
+        "tileY": -1.8236565589904785,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 1369.73681640625,
+          "y": -179.73580932617188
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 49,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 3.3497493267059326,
+          "y": -2.319359302520752
+        },
+        "tileX": 3.3497493267059326,
+        "tileY": -2.319359302520752,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 597.3056030273438,
+          "y": -245.4439697265625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 50,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 1.4260276556015015,
+          "y": -1.018018126487732
+        },
+        "tileX": 1.4260276556015015,
+        "tileY": -1.018018126487732,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 342.30560302734375,
+          "y": -72.94395446777344
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 51,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 16.583715438842773,
+          "y": 9.778229713439941
+        },
+        "tileX": 16.583715438842773,
+        "tileY": 9.778229713439941,
+        "type": "ore_debris",
+        "worldPos": {
+          "x": 2351.54150390625,
+          "y": 1358.15869140625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 52,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.800000011920929,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 16.697202682495117,
+          "y": 10.228740692138672
+        },
+        "tileX": 16.697202682495117,
+        "tileY": 10.228740692138672,
+        "type": "ore_debris",
+        "worldPos": {
+          "x": 2366.58447265625,
+          "y": 1417.87646484375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 54,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 0.6899999976158142,
+        "scaleY": 0.6100000143051147,
+        "tilePos": {
+          "x": 14.42277717590332,
+          "y": 11.993408203125
+        },
+        "tileX": 14.42277717590332,
+        "tileY": 11.993408203125,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 2065.096923828125,
+          "y": 1651.7928466796875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 42,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.699999988079071,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 16.205528259277344,
+          "y": 10.0222749710083
+        },
+        "tileX": 16.205528259277344,
+        "tileY": 10.0222749710083,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 2301.41064453125,
+          "y": 1390.50830078125
+        },
+        "zIndex": 1
+      },
+      {
+        "destructible": true,
+        "id": 43,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.6000000238418579,
+        "scaleX": 1.340000033378601,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 16.520099639892578,
+          "y": 10.424242973327637
+        },
+        "tileX": 16.520099639892578,
+        "tileY": 10.424242973327637,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 2343.10888671875,
+          "y": 1443.7913818359375
+        },
+        "zIndex": 1
+      },
+      {
+        "destructible": true,
+        "id": 53,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 0.5099999904632568,
+        "scaleY": 0.5099999904632568,
+        "tilePos": {
+          "x": 14.140864372253418,
+          "y": 11.617530822753906
+        },
+        "tileX": 14.140864372253418,
+        "tileY": 11.617530822753906,
+        "type": "dry_grass",
+        "worldPos": {
+          "x": 2027.7279052734375,
+          "y": 1601.96826171875
+        },
+        "zIndex": 1
+      }
+    ],
+    "enemyBountyRules": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 2,
+          "toWave": 3
+        },
+        {
+          "fromWave": 4,
+          "reward": 1,
+          "rewardStep": 3,
+          "toWave": 6
+        },
+        {
+          "fromWave": 7,
+          "reward": 1,
+          "rewardStep": 6,
+          "toWave": 10
+        },
+        {
+          "fromWave": 11,
+          "reward": 1,
+          "rewardStep": 10,
+          "toWave": 14
+        },
+        {
+          "fromWave": 15,
+          "reward": 1,
+          "rewardStep": 12,
+          "toWave": 18
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 4
+        },
+        {
+          "fromWave": 5,
+          "reward": 1,
+          "rewardStep": 3,
+          "toWave": 9
+        },
+        {
+          "fromWave": 10,
+          "reward": 1,
+          "rewardStep": 5,
+          "toWave": 13
+        },
+        {
+          "fromWave": 14,
+          "reward": 1,
+          "rewardStep": 6,
+          "toWave": 18
+        }
+      ]
+    },
+    "enemyGlobalBounties": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 2,
+          "toWave": 3
+        },
+        {
+          "fromWave": 4,
+          "reward": 1,
+          "rewardStep": 3,
+          "toWave": 6
+        },
+        {
+          "fromWave": 7,
+          "reward": 1,
+          "rewardStep": 6,
+          "toWave": 10
+        },
+        {
+          "fromWave": 11,
+          "reward": 1,
+          "rewardStep": 10,
+          "toWave": 14
+        },
+        {
+          "fromWave": 15,
+          "reward": 1,
+          "rewardStep": 12,
+          "toWave": 18
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 4
+        },
+        {
+          "fromWave": 5,
+          "reward": 1,
+          "rewardStep": 3,
+          "toWave": 9
+        },
+        {
+          "fromWave": 10,
+          "reward": 1,
+          "rewardStep": 5,
+          "toWave": 13
+        },
+        {
+          "fromWave": 14,
+          "reward": 1,
+          "rewardStep": 6,
+          "toWave": 18
+        }
+      ]
+    },
+    "enemyHpRules": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "hp": 18,
+          "toWave": 4
+        },
+        {
+          "fromWave": 5,
+          "hp": 28,
+          "toWave": 8
+        },
+        {
+          "fromWave": 9,
+          "hp": 40,
+          "toWave": 12
+        },
+        {
+          "fromWave": 13,
+          "hp": 50,
+          "toWave": 15
+        },
+        {
+          "fromWave": 16,
+          "hp": 55,
+          "toWave": 18
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "hp": 6,
+          "toWave": 4
+        },
+        {
+          "fromWave": 5,
+          "hp": 10,
+          "toWave": 8
+        },
+        {
+          "fromWave": 9,
+          "hp": 16,
+          "toWave": 12
+        },
+        {
+          "fromWave": 13,
+          "hp": 18,
+          "toWave": 15
+        },
+        {
+          "fromWave": 16,
+          "hp": 24,
+          "toWave": 18
+        }
+      ]
+    },
+    "height": 9,
+    "layout": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        3,
+        3,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "maxUpgradeTier": 2,
+    "noBuildMask": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "offsetX": 153.2777099609375,
+    "offsetY": 62.0,
+    "outerCells": [
+      {
+        "noBuild": false,
+        "type": 6,
+        "x": -5,
+        "y": 3
+      },
+      {
+        "noBuild": false,
+        "type": 6,
+        "x": -5,
+        "y": 4
+      },
+      {
+        "noBuild": false,
+        "type": 6,
+        "x": -5,
+        "y": 5
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -4,
+        "y": 3
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -4,
+        "y": 4
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -4,
+        "y": 5
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -3,
+        "y": 3
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -3,
+        "y": 4
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -3,
+        "y": 5
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -2,
+        "y": 3
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -2,
+        "y": 4
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -2,
+        "y": 5
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -1,
+        "y": 3
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -1,
+        "y": 4
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": -1,
+        "y": 5
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": 17,
+        "y": 4
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": 17,
+        "y": 5
+      },
+      {
+        "noBuild": false,
+        "type": 1,
+        "x": 18,
+        "y": 4
+      },
+      {
+        "noBuild": false,
+        "type": 7,
+        "x": 19,
+        "y": 4
+      }
+    ],
+    "spawners": [
+      {
+        "enableFadeIn": true,
+        "groupId": -1,
+        "targetBaseIndex": -1,
+        "visibleInGame": false,
+        "x": -5,
+        "y": 3
+      },
+      {
+        "enableFadeIn": true,
+        "groupId": -1,
+        "targetBaseIndex": -1,
+        "visibleInGame": false,
+        "x": -5,
+        "y": 4
+      },
+      {
+        "enableFadeIn": true,
+        "groupId": -1,
+        "targetBaseIndex": -1,
+        "visibleInGame": false,
+        "x": -5,
+        "y": 5
+      }
+    ],
+    "startingHealth": 20,
+    "startingMoney": 35,
+    "towerMaxTiers": {
+      "Basic": 2,
+      "Mercury": 1,
+      "Piston": 1
+    },
+    "width": 17
+  },
+  "maxUpgradeTier": 2,
+  "name": "Ртутная щахта",
+  "startingHealth": 20,
+  "startingMoney": 35,
+  "tags": [
+    "Тест"
+  ],
+  "towerMaxTiers": {
+    "Basic": 2,
+    "Mercury": 1,
+    "Piston": 1
+  },
+  "waves": [
+    {
+      "parts": [
+        {
+          "count": 10,
+          "delayAfter": 1.5,
+          "interval": 0.550000011920929,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 8,
+          "delayAfter": 0.0,
+          "interval": 0.5,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 14,
+          "delayAfter": 1.5,
+          "interval": 0.41999998688697815,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 12,
+          "delayAfter": 0.0,
+          "interval": 0.3799999952316284,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 18,
+          "delayAfter": 1.5,
+          "interval": 0.3199999928474426,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 14,
+          "delayAfter": 1.0,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 5,
+          "delayAfter": 0.0,
+          "interval": 0.44999998807907104,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 10,
+          "delayAfter": 1.5,
+          "interval": 0.3499999940395355,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 24,
+          "delayAfter": 0.0,
+          "interval": 0.2800000011920929,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 24,
+          "delayAfter": 1.0,
+          "interval": 0.25,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 14,
+          "delayAfter": 1.0,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 20,
+          "delayAfter": 0.0,
+          "interval": 0.25,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 35,
+          "delayAfter": 1.5,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 30,
+          "delayAfter": 0.0,
+          "interval": 0.18000000715255737,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 18,
+          "delayAfter": 1.2000000476837158,
+          "interval": 0.23999999463558197,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 30,
+          "delayAfter": 1.2000000476837158,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 18,
+          "delayAfter": 0.0,
+          "interval": 0.23999999463558197,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 45,
+          "delayAfter": 1.2000000476837158,
+          "interval": 0.1599999964237213,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 22,
+          "delayAfter": 1.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 35,
+          "delayAfter": 0.0,
+          "interval": 0.1599999964237213,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 30,
+          "delayAfter": 1.2000000476837158,
+          "interval": 0.18000000715255737,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 35,
+          "delayAfter": 0.0,
+          "interval": 0.1599999964237213,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 55,
+          "delayAfter": 1.2000000476837158,
+          "interval": 0.14000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 25,
+          "delayAfter": 1.0,
+          "interval": 0.18000000715255737,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 45,
+          "delayAfter": 0.0,
+          "interval": 0.14000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 40,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.14000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 28,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.1599999964237213,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 40,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.14000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 28,
+          "delayAfter": 0.0,
+          "interval": 0.1599999964237213,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 75,
+          "delayAfter": 1.2000000476837158,
+          "interval": 0.11999999731779099,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 65,
+          "delayAfter": 0.0,
+          "interval": 0.10999999940395355,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 35,
+          "delayAfter": 1.0,
+          "interval": 0.14000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 60,
+          "delayAfter": 1.0,
+          "interval": 0.12999999523162842,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 45,
+          "delayAfter": 0.0,
+          "interval": 0.12999999523162842,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 75,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.10999999940395355,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 40,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.12999999523162842,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 75,
+          "delayAfter": 0.0,
+          "interval": 0.10000000149011612,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 45,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.11999999731779099,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 55,
+          "delayAfter": 1.0,
+          "interval": 0.10999999940395355,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 70,
+          "delayAfter": 0.0,
+          "interval": 0.11999999731779099,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 95,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.10000000149011612,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 45,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.11999999731779099,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 90,
+          "delayAfter": 0.0,
+          "interval": 0.10000000149011612,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 85,
+          "delayAfter": 0.699999988079071,
+          "interval": 0.10000000149011612,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 55,
+          "delayAfter": 0.699999988079071,
+          "interval": 0.10999999940395355,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 85,
+          "delayAfter": 0.699999988079071,
+          "interval": 0.09000000357627869,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 55,
+          "delayAfter": 0.0,
+          "interval": 0.10999999940395355,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 60,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.10000000149011612,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 120,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.09000000357627869,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 70,
+          "delayAfter": 0.800000011920929,
+          "interval": 0.10000000149011612,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 120,
+          "delayAfter": 0.0,
+          "interval": 0.07999999821186066,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    }
+  ]
+}

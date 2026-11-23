@@ -19,7 +19,7 @@ private:
     // дерьмицо для отрисовочки
     std::shared_ptr<SpriteRenderer> m_renderer;
     TextRenderer* m_textRenderer;
-    std::shared_ptr<Texture2D> m_uiTexture;
+    const Texture2D* m_uiTexture;
 
     // путь к уровню
     std::string m_levelPath;

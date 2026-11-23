@@ -60,7 +60,7 @@ bool VolumeSliderWidget::handleInput(glm::vec2 mousePos, bool mousePressed, bool
     return m_isDragging;
 }
 
-void VolumeSliderWidget::render(SpriteRenderer* renderer, TextRenderer* textRenderer, std::shared_ptr<Texture2D> whiteTexture) {
+void VolumeSliderWidget::render(SpriteRenderer* renderer, TextRenderer* textRenderer, const Texture2D* whiteTexture) {
     if (!renderer || !textRenderer || !whiteTexture) return;
 
     float scale = m_scale;

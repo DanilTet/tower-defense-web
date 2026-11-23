@@ -39,4 +39,14 @@ public:
 	float CalculateTextWidth(const std::string& text, float scale);
 private:
 	unsigned int VAO, VBO;
+
+	// Закэшированные uniform-локации шейдера текста
+	int projectionLocation;
+	int textColorLocation;
+
+	// Освобождает все OpenGL-текстуры глифов и очищает Characters
+	void releaseGlyphTextures();
+
+	// Безопасно декодирует один UTF-8 символ с позиции i (с проверкой границ), сдвигает i
+	static char32_t decodeUtf8(const std::string& text, size_t& i);
 };

@@ -13,8 +13,8 @@
 SettingsState::SettingsState(GameStateManager& stateManager, int width, int height, std::shared_ptr<SpriteRenderer> renderer, TextRenderer* textRenderer)
     : m_stateManager(stateManager), m_width(width), m_height(height), m_renderer(renderer), m_textRenderer(textRenderer)
 {
-    m_whiteTexture = std::shared_ptr<Texture2D>(ResourceManager::getWhiteTexture(), [](Texture2D*) {});
-    m_uiTexture = std::shared_ptr<Texture2D>(ResourceManager::getTexture("uiBaseTexture"), [](Texture2D*) {});
+    m_whiteTexture = ResourceManager::getWhiteTexture();
+    m_uiTexture = ResourceManager::getTexture("uiBaseTexture");
 }
 
 void SettingsState::updateLayout() {

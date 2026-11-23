@@ -15,7 +15,7 @@
 GameOverState::GameOverState(GameStateManager& stateManager, int width, int height, std::shared_ptr<SpriteRenderer> renderer, TextRenderer* textRenderer, std::string levelPath, bool isEditorTest, GameplayOrigin origin)
     : m_stateManager(stateManager), m_width(width), m_height(height), m_renderer(renderer), m_textRenderer(textRenderer), m_levelPath(levelPath), m_isEditorTest(isEditorTest), m_origin(origin)
 {
-    m_uiTexture = std::shared_ptr<Texture2D>(ResourceManager::getTexture("uiBaseTexture"), [](Texture2D*) {});
+    m_uiTexture = ResourceManager::getTexture("uiBaseTexture");
     m_mousePressedLastFrame = true;
 }
 

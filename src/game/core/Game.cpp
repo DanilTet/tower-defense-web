@@ -38,10 +38,15 @@ void Game::init() {
     m_renderer->setProjection(projection);
 
     // Включаем шейдер в работу на GPU
-    shader->use();
+    if (shader != nullptr) {
+        shader->use();
 
-    // Привязываем uniform-переменную текстуры в фрагментном шейдере к текстурному слоту №0
-    glUniform1i(glGetUniformLocation(shader->getId(), "u_texture"), 0);
+        // Привязываем uniform-переменную текстуры в фрагментном шейдере к текстурному слоту №0
+        glUniform1i(glGetUniformLocation(shader->getId(), "u_texture"), 0);
+    }
+    else {
+        std::cerr << "Game::init: sprite shader is null, rendering disabled" << std::endl;
+    }
 
     // ИНИЦИАЛИЗАЦИЯ ТЕКСТА
     if (!ResourceManager::loadShader("textShader", "res/shaders/text_shader.vert", "res/shaders/text_shader.frag")) {
@@ -57,6 +62,7 @@ void Game::init() {
     }
     SettingsManager::init();
     LocalizationManager::init();
+    ResourceManager::loadTexture("particleTexture", "res/textures/particle.png");
 
     // Загружаем шрифт с размером 24 пикселя
     m_stateManager.setState(std::make_unique<MainMenuState>(m_stateManager, width, height, m_renderer, m_textRenderer.get()));

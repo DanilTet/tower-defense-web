@@ -38,6 +38,6 @@ public:
     bool handleInput(glm::vec2 mousePos, bool mousePressed, bool mouseJustPressed);
 
     // Отрисовка виджета
-    void render(SpriteRenderer* renderer, TextRenderer* textRenderer, std::shared_ptr<Texture2D> whiteTexture);
+    void render(SpriteRenderer* renderer, TextRenderer* textRenderer, const Texture2D* whiteTexture);
 };
 

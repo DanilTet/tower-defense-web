@@ -1,0 +1,2489 @@
+{
+  "allowedTowers": [
+    "Basic"
+  ],
+  "background": "pipes_canal",
+  "camera": {
+    "isCustom": true,
+    "tileX": 16.483308792114258,
+    "tileY": 3.508995294570923,
+    "viewTilesH": 13.933029174804688,
+    "viewTilesW": 26.054460525512695,
+    "x": 16.483308792114258,
+    "y": 3.508995294570923,
+    "zoom": 1.2665777206420898
+  },
+  "enemyBountyRules": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 2,
+        "toWave": 2
+      },
+      {
+        "fromWave": 5,
+        "reward": 1,
+        "rewardStep": 4,
+        "toWave": 6
+      },
+      {
+        "fromWave": 7,
+        "reward": 1,
+        "rewardStep": 5,
+        "toWave": 15
+      },
+      {
+        "fromWave": 3,
+        "reward": 1,
+        "rewardStep": 3,
+        "toWave": 4
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ]
+  },
+  "enemyGlobalBounties": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 2,
+        "toWave": 2
+      },
+      {
+        "fromWave": 5,
+        "reward": 1,
+        "rewardStep": 4,
+        "toWave": 6
+      },
+      {
+        "fromWave": 7,
+        "reward": 1,
+        "rewardStep": 5,
+        "toWave": 15
+      },
+      {
+        "fromWave": 3,
+        "reward": 1,
+        "rewardStep": 3,
+        "toWave": 4
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ]
+  },
+  "hasSidePockets": true,
+  "isCampaign": true,
+  "map": {
+    "allowedTowers": [
+      "Basic"
+    ],
+    "bases": [
+      {
+        "enableFadeOut": true,
+        "id": 0,
+        "visibleInGame": false,
+        "x": 29,
+        "y": 2
+      },
+      {
+        "enableFadeOut": true,
+        "id": 0,
+        "visibleInGame": false,
+        "x": 29,
+        "y": 3
+      },
+      {
+        "enableFadeOut": true,
+        "id": 0,
+        "visibleInGame": false,
+        "x": 29,
+        "y": 4
+      }
+    ],
+    "cellSize": 77.57575988769531,
+    "decorations": [
+      {
+        "destructible": true,
+        "id": 60,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 13.510285377502441,
+          "y": 11.679563522338867
+        },
+        "tileX": 13.510285377502441,
+        "tileY": 11.679563522338867,
+        "type": "puddle",
+        "worldPos": {
+          "x": 1048.0706787109375,
+          "y": 1293.035888671875
+        },
+        "zIndex": -1
+      },
+      {
+        "destructible": true,
+        "id": 2,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 12.5,
+          "y": 5.5
+        },
+        "tileX": 12.5,
+        "tileY": 5.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 969.697021484375,
+          "y": 813.6514892578125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 2,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 9.5,
+          "y": 1.5
+        },
+        "tileX": 9.5,
+        "tileY": 1.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 736.9697265625,
+          "y": 503.3484802246094
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 3,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 13.5,
+          "y": 0.5
+        },
+        "tileX": 13.5,
+        "tileY": 0.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 1047.272705078125,
+          "y": 425.772705078125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": false,
+        "id": 4,
+        "opacity": 0.5,
+        "rotation": 180.0,
+        "scale": 1.2000000476837158,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 6.505015850067139,
+          "y": 7.409729957580566
+        },
+        "tileX": 6.505015850067139,
+        "tileY": 7.409729957580566,
+        "type": "crack",
+        "worldPos": {
+          "x": 504.6315612792969,
+          "y": 961.80029296875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": false,
+        "id": 5,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 10.884936332702637,
+          "y": 7.962397575378418
+        },
+        "tileX": 10.884936332702637,
+        "tileY": 7.962397575378418,
+        "type": "crack",
+        "worldPos": {
+          "x": 844.4072265625,
+          "y": 1004.673828125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 6,
+        "opacity": 0.15000000596046448,
+        "rotation": 0.0,
+        "scale": 1.100000023841858,
+        "scaleX": 1.600000023841858,
+        "scaleY": 1.309999942779541,
+        "tilePos": {
+          "x": 9.305668830871582,
+          "y": 4.3608293533325195
+        },
+        "tileX": 9.305668830871582,
+        "tileY": 4.3608293533325195,
+        "type": "puddle",
+        "worldPos": {
+          "x": 721.8943481445313,
+          "y": 725.2794799804688
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 7,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 17.5,
+          "y": 1.5
+        },
+        "tileX": 17.5,
+        "tileY": 1.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 1357.5758056640625,
+          "y": 503.3484802246094
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 8,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 16.5,
+          "y": 1.5
+        },
+        "tileX": 16.5,
+        "tileY": 1.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 1280.0,
+          "y": 503.3484802246094
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 9,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 19.5,
+          "y": 6.5
+        },
+        "tileX": 19.5,
+        "tileY": 6.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 1512.727294921875,
+          "y": 891.227294921875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 10,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 23.5,
+          "y": 5.5
+        },
+        "tileX": 23.5,
+        "tileY": 5.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 1823.0303955078125,
+          "y": 813.6514892578125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 11,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 25.5,
+          "y": 0.5
+        },
+        "tileX": 25.5,
+        "tileY": 0.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 1978.181884765625,
+          "y": 425.772705078125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 12,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 10.892010688781738,
+          "y": 8.540145874023438
+        },
+        "tileX": 10.892010688781738,
+        "tileY": 8.540145874023438,
+        "type": "puddle",
+        "worldPos": {
+          "x": 844.9559936523438,
+          "y": 1049.4931640625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 13,
+        "opacity": 0.5,
+        "rotation": 135.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 22.511993408203125,
+          "y": -0.8809792995452881
+        },
+        "tileX": 22.511993408203125,
+        "tileY": -0.8809792995452881,
+        "type": "crack",
+        "worldPos": {
+          "x": 1746.385009765625,
+          "y": 318.6422119140625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 14,
+        "opacity": 0.5,
+        "rotation": 180.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 6.6212053298950195,
+          "y": -0.495617151260376
+        },
+        "tileX": 6.6212053298950195,
+        "tileY": -0.495617151260376,
+        "type": "crack",
+        "worldPos": {
+          "x": 513.64501953125,
+          "y": 348.5369567871094
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 15,
+        "opacity": 0.5,
+        "rotation": 180.0,
+        "scale": 0.699999988079071,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 15.577592849731445,
+          "y": 7.913864612579346
+        },
+        "tileX": 15.577592849731445,
+        "tileY": 7.913864612579346,
+        "type": "crack",
+        "worldPos": {
+          "x": 1208.443603515625,
+          "y": 1000.908935546875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 16,
+        "opacity": 0.5,
+        "rotation": 180.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 15.565384864807129,
+          "y": 8.47476577758789
+        },
+        "tileX": 15.565384864807129,
+        "tileY": 8.47476577758789,
+        "type": "puddle",
+        "worldPos": {
+          "x": 1207.49658203125,
+          "y": 1044.4212646484375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 18,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 8.576858520507813,
+          "y": 6.409273624420166
+        },
+        "tileX": 8.576858520507813,
+        "tileY": 6.409273624420166,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 665.3563232421875,
+          "y": 884.1890869140625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 19,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 9.5,
+          "y": 5.5
+        },
+        "tileX": 9.5,
+        "tileY": 5.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 736.9697265625,
+          "y": 813.6514892578125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 20,
+        "opacity": 0.5,
+        "rotation": 315.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 7.836493492126465,
+          "y": -1.614330768585205
+        },
+        "tileX": 7.836493492126465,
+        "tileY": -1.614330768585205,
+        "type": "flower",
+        "worldPos": {
+          "x": 607.9219360351563,
+          "y": 261.75189208984375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 21,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 13.586834907531738,
+          "y": 8.653464317321777
+        },
+        "tileX": 13.586834907531738,
+        "tileY": 8.653464317321777,
+        "type": "flower",
+        "worldPos": {
+          "x": 1054.009033203125,
+          "y": 1058.283935546875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": false,
+        "id": 21,
+        "opacity": 1.0,
+        "rotation": 90.0,
+        "scale": 2.0999999046325684,
+        "scaleX": 3.0,
+        "scaleY": 3.0,
+        "tilePos": {
+          "x": 3.557103395462036,
+          "y": 2.890120267868042
+        },
+        "tileX": 3.557103395462036,
+        "tileY": 2.890120267868042,
+        "type": "fog",
+        "worldPos": {
+          "x": 275.94500732421875,
+          "y": 611.1881103515625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": false,
+        "id": 22,
+        "opacity": 1.0,
+        "rotation": 270.0,
+        "scale": 2.9000000953674316,
+        "scaleX": 2.5,
+        "scaleY": 1.2999999523162842,
+        "tilePos": {
+          "x": 29.53660011291504,
+          "y": 3.8147542476654053
+        },
+        "tileX": 29.53660011291504,
+        "tileY": 3.8147542476654053,
+        "type": "fog",
+        "worldPos": {
+          "x": 2291.32421875,
+          "y": 682.9172973632813
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 24,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.100000023841858,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 10.503920555114746,
+          "y": -1.5452860593795776
+        },
+        "tileX": 10.503920555114746,
+        "tileY": -1.5452860593795776,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 814.849609375,
+          "y": 267.10809326171875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 25,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.6000000238418579,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 14.285489082336426,
+          "y": 6.280001163482666
+        },
+        "tileX": 14.285489082336426,
+        "tileY": 6.280001163482666,
+        "type": "bush",
+        "worldPos": {
+          "x": 1108.2076416015625,
+          "y": 874.1607055664063
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 28,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.800000011920929,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 8.400983810424805,
+          "y": 0.35670459270477295
+        },
+        "tileX": 8.400983810424805,
+        "tileY": 0.35670459270477295,
+        "type": "bush",
+        "worldPos": {
+          "x": 651.7127075195313,
+          "y": 414.6564636230469
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 29,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 3.5,
+          "y": 6.5
+        },
+        "tileX": 3.5,
+        "tileY": 6.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 271.5151672363281,
+          "y": 891.227294921875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 30,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 3.5,
+          "y": 5.5
+        },
+        "tileX": 3.5,
+        "tileY": 5.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 271.5151672363281,
+          "y": 813.6514892578125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 31,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 3.5,
+          "y": 1.5
+        },
+        "tileX": 3.5,
+        "tileY": 1.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 271.5151672363281,
+          "y": 503.3484802246094
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 32,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 3.5,
+          "y": 0.5
+        },
+        "tileX": 3.5,
+        "tileY": 0.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 271.5151672363281,
+          "y": 425.772705078125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 33,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 28.5,
+          "y": 6.5
+        },
+        "tileX": 28.5,
+        "tileY": 6.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 2210.9091796875,
+          "y": 891.227294921875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 34,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 28.5,
+          "y": 5.5
+        },
+        "tileX": 28.5,
+        "tileY": 5.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 2210.9091796875,
+          "y": 813.6514892578125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 35,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 29.5,
+          "y": 5.5
+        },
+        "tileX": 29.5,
+        "tileY": 5.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 2288.48486328125,
+          "y": 813.6514892578125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 36,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 29.5,
+          "y": 6.5
+        },
+        "tileX": 29.5,
+        "tileY": 6.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 2288.48486328125,
+          "y": 891.227294921875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 37,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 28.5,
+          "y": 1.5
+        },
+        "tileX": 28.5,
+        "tileY": 1.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 2210.9091796875,
+          "y": 503.3484802246094
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 38,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 28.5,
+          "y": 0.5
+        },
+        "tileX": 28.5,
+        "tileY": 0.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 2210.9091796875,
+          "y": 425.772705078125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 39,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 29.5,
+          "y": 0.5
+        },
+        "tileX": 29.5,
+        "tileY": 0.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 2288.48486328125,
+          "y": 425.772705078125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 40,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 29.5,
+          "y": 1.5
+        },
+        "tileX": 29.5,
+        "tileY": 1.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 2288.48486328125,
+          "y": 503.3484802246094
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 41,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 23.61685562133789,
+          "y": -1.5682294368743896
+        },
+        "tileX": 23.61685562133789,
+        "tileY": -1.5682294368743896,
+        "type": "stone",
+        "worldPos": {
+          "x": 1832.0955810546875,
+          "y": 265.3282470703125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 42,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 27.251686096191406,
+          "y": -1.4682716131210327
+        },
+        "tileX": 27.251686096191406,
+        "tileY": -1.4682716131210327,
+        "type": "flower",
+        "worldPos": {
+          "x": 2114.0703125,
+          "y": 273.0825500488281
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 43,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0199999809265137,
+        "scaleY": 1.1100000143051147,
+        "tilePos": {
+          "x": 15.005949020385742,
+          "y": -2.263387441635132
+        },
+        "tileX": 15.005949020385742,
+        "tileY": -2.263387441635132,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 1164.097900390625,
+          "y": 211.4008331298828
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 44,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 14.409173965454102,
+          "y": -2.51889967918396
+        },
+        "tileX": 14.409173965454102,
+        "tileY": -2.51889967918396,
+        "type": "flower",
+        "worldPos": {
+          "x": 1117.8026123046875,
+          "y": 191.5792694091797
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 44,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 4.239038944244385,
+          "y": 9.08976936340332
+        },
+        "tileX": 4.239038944244385,
+        "tileY": 9.08976936340332,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 328.8466796875,
+          "y": 1092.130615234375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 45,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 24.872045516967773,
+          "y": 9.08976936340332
+        },
+        "tileX": 24.872045516967773,
+        "tileY": 9.08976936340332,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 1929.4677734375,
+          "y": 1092.130615234375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 46,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 18.451934814453125,
+          "y": 9.90479564666748
+        },
+        "tileX": 18.451934814453125,
+        "tileY": 9.90479564666748,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 1431.4228515625,
+          "y": 1155.35693359375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 47,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 11.049336433410645,
+          "y": 9.383735656738281
+        },
+        "tileX": 11.049336433410645,
+        "tileY": 9.383735656738281,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 857.16064453125,
+          "y": 1114.935302734375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 48,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 19.166868209838867,
+          "y": 8.860990524291992
+        },
+        "tileX": 19.166868209838867,
+        "tileY": 8.860990524291992,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 1486.8843994140625,
+          "y": 1074.3829345703125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 49,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 17.951480865478516,
+          "y": 8.789497375488281
+        },
+        "tileX": 17.951480865478516,
+        "tileY": 8.789497375488281,
+        "type": "flower",
+        "worldPos": {
+          "x": 1392.5997314453125,
+          "y": 1068.8367919921875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 50,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 5.540219783782959,
+          "y": 8.989679336547852
+        },
+        "tileX": 5.540219783782959,
+        "tileY": 8.989679336547852,
+        "type": "flower",
+        "worldPos": {
+          "x": 429.7867736816406,
+          "y": 1084.3660888671875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 51,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 17.83708953857422,
+          "y": -1.5341546535491943
+        },
+        "tileX": 17.83708953857422,
+        "tileY": -1.5341546535491943,
+        "type": "flower",
+        "worldPos": {
+          "x": 1383.725830078125,
+          "y": 267.97161865234375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 52,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 8.746346473693848,
+          "y": 8.83414077758789
+        },
+        "tileX": 8.746346473693848,
+        "tileY": 8.83414077758789,
+        "type": "flower",
+        "worldPos": {
+          "x": 678.5044555664063,
+          "y": 1072.300048828125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 53,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0700000524520874,
+        "tilePos": {
+          "x": 5.787607192993164,
+          "y": 11.838589668273926
+        },
+        "tileX": 5.787607192993164,
+        "tileY": 11.838589668273926,
+        "type": "bush",
+        "worldPos": {
+          "x": 448.97802734375,
+          "y": 1305.3724365234375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 54,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 7.025107383728027,
+          "y": 11.78187084197998
+        },
+        "tileX": 7.025107383728027,
+        "tileY": 11.78187084197998,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 544.97802734375,
+          "y": 1300.972412109375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 55,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 8.5,
+          "y": 11.5
+        },
+        "tileX": 8.5,
+        "tileY": 11.5,
+        "type": "grass_field",
+        "worldPos": {
+          "x": 659.3939819335938,
+          "y": 1279.1060791015625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 56,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 9.469169616699219,
+          "y": 11.776715278625488
+        },
+        "tileX": 9.469169616699219,
+        "tileY": 11.776715278625488,
+        "type": "flower",
+        "worldPos": {
+          "x": 734.5780029296875,
+          "y": 1300.572509765625
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 57,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 10.43057918548584,
+          "y": 11.735344886779785
+        },
+        "tileX": 10.43057918548584,
+        "tileY": 11.735344886779785,
+        "type": "stone",
+        "worldPos": {
+          "x": 809.1600952148438,
+          "y": 1297.3631591796875
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 58,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 11.459249496459961,
+          "y": 11.764322280883789
+        },
+        "tileX": 11.459249496459961,
+        "tileY": 11.764322280883789,
+        "type": "helmet",
+        "worldPos": {
+          "x": 888.9599609375,
+          "y": 1299.611083984375
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 59,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 12.49516487121582,
+          "y": 11.612195014953613
+        },
+        "tileX": 12.49516487121582,
+        "tileY": 11.612195014953613,
+        "type": "pickaxe",
+        "worldPos": {
+          "x": 969.3218994140625,
+          "y": 1287.8096923828125
+        },
+        "zIndex": 0
+      },
+      {
+        "destructible": true,
+        "id": 27,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 1.0,
+        "scaleX": 1.2999999523162842,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 16.4528751373291,
+          "y": 5.2175421714782715
+        },
+        "tileX": 16.4528751373291,
+        "tileY": 5.2175421714782715,
+        "type": "grass_tuft",
+        "worldPos": {
+          "x": 1276.34423828125,
+          "y": 791.7396240234375
+        },
+        "zIndex": 1
+      },
+      {
+        "destructible": true,
+        "id": 27,
+        "opacity": 0.5,
+        "rotation": 0.0,
+        "scale": 0.800000011920929,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "tilePos": {
+          "x": 16.681365966796875,
+          "y": 5.679178237915039
+        },
+        "tileX": 16.681365966796875,
+        "tileY": 5.679178237915039,
+        "type": "bush",
+        "worldPos": {
+          "x": 1294.069580078125,
+          "y": 827.5513916015625
+        },
+        "zIndex": 1
+      }
+    ],
+    "emitters": [
+      {
+        "angleDeg": 315.0,
+        "burstDuration": 0.699999988079071,
+        "id": 1,
+        "loop": false,
+        "particleScale": 1.2000000476837158,
+        "periodMax": 40.0,
+        "periodMin": 25.0,
+        "speed": 450.0,
+        "tilePos": {
+          "x": 6.537864685058594,
+          "y": 7.320586681365967
+        },
+        "type": "steam_jet",
+        "zIndex": 0
+      },
+      {
+        "angleDeg": 90.0,
+        "burstDuration": 0.8999999761581421,
+        "id": 2,
+        "loop": false,
+        "particleScale": 1.2000000476837158,
+        "periodMax": 11.0,
+        "periodMin": 5.0,
+        "speed": 120.0,
+        "tilePos": {
+          "x": 10.881659507751465,
+          "y": 7.86679220199585
+        },
+        "type": "water_drip",
+        "zIndex": 0
+      },
+      {
+        "angleDeg": 225.0,
+        "burstDuration": 2.5,
+        "id": 3,
+        "loop": false,
+        "particleScale": 0.800000011920929,
+        "periodMax": 40.0,
+        "periodMin": 25.0,
+        "speed": 450.0,
+        "tilePos": {
+          "x": 22.518735885620117,
+          "y": -0.8817887306213379
+        },
+        "type": "steam_jet",
+        "zIndex": 0
+      },
+      {
+        "angleDeg": 135.0,
+        "burstDuration": 0.4000000059604645,
+        "id": 4,
+        "loop": false,
+        "particleScale": 0.5,
+        "periodMax": 40.0,
+        "periodMin": 20.0,
+        "speed": 120.0,
+        "tilePos": {
+          "x": 6.6194024085998535,
+          "y": -0.523514449596405
+        },
+        "type": "steam_jet",
+        "zIndex": 0
+      },
+      {
+        "angleDeg": 90.0,
+        "burstDuration": 1.0,
+        "id": 5,
+        "loop": false,
+        "particleScale": 0.5,
+        "periodMax": 40.0,
+        "periodMin": 25.0,
+        "speed": 40.0,
+        "tilePos": {
+          "x": 15.551097869873047,
+          "y": 7.897402763366699
+        },
+        "type": "water_drip",
+        "zIndex": 0
+      }
+    ],
+    "enemyBountyRules": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 2,
+          "toWave": 2
+        },
+        {
+          "fromWave": 5,
+          "reward": 1,
+          "rewardStep": 4,
+          "toWave": 6
+        },
+        {
+          "fromWave": 7,
+          "reward": 1,
+          "rewardStep": 5,
+          "toWave": 15
+        },
+        {
+          "fromWave": 3,
+          "reward": 1,
+          "rewardStep": 3,
+          "toWave": 4
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ]
+    },
+    "enemyGlobalBounties": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 2,
+          "toWave": 2
+        },
+        {
+          "fromWave": 5,
+          "reward": 1,
+          "rewardStep": 4,
+          "toWave": 6
+        },
+        {
+          "fromWave": 7,
+          "reward": 1,
+          "rewardStep": 5,
+          "toWave": 15
+        },
+        {
+          "fromWave": 3,
+          "reward": 1,
+          "rewardStep": 3,
+          "toWave": 4
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ]
+    },
+    "height": 7,
+    "layout": [
+      [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ]
+    ],
+    "maxUpgradeTier": 1,
+    "noBuildMask": [
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "offsetX": 0.0,
+    "offsetY": 386.9848327636719,
+    "outerCells": [],
+    "spawners": [
+      {
+        "enableFadeIn": true,
+        "groupId": -1,
+        "targetBaseIndex": -1,
+        "visibleInGame": false,
+        "x": 3,
+        "y": 2
+      },
+      {
+        "enableFadeIn": true,
+        "groupId": -1,
+        "targetBaseIndex": -1,
+        "visibleInGame": false,
+        "x": 3,
+        "y": 3
+      },
+      {
+        "enableFadeIn": true,
+        "groupId": -1,
+        "targetBaseIndex": -1,
+        "visibleInGame": false,
+        "x": 3,
+        "y": 4
+      }
+    ],
+    "startingHealth": 20,
+    "startingMoney": 20,
+    "towerMaxTiers": {
+      "Basic": 1,
+      "Mercury": 1,
+      "Piston": 1
+    },
+    "width": 33
+  },
+  "maxUpgradeTier": 1,
+  "name": "Канал",
+  "startingHealth": 20,
+  "startingMoney": 20,
+  "tags": [
+    "Тест"
+  ],
+  "towerMaxTiers": {
+    "Basic": 1,
+    "Mercury": 1,
+    "Piston": 1
+  },
+  "waves": [
+    {
+      "parts": [
+        {
+          "count": 8,
+          "delayAfter": 2.0,
+          "interval": 0.6000000238418579,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 6,
+          "delayAfter": 0.0,
+          "interval": 0.5,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 12,
+          "delayAfter": 1.5,
+          "interval": 0.44999998807907104,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 10,
+          "delayAfter": 0.0,
+          "interval": 0.4000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 15,
+          "delayAfter": 2.0,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 15,
+          "delayAfter": 0.0,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 12,
+          "delayAfter": 1.0,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 5,
+          "delayAfter": 0.0,
+          "interval": 0.5,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 6,
+          "delayAfter": 1.5,
+          "interval": 0.4000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 15,
+          "delayAfter": 1.5,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 6,
+          "delayAfter": 0.0,
+          "interval": 0.4000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 20,
+          "delayAfter": 2.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 15,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 8,
+          "delayAfter": 1.0,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 8,
+          "delayAfter": 1.5,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 15,
+          "delayAfter": 0.0,
+          "interval": 0.4000000059604645,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 25,
+          "delayAfter": 1.5,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 10,
+          "delayAfter": 0.0,
+          "interval": 0.30000001192092896,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 12,
+          "delayAfter": 2.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 12,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 30,
+          "delayAfter": 1.5,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 10,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 15,
+          "delayAfter": 1.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 10,
+          "delayAfter": 1.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 15,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 15,
+          "delayAfter": 1.5,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 15,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 40,
+          "delayAfter": 2.0,
+          "interval": 0.10000000149011612,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 20,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 20,
+          "delayAfter": 0.5,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 20,
+          "delayAfter": 1.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 20,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        }
+      ]
+    },
+    {
+      "parts": [
+        {
+          "count": 25,
+          "delayAfter": 1.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 50,
+          "delayAfter": 1.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Coal"
+        },
+        {
+          "count": 25,
+          "delayAfter": 0.0,
+          "interval": 0.20000000298023224,
+          "reward": 1,
+          "reward_step": 1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    }
+  ]
+}

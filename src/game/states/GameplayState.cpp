@@ -16,6 +16,7 @@
 #include "../resources/ResourceManager.h"
 #include "../textures/Texture2D.h"
 #include "../../audio/AudioEventSystem.h"
+#include "../../audio/AudioManager.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <algorithm>
@@ -39,11 +40,13 @@ GameplayState::GameplayState(GameStateManager& stateManager, int windowWidth, in
 void GameplayState::cleanup() {
     EventBus::clear();
     AudioEventSystem::cleanup();
+    AudioManager::stopMusic();
 }
 
 void GameplayState::setupUI() {
     m_buildPanel = std::make_unique<Buildpanel>();
-    m_buildPanel->initPanelData();
+    const auto& allowedTowers = m_world ? m_world->levelData.allowedTowers : std::vector<std::string>{};
+    m_buildPanel->initPanelData(allowedTowers);
     m_placementUI = std::make_unique<PlacementUI>();
     m_pathVisualizer = std::make_unique<PathVisualizer>();
     m_statsPanel = std::make_unique<StatsPanel>();
@@ -56,12 +59,53 @@ void GameplayState::setupEventListeners() {
 
     AudioEventSystem::init();
 
+    enemyKillCounts.clear();
+
     EventBus::subscribe(EventType::EnemyDied, [this](const Event& e) {
-        this->m_world->playerStats.money += e.value1;
+        std::string type = normalizeEnemyType(e.enemyType.empty() ? "Basic" : e.enemyType);
+        this->enemyKillCounts[type]++;
+
+        int displayWave = (e.waveIndex >= 0) ? (e.waveIndex + 1) : 1;
+        EnemyWaveBountyRule rule;
+        if (this->m_world) {
+            auto bounty = getEnemyBountyForWave(this->m_world->levelData.enemyBountyRules, type, e.waveIndex);
+            rule.reward = bounty.first;
+            rule.rewardStep = bounty.second;
+        } else {
+            if (e.value1 > 0) {
+                rule.reward = e.value1;
+            } else {
+                rule.reward = 1;
+            }
+            if (e.rewardStep > 0) {
+                rule.rewardStep = e.rewardStep;
+            } else {
+                rule.rewardStep = 1;
+            }
+        }
+
+        if (rule.rewardStep <= 0) {
+            rule.rewardStep = 1;
+        }
+
+        if (!this->m_world) {
+            return;
+        }
+
+        int addedMoney = 0;
+        if (this->enemyKillCounts[type] % rule.rewardStep == 0) {
+            addedMoney = rule.reward;
+            this->m_world->playerStats.addMoney(rule.reward);
+        }
+        (void)addedMoney;
+        (void)displayWave;
         this->m_world->playerStats.score += e.value2;
     });
 
     EventBus::subscribe(EventType::EnemyReachedBase, [this](const Event& e) {
+        if (!this->m_world) {
+            return;
+        }
         this->m_world->playerStats.baseHealth -= e.value1;
         if (this->m_world->playerStats.baseHealth <= 0) {
             this->m_world->playerStats.baseHealth = 0;
@@ -73,6 +117,7 @@ void GameplayState::setupEventListeners() {
 void GameplayState::init() {
     ConfigManager::loadConfigs("res/configs/towers.json", "res/configs/enemies.json", "res/configs/particles.json");
     ConfigManager::loadTextureConfig("res/levels/textures.json");
+    ConfigManager::preloadAllSounds();
 
     m_gameplayRenderer = std::make_unique<GameplayRenderer>(m_renderer, m_textRenderer);
     m_inputHandler = std::make_unique<GameplayInputHandler>();
@@ -187,7 +232,7 @@ void GameplayState::update(float dt) {
             m_pathVisualizer->update(step, m_world->grid->getCellSize());
         }
 
-        m_world->update(step);
+        m_world->update(step, m_timeScale);
         remainingDt -= step;
     }
 
@@ -250,9 +295,12 @@ void GameplayState::render() {
         bool hovered = (mousePos.x >= btnX && mousePos.x <= btnX + btnW &&
                         mousePos.y >= btnY && mousePos.y <= btnY + btnH);
 
-        auto whiteTex = std::shared_ptr<Texture2D>(ResourceManager::getWhiteTexture(), [](Texture2D*) {});
+        auto whiteTex = ResourceManager::getWhiteTexture();
         Texture2D* rawUiTex = ResourceManager::getTexture("uiBaseTexture");
-        auto uiTex = rawUiTex ? std::shared_ptr<Texture2D>(rawUiTex, [](Texture2D*) {}) : whiteTex;
+        const Texture2D* uiTex = whiteTex;
+        if (rawUiTex) {
+            uiTex = rawUiTex;
+        }
 
         m_renderer->beginBatch();
 
@@ -278,8 +326,8 @@ void GameplayState::render() {
 }
 
 void GameplayState::startNextWave() {
-    if (m_world && m_world->waveManager) {
-        m_world->waveManager->startNextWave();
+    if (m_world) {
+        m_world->triggerEarlyWave();
     }
 }
 
@@ -305,10 +353,14 @@ void GameplayState::togglePause() {
 
 
 void GameplayState::restartGame() {
+    enemyKillCounts.clear();
     m_world = std::make_unique<GameWorld>();
     m_world->loadLevel(m_currentLevelPath, this->width, this->height);
     m_selectedTowerType = "";
     m_selectedTowerOnMap = nullptr;
+    if (m_buildPanel) {
+        m_buildPanel->initPanelData(m_world->levelData.allowedTowers);
+    }
     std::cout << "Game Restarted!" << std::endl;
 }
 
@@ -326,8 +378,13 @@ void GameplayState::resize(int windowWidth, int windowHeight) {
 void GameplayState::saveGame(const std::string& saveName) {
     if (!m_world || !m_world->waveManager || !m_world->entityManager) return;
 
+    if (m_world->waveManager->isWaveActive() || !m_world->entityManager->getEnemies().empty()) {
+        std::cout << "[GameplayState] Сохранение запрещено во время активной волны." << std::endl;
+        return;
+    }
+
     SaveManager saveManager;
-    saveManager.writeSave(saveName, m_currentLevelPath, m_world->playerStats, *m_world->waveManager, *m_world->entityManager);
+    saveManager.writeSave(saveName, m_currentLevelPath, m_world->playerStats, *m_world->waveManager, *m_world->entityManager, enemyKillCounts);
     std::cout << "[GameplayState] Игра сохранена в слот: " << saveName << std::endl;
 }
 
@@ -336,9 +393,11 @@ bool GameplayState::loadSavedGame(const std::string& saveName) {
     std::string loadedLevelPath;
     PlayerStats loadedStats;
     int loadedWaveIndex = 0;
+    bool loadedGameStarted = false;
+    std::map<std::string, int> loadedEnemyKillCounts;
     nlohmann::json restoredTowers;
 
-    if (!saveManager.readSave(saveName, loadedLevelPath, loadedStats, loadedWaveIndex, restoredTowers)) {
+    if (!saveManager.readSave(saveName, loadedLevelPath, loadedStats, loadedWaveIndex, loadedGameStarted, loadedEnemyKillCounts, restoredTowers)) {
         std::cout << "[LoadGame] Не удалось загрузить файл: " << saveName << std::endl;
         return false;
     }
@@ -355,25 +414,50 @@ bool GameplayState::loadSavedGame(const std::string& saveName) {
     m_world->loadLevel(m_currentLevelPath, this->width, this->height);
 
     m_world->playerStats = loadedStats;
-    m_world->waveManager->setCurrentWaveIndex(loadedWaveIndex);
+    if (m_world->waveManager) {
+        m_world->waveManager->setCurrentWaveIndex(loadedWaveIndex);
+        m_world->waveManager->setGameStarted(loadedGameStarted);
+    }
 
     setupUI();
     setupEventListeners();
+    enemyKillCounts = loadedEnemyKillCounts;
     AudioEventSystem::playThemeMusic("res/sounds/background.mp3");
 
     for (const auto& tData : restoredTowers) {
-        std::string type = tData.at("type").get<std::string>();
-        int gx = tData.at("grid_x").get<int>();
-        int gy = tData.at("grid_y").get<int>();
-        int lvl = tData.at("level").get<int>();
-        int modeInt = tData.at("target_mode").get<int>();
+        try {
+            std::string type = tData.at("type").get<std::string>();
+            int gx = tData.at("grid_x").get<int>();
+            int gy = tData.at("grid_y").get<int>();
+            int lvl = tData.at("level").get<int>();
+            int modeInt = tData.at("target_mode").get<int>();
+            float angle = 270.0f;
+            if (tData.contains("angle")) {
+                angle = tData.at("angle").get<float>();
+            }
 
-        auto restoredTower = std::make_unique<Tower>(gx, gy, type);
-        restoredTower->forceLevel(lvl);
-        restoredTower->setTargetMode(static_cast<TargetMode>(modeInt));
+            if (gx < 0 || gy < 0 || gx >= m_world->grid->getWidth() || gy >= m_world->grid->getHeight()) {
+                std::cerr << "[LoadGame] Башня вне границ сетки пропущена: " << gx << "," << gy << std::endl;
+                continue;
+            }
 
-        m_world->entityManager->addTower(std::move(restoredTower));
-        m_world->grid->setCellType(gx, gy, CellType::Tower);
+            auto restoredTower = std::make_unique<Tower>(gx, gy, type, angle);
+            if (lvl < 1) {
+                lvl = 1;
+            }
+            if (lvl > restoredTower->getMaxLevel()) {
+                lvl = restoredTower->getMaxLevel();
+            }
+            restoredTower->forceLevel(lvl);
+            restoredTower->setTargetMode(static_cast<TargetMode>(modeInt));
+
+            m_world->grid->setCellType(gx, gy, CellType::Tower);
+            m_world->demolishDecorationsInCell(gx, gy);
+            m_world->entityManager->addTower(std::move(restoredTower));
+        }
+        catch (const std::exception& e) {
+            std::cerr << "[LoadGame] Пропущена повреждённая запись башни: " << e.what() << std::endl;
+        }
     }
 
     m_world->recalculateAllPaths();

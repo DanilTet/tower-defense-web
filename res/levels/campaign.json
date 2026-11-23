@@ -3,15 +3,17 @@
   "missions": [
     {
       "id": "mission_1",
-      "file": "level_1.json",
-      "name": "Шурф №1: Вход в выработку",
-      "description": "Первая линия обороны рудника от мутантов"
+      "file": "kanal.json",
+      "name": "Канал",
+      "description": "Первая линия обороны: канал на подступах к руднику",
+      "order": 1
     },
     {
       "id": "mission_2",
-      "file": "level_2.json",
-      "name": "Горизонт -200: Ртутные пути",
-      "description": "Оборона узких переходов над глубокими обрывами"
+      "file": "rtutnaya_shchakhta.json",
+      "name": "Вход в ртутную шахту",
+      "description": "Оборона входа в ртутную шахту",
+      "order": 2
     }
   ]
 }

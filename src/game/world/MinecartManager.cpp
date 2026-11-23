@@ -8,36 +8,35 @@
 #include <cstdlib>
 #include <cstdint>
 
-void MinecartManager::rebuildWaypoints() {
-    m_waypoints.clear();
-    for (const auto& pt : m_railGridCells) {
+void MinecartManager::rebuildWaypoints(CartInstance& cart) {
+    cart.waypoints.clear();
+    cart.waypoints.reserve(cart.railGridCells.size());
+    for (const auto& pt : cart.railGridCells) {
         glm::vec2 center = m_gridOffset + glm::vec2((pt.x + 0.5f) * m_cellSize, (pt.y + 0.5f) * m_cellSize);
-        m_waypoints.push_back(center);
+        cart.waypoints.push_back(center);
     }
 }
 
 void MinecartManager::init(const LevelMapData& levelData, float cellSize, glm::vec2 gridOffset) {
-    m_state = CartState::Inactive;
-    m_railGridCells.clear();
-    m_waypoints.clear();
+    m_carts.clear();
     m_particles.clear();
     m_floatingTexts.clear();
-    m_particleSpawnTimer = 0.0f;
+    m_floatingTexts.reserve(8);
     m_popupCooldown = 0.0f;
+    m_killCounter = 0;
     m_cellSize = cellSize;
     m_gridOffset = gridOffset;
-    m_currentWaypointIndex = 0;
-    m_currentAngle = 0.0f;
-    m_pulseTimer = 0.0f;
 
-    if (levelData.minecarts.empty()) return;
-    const auto& mc = levelData.minecarts[0];
-    if (!mc.hasStart() || !mc.hasEnd()) return;
+    if (levelData.minecarts.empty()) {
+        m_particles.reserve(64);
+        return;
+    }
 
-    glm::ivec2 startPt = mc.start;
-    glm::ivec2 endPt = mc.end;
     int gw = levelData.gridWidth;
     int gh = levelData.gridHeight;
+    if (gw <= 0 || gh <= 0) {
+        return;
+    }
 
     auto isRail = [&](int x, int y) -> bool {
         if (x < 0 || x >= gw || y < 0 || y >= gh) return false;
@@ -45,67 +44,91 @@ void MinecartManager::init(const LevelMapData& levelData, float cellSize, glm::v
         return levelData.layout[y][x] == 5; // CellType::Rail
     };
 
-    if (!isRail(startPt.x, startPt.y) || !isRail(endPt.x, endPt.y)) return;
-
-    // 4-направлений BFS від Depot до Buffer
     const glm::ivec2 dirs[4] = { {0,-1}, {0,1}, {-1,0}, {1,0} };
-    std::vector<std::vector<glm::ivec2>> parent(gh, std::vector<glm::ivec2>(gw, {-1, -1}));
-    std::vector<std::vector<bool>> visited(gh, std::vector<bool>(gw, false));
-    std::queue<glm::ivec2> q;
+    std::vector<glm::ivec2> parent(static_cast<size_t>(gw) * static_cast<size_t>(gh), {-1, -1});
+    std::vector<uint8_t> visited(static_cast<size_t>(gw) * static_cast<size_t>(gh), 0);
 
-    q.push(startPt);
-    visited[startPt.y][startPt.x] = true;
-    parent[startPt.y][startPt.x] = startPt;
+    m_carts.reserve(levelData.minecarts.size());
 
-    bool found = false;
-    while (!q.empty()) {
-        glm::ivec2 cur = q.front(); q.pop();
-        if (cur.x == endPt.x && cur.y == endPt.y) {
-            found = true;
-            break;
-        }
-        for (const auto& d : dirs) {
-            int nx = cur.x + d.x, ny = cur.y + d.y;
-            if (isRail(nx, ny) && !visited[ny][nx]) {
-                visited[ny][nx] = true;
-                parent[ny][nx] = cur;
-                q.push({nx, ny});
+    for (const auto& mc : levelData.minecarts) {
+        if (!mc.hasStart() || !mc.hasEnd()) continue;
+
+        glm::ivec2 startPt = mc.start;
+        glm::ivec2 endPt = mc.end;
+        if (!isRail(startPt.x, startPt.y) || !isRail(endPt.x, endPt.y)) continue;
+
+        std::fill(visited.begin(), visited.end(), 0);
+        std::fill(parent.begin(), parent.end(), glm::ivec2(-1, -1));
+
+        std::queue<glm::ivec2> q;
+        q.push(startPt);
+        visited[static_cast<size_t>(startPt.y) * gw + startPt.x] = 1;
+        parent[static_cast<size_t>(startPt.y) * gw + startPt.x] = startPt;
+
+        bool found = false;
+        while (!q.empty()) {
+            glm::ivec2 cur = q.front();
+            q.pop();
+            if (cur.x == endPt.x && cur.y == endPt.y) {
+                found = true;
+                break;
+            }
+            for (const auto& d : dirs) {
+                int nx = cur.x + d.x;
+                int ny = cur.y + d.y;
+                if (isRail(nx, ny)) {
+                    size_t nIdx = static_cast<size_t>(ny) * gw + nx;
+                    if (!visited[nIdx]) {
+                        visited[nIdx] = 1;
+                        parent[nIdx] = cur;
+                        q.push({nx, ny});
+                    }
+                }
             }
         }
+
+        if (!found) continue;
+
+        // Восстановление цепочки рельсов от Depot к Buffer
+        std::vector<glm::ivec2> path;
+        glm::ivec2 cur = endPt;
+        while (!(cur.x == startPt.x && cur.y == startPt.y)) {
+            path.push_back(cur);
+            cur = parent[static_cast<size_t>(cur.y) * gw + cur.x];
+        }
+        path.push_back(startPt);
+        std::reverse(path.begin(), path.end());
+
+        CartInstance cart;
+        cart.railGridCells = std::move(path);
+        cart.interval = std::max(5.0f, mc.interval);
+        cart.warningTime = std::clamp(mc.warningTime, 1.0f, cart.interval);
+        cart.speed = std::max(1.0f, mc.speed);
+
+        rebuildWaypoints(cart);
+
+        if (!cart.waypoints.empty()) {
+            cart.state = CartState::Cooldown;
+            cart.intervalTimer = cart.interval;
+            cart.currentPos = cart.waypoints[0];
+            m_carts.push_back(std::move(cart));
+        }
     }
 
-    if (!found) return;
-
-    // Відновлення ланцюжка
-    std::vector<glm::ivec2> path;
-    glm::ivec2 cur = endPt;
-    while (!(cur.x == startPt.x && cur.y == startPt.y)) {
-        path.push_back(cur);
-        cur = parent[cur.y][cur.x];
-    }
-    path.push_back(startPt);
-    std::reverse(path.begin(), path.end());
-
-    m_railGridCells = std::move(path);
-    m_interval = std::max(5.0f, mc.interval);
-    m_warningTime = std::clamp(mc.warningTime, 1.0f, m_interval);
-    m_speed = std::max(1.0f, mc.speed);
-
-    rebuildWaypoints();
-
-    if (!m_waypoints.empty()) {
-        m_state = CartState::Cooldown;
-        m_intervalTimer = m_interval;
-        m_currentPos = m_waypoints[0];
-    }
+    size_t reserveCount = std::min<size_t>(180, 64 * std::max<size_t>(1, m_carts.size()));
+    m_particles.reserve(reserveCount);
 }
 
 void MinecartManager::updateCellSize(float cellSize, glm::vec2 gridOffset) {
     m_cellSize = cellSize;
     m_gridOffset = gridOffset;
-    rebuildWaypoints();
-    if (m_currentWaypointIndex < m_waypoints.size()) {
-        m_currentPos = m_waypoints[m_currentWaypointIndex];
+    for (auto& cart : m_carts) {
+        rebuildWaypoints(cart);
+        if (cart.currentWaypointIndex < cart.waypoints.size()) {
+            cart.currentPos = cart.waypoints[cart.currentWaypointIndex];
+        } else if (!cart.waypoints.empty()) {
+            cart.currentPos = cart.waypoints.back();
+        }
     }
 }
 
@@ -120,19 +143,20 @@ void MinecartManager::spawnKillText(glm::vec2 pos) {
     m_floatingTexts.push_back(ft);
 }
 
-void MinecartManager::spawnMovementParticles(float dt) {
-    m_particleSpawnTimer += dt;
-    float headingCos = std::cos(m_currentAngle);
-    float headingSin = std::sin(m_currentAngle);
+void MinecartManager::spawnMovementParticles(CartInstance& cart, float dt) {
+    cart.particleSpawnTimer += dt;
+    float headingCos = std::cos(cart.currentAngle);
+    float headingSin = std::sin(cart.currentAngle);
     glm::vec2 heading(headingCos, headingSin);
     glm::vec2 lateral(-headingSin, headingCos);
 
+    const size_t maxParticles = std::min<size_t>(180, 45 * std::max<size_t>(1, m_carts.size()));
     const float spawnInterval = 0.06f; // Прореженный интервал спавна для предотвращения сплошного ковра
-    while (m_particleSpawnTimer >= spawnInterval) {
-        m_particleSpawnTimer -= spawnInterval;
+    while (cart.particleSpawnTimer >= spawnInterval) {
+        cart.particleSpawnTimer -= spawnInterval;
 
         // Ограничиваем максимальное количество одновременных частиц
-        if (m_particles.size() >= 45) break;
+        if (m_particles.size() >= maxParticles) break;
 
         // 1. Искры: спавним только с 1-2 случайных колес за тик вместо всех четырех
         const glm::vec2 wheelOffsets[4] = {
@@ -145,13 +169,13 @@ void MinecartManager::spawnMovementParticles(float dt) {
         int sparksToSpawn = 1 + (std::rand() % 2); // 1 или 2 искры
         for (int s = 0; s < sparksToSpawn; ++s) {
             int wIdx = std::rand() % 4;
-            glm::vec2 wPos = m_currentPos + glm::vec2(
+            glm::vec2 wPos = cart.currentPos + glm::vec2(
                 wheelOffsets[wIdx].x * headingCos - wheelOffsets[wIdx].y * headingSin,
                 wheelOffsets[wIdx].x * headingSin + wheelOffsets[wIdx].y * headingCos
             );
 
             float sideSign = (wheelOffsets[wIdx].y > 0.0f) ? 1.0f : -1.0f;
-            float sparkSpeed = (m_speed * m_cellSize * 0.45f) + static_cast<float>(std::rand() % 45);
+            float sparkSpeed = (cart.speed * m_cellSize * 0.45f) + static_cast<float>(std::rand() % 45);
             float spreadAngle = (static_cast<float>(std::rand() % 50) - 25.0f) * 0.0174533f;
 
             glm::vec2 baseDir = -heading * 0.40f + (lateral * sideSign * 0.70f);
@@ -180,7 +204,7 @@ void MinecartManager::spawnMovementParticles(float dt) {
         if (std::rand() % 2 == 0) {
             float rearYOffset = (static_cast<float>(std::rand() % 24) - 12.0f) * 0.01f * m_cellSize;
             glm::vec2 rearLocal(-m_cellSize * 0.44f, rearYOffset);
-            glm::vec2 rearPos = m_currentPos + glm::vec2(
+            glm::vec2 rearPos = cart.currentPos + glm::vec2(
                 rearLocal.x * headingCos - rearLocal.y * headingSin,
                 rearLocal.x * headingSin + rearLocal.y * headingCos
             );
@@ -189,7 +213,7 @@ void MinecartManager::spawnMovementParticles(float dt) {
             smoke.type = CartParticleType::Smoke;
             smoke.pos = rearPos;
             glm::vec2 randVel = glm::vec2(std::rand() % 30 - 15, std::rand() % 30 - 15) * 0.35f;
-            smoke.vel = -heading * (m_speed * m_cellSize * 0.15f) + randVel;
+            smoke.vel = -heading * (cart.speed * m_cellSize * 0.15f) + randVel;
             smoke.life = 0.40f + static_cast<float>(std::rand() % 20) / 100.0f; // 0.40 - 0.60s
             smoke.maxLife = smoke.life;
             smoke.size = m_cellSize * 0.16f;
@@ -206,34 +230,53 @@ void MinecartManager::updateParticles(float dt) {
         m_popupCooldown -= dt;
     }
 
-    for (auto& p : m_particles) {
+    size_t pIdx = 0;
+    while (pIdx < m_particles.size()) {
+        CartParticle& p = m_particles[pIdx];
         p.pos += p.vel * dt;
         if (p.type == CartParticleType::Spark) {
             p.vel *= 0.88f;
-        } else {
+        }
+        else {
             p.vel *= 0.94f;
         }
         p.life -= dt;
+        if (p.life <= 0.0f) {
+            if (pIdx + 1 < m_particles.size()) {
+                m_particles[pIdx] = m_particles.back();
+            }
+            m_particles.pop_back();
+        }
+        else {
+            ++pIdx;
+        }
     }
-    m_particles.erase(std::remove_if(m_particles.begin(), m_particles.end(),
-        [](const CartParticle& p) { return p.life <= 0.0f; }), m_particles.end());
 
-    for (auto& ft : m_floatingTexts) {
+    size_t ftIdx = 0;
+    while (ftIdx < m_floatingTexts.size()) {
+        FloatingTextEffect& ft = m_floatingTexts[ftIdx];
         ft.pos += ft.vel * dt;
         ft.vel.y += dt * (m_cellSize * 0.6f); // плавное замедление подъема
         ft.life -= dt;
+        if (ft.life <= 0.0f) {
+            if (ftIdx + 1 < m_floatingTexts.size()) {
+                m_floatingTexts[ftIdx] = std::move(m_floatingTexts.back());
+            }
+            m_floatingTexts.pop_back();
+        }
+        else {
+            ++ftIdx;
+        }
     }
-    m_floatingTexts.erase(std::remove_if(m_floatingTexts.begin(), m_floatingTexts.end(),
-        [](const FloatingTextEffect& ft) { return ft.life <= 0.0f; }), m_floatingTexts.end());
 }
 
 template <typename TEnemyPtr>
-void MinecartManager::checkCollisions(std::vector<TEnemyPtr>& enemies) {
+void MinecartManager::checkCollisions(const CartInstance& cart, std::vector<TEnemyPtr>& enemies) {
     float killRadius = m_cellSize * 0.55f;
     for (auto& enemy : enemies) {
         if (!enemy || enemy->isDead() || enemy->isReachedEnd()) continue;
         glm::vec2 enemyCenter = enemy->getPixelPos() + glm::vec2(m_cellSize * 0.5f);
-        if (glm::distance(m_currentPos, enemyCenter) <= killRadius) {
+        if (glm::distance(cart.currentPos, enemyCenter) <= killRadius) {
             enemy->takeDamage(999999);
             // Спавним всплывающий текст ТОЛЬКО если m_popupCooldown <= 0.0f И на экране не больше 2 активных текстов
             if (m_popupCooldown <= 0.0f && m_floatingTexts.size() <= 2) {
@@ -248,61 +291,71 @@ template <typename TEnemyPtr>
 void MinecartManager::updateInternal(float dt, std::vector<TEnemyPtr>& enemies) {
     updateParticles(dt);
 
-    if (m_state == CartState::Inactive || m_waypoints.empty()) return;
+    if (m_carts.empty()) return;
 
-    m_pulseTimer += dt;
+    float maxStepDist = std::max(1.0f, m_cellSize * 0.35f);
 
-    if (m_state == CartState::Cooldown) {
-        m_intervalTimer -= dt;
-        if (m_intervalTimer <= m_warningTime) {
-            m_state = CartState::Warning;
-            m_warningTimer = m_warningTime;
-            m_pulseTimer = 0.0f;
-        }
-    } else if (m_state == CartState::Warning) {
-        m_warningTimer -= dt;
-        if (m_warningTimer <= 0.0f) {
-            m_state = CartState::Moving;
-            m_currentWaypointIndex = 0;
-            m_currentPos = m_waypoints[0];
-            if (m_waypoints.size() > 1) {
-                glm::vec2 dir = m_waypoints[1] - m_waypoints[0];
-                m_currentAngle = std::atan2(dir.y, dir.x);
-            } else {
-                m_currentAngle = 0.0f;
+    for (auto& cart : m_carts) {
+        if (cart.state == CartState::Inactive || cart.waypoints.empty()) continue;
+
+        cart.pulseTimer += dt;
+
+        if (cart.state == CartState::Cooldown) {
+            cart.intervalTimer -= dt;
+            if (cart.intervalTimer <= cart.warningTime) {
+                cart.state = CartState::Warning;
+                cart.warningTimer = cart.warningTime;
+                cart.pulseTimer = 0.0f;
             }
-        }
-    } else if (m_state == CartState::Moving) {
-        spawnMovementParticles(dt);
+        } else if (cart.state == CartState::Warning) {
+            cart.warningTimer -= dt;
+            if (cart.warningTimer <= 0.0f) {
+                cart.state = CartState::Moving;
+                cart.currentWaypointIndex = 0;
+                cart.currentPos = cart.waypoints[0];
+                if (cart.waypoints.size() > 1) {
+                    glm::vec2 dir = cart.waypoints[1] - cart.waypoints[0];
+                    cart.currentAngle = std::atan2(dir.y, dir.x);
+                } else {
+                    cart.currentAngle = 0.0f;
+                }
+            }
+        } else if (cart.state == CartState::Moving) {
+            spawnMovementParticles(cart, dt);
 
-        float moveDist = m_speed * m_cellSize * dt;
+            float moveDist = cart.speed * m_cellSize * dt;
 
-        while (moveDist > 0.0f && m_currentWaypointIndex < m_waypoints.size()) {
-            glm::vec2 target = m_waypoints[m_currentWaypointIndex];
-            glm::vec2 toTarget = target - m_currentPos;
-            float distToTarget = glm::length(toTarget);
+            // Проверяем столкновение в стартовой точке (на случай врага прямо у депо)
+            checkCollisions(cart, enemies);
 
-            if (distToTarget > 0.001f) {
-                m_currentAngle = std::atan2(toTarget.y, toTarget.x);
+            while (moveDist > 0.0001f && cart.currentWaypointIndex < cart.waypoints.size()) {
+                glm::vec2 target = cart.waypoints[cart.currentWaypointIndex];
+                glm::vec2 toTarget = target - cart.currentPos;
+                float distToTarget = glm::length(toTarget);
+
+                if (distToTarget > 0.001f) {
+                    cart.currentAngle = std::atan2(toTarget.y, toTarget.x);
+                }
+
+                float stepAllowance = std::min(moveDist, maxStepDist);
+                if (distToTarget <= stepAllowance) {
+                    cart.currentPos = target;
+                    moveDist -= distToTarget;
+                    cart.currentWaypointIndex++;
+                } else {
+                    cart.currentPos += (toTarget / distToTarget) * stepAllowance;
+                    moveDist -= stepAllowance;
+                }
+
+                // Уничтожение врагов внутри каждого подшага, чтобы на 4x не проскакивать на поворотах
+                checkCollisions(cart, enemies);
             }
 
-            if (moveDist >= distToTarget) {
-                m_currentPos = target;
-                moveDist -= distToTarget;
-                m_currentWaypointIndex++;
-            } else {
-                m_currentPos += (toTarget / distToTarget) * moveDist;
-                moveDist = 0.0f;
+            // Достигли конца маршрута (Тупик)
+            if (cart.currentWaypointIndex >= cart.waypoints.size()) {
+                cart.state = CartState::Cooldown;
+                cart.intervalTimer = cart.interval;
             }
-        }
-
-        // Знищення ворогів на шляху вагонетки
-        checkCollisions(enemies);
-
-        // Досягли кінця маршруту (Тупик)
-        if (m_currentWaypointIndex >= m_waypoints.size()) {
-            m_state = CartState::Cooldown;
-            m_intervalTimer = m_interval;
         }
     }
 }
@@ -315,10 +368,10 @@ void MinecartManager::update(float dt, std::vector<std::shared_ptr<Enemy>>& enem
     updateInternal(dt, enemies);
 }
 
-void MinecartManager::renderSemaphore(SpriteRenderer* renderer, std::shared_ptr<Texture2D> whiteTexture) {
-    if (m_waypoints.empty()) return;
+void MinecartManager::renderSemaphore(const CartInstance& cart, SpriteRenderer* renderer, const Texture2D* whiteTexture) {
+    if (cart.waypoints.empty()) return;
 
-    glm::vec2 depotCenter = m_waypoints[0];
+    glm::vec2 depotCenter = cart.waypoints[0];
     glm::vec2 semBase = depotCenter + glm::vec2(-m_cellSize * 0.32f, -m_cellSize * 0.30f);
 
     float mastW = std::max(3.0f, std::round(m_cellSize * 0.09f));
@@ -352,12 +405,12 @@ void MinecartManager::renderSemaphore(SpriteRenderer* renderer, std::shared_ptr<
     glm::vec2 lensPos = headPos + glm::vec2((headW - lensSize) * 0.5f, (headH - lensSize) * 0.5f + 1.0f);
     glm::vec2 lampCenter = lensPos + glm::vec2(lensSize * 0.5f);
 
-    if (m_state == CartState::Warning) {
-        float flash = (std::sin(m_pulseTimer * 14.0f) + 1.0f) * 0.5f;
+    if (cart.state == CartState::Warning) {
+        float flash = (std::sin(cart.pulseTimer * 14.0f) + 1.0f) * 0.5f;
 
         // Розширювана тривожна аура навколо семафора (2 хвилі)
-        float wave1 = std::fmod(m_pulseTimer * 1.6f, 1.0f);
-        float wave2 = std::fmod(m_pulseTimer * 1.6f + 0.5f, 1.0f);
+        float wave1 = std::fmod(cart.pulseTimer * 1.6f, 1.0f);
+        float wave2 = std::fmod(cart.pulseTimer * 1.6f + 0.5f, 1.0f);
         float r1 = m_cellSize * (0.25f + wave1 * 0.85f);
         float r2 = m_cellSize * (0.25f + wave2 * 0.85f);
         float alpha1 = (1.0f - wave1) * 0.40f * (0.4f + 0.6f * flash);
@@ -377,7 +430,7 @@ void MinecartManager::renderSemaphore(SpriteRenderer* renderer, std::shared_ptr<
         float coreSz = lensSize * 0.5f;
         renderer->drawSprite(whiteTexture, lampCenter - glm::vec2(coreSz * 0.5f), glm::vec2(coreSz), 0.0f, coreCol);
 
-    } else if (m_state == CartState::Moving) {
+    } else if (cart.state == CartState::Moving) {
         // Яскраво-зелений сигнал "Колія відкрита / Вагонетка в русі"
         float haloSz = lensSize * 2.2f;
         renderer->drawSpriteRGBA(whiteTexture, lampCenter - glm::vec2(haloSz * 0.5f), glm::vec2(haloSz), 0.0f, glm::vec4(0.15f, 0.95f, 0.35f, 0.35f));
@@ -398,13 +451,13 @@ void MinecartManager::renderSemaphore(SpriteRenderer* renderer, std::shared_ptr<
     }
 }
 
-void MinecartManager::renderMovingCart(SpriteRenderer* renderer, std::shared_ptr<Texture2D> whiteTexture) {
-    float rotDeg = glm::degrees(m_currentAngle);
-    float cosA = std::cos(m_currentAngle);
-    float sinA = std::sin(m_currentAngle);
+void MinecartManager::renderMovingCart(const CartInstance& cart, SpriteRenderer* renderer, const Texture2D* whiteTexture) {
+    float rotDeg = glm::degrees(cart.currentAngle);
+    float cosA = std::cos(cart.currentAngle);
+    float sinA = std::sin(cart.currentAngle);
 
     auto drawLocalQuad = [&](glm::vec2 localOffset, glm::vec2 size, glm::vec3 color) {
-        glm::vec2 worldCenter = m_currentPos + glm::vec2(
+        glm::vec2 worldCenter = cart.currentPos + glm::vec2(
             localOffset.x * cosA - localOffset.y * sinA,
             localOffset.x * sinA + localOffset.y * cosA
         );
@@ -412,7 +465,7 @@ void MinecartManager::renderMovingCart(SpriteRenderer* renderer, std::shared_ptr
     };
 
     auto drawLocalQuadRGBA = [&](glm::vec2 localOffset, glm::vec2 size, glm::vec4 color) {
-        glm::vec2 worldCenter = m_currentPos + glm::vec2(
+        glm::vec2 worldCenter = cart.currentPos + glm::vec2(
             localOffset.x * cosA - localOffset.y * sinA,
             localOffset.x * sinA + localOffset.y * cosA
         );
@@ -420,7 +473,7 @@ void MinecartManager::renderMovingCart(SpriteRenderer* renderer, std::shared_ptr
     };
 
     // 1. М'яка падаюча тінь під вагонеткою (зміщення вниз-вправо у світових координатах)
-    glm::vec2 shadowWorldCenter = m_currentPos + glm::vec2(m_cellSize * 0.06f, m_cellSize * 0.08f);
+    glm::vec2 shadowWorldCenter = cart.currentPos + glm::vec2(m_cellSize * 0.06f, m_cellSize * 0.08f);
     glm::vec2 shadowSize(m_cellSize * 0.94f, m_cellSize * 0.68f);
     renderer->drawSpriteRGBA(whiteTexture, shadowWorldCenter - shadowSize * 0.5f, shadowSize, rotDeg, glm::vec4(0.0f, 0.0f, 0.0f, 0.36f));
 
@@ -481,7 +534,7 @@ void MinecartManager::renderMovingCart(SpriteRenderer* renderer, std::shared_ptr
     drawLocalQuad(glm::vec2(m_cellSize * 0.51f, 0.0f), glm::vec2(m_cellSize * 0.04f, m_cellSize * 0.18f), glm::vec3(0.92f, 0.80f, 0.15f));
 }
 
-void MinecartManager::renderParticles(SpriteRenderer* renderer, std::shared_ptr<Texture2D> whiteTexture) {
+void MinecartManager::renderParticles(SpriteRenderer* renderer, const Texture2D* whiteTexture) {
     for (const auto& p : m_particles) {
         float t = 1.0f - std::clamp(p.life / p.maxLife, 0.0f, 1.0f);
         float curSize = glm::mix(p.size, p.endSize, t);
@@ -540,7 +593,7 @@ static uint8_t getCharBitmapRow(char c, int row) {
     }
 }
 
-void MinecartManager::renderFloatingTexts(SpriteRenderer* renderer, std::shared_ptr<Texture2D> whiteTexture) {
+void MinecartManager::renderFloatingTexts(SpriteRenderer* renderer, const Texture2D* whiteTexture) {
     for (const auto& ft : m_floatingTexts) {
         float progress = 1.0f - std::clamp(ft.life / ft.maxLife, 0.0f, 1.0f);
         float alpha = std::clamp(ft.life / 0.3f, 0.0f, 1.0f);
@@ -597,21 +650,27 @@ void MinecartManager::renderFloatingTexts(SpriteRenderer* renderer, std::shared_
     }
 }
 
-void MinecartManager::render(SpriteRenderer* renderer, std::shared_ptr<Texture2D> whiteTexture) {
-    if (!renderer || !whiteTexture || m_state == CartState::Inactive) return;
+void MinecartManager::render(SpriteRenderer* renderer, const Texture2D* whiteTexture) {
+    if (!renderer || !whiteTexture || m_carts.empty()) return;
 
-    // 1. Семафор на станції початку (замість заливки всієї колії)
-    renderSemaphore(renderer, whiteTexture);
-
-    // 2. Системи часток (димок і іскри)
-    renderParticles(renderer, whiteTexture);
-
-    // 3. Рухома вагонетка з рудою та відбійником
-    if (m_state == CartState::Moving) {
-        renderMovingCart(renderer, whiteTexture);
+    // 1. Семафоры на станциях начала каждой активной вагонетки
+    for (const auto& cart : m_carts) {
+        if (cart.state != CartState::Inactive) {
+            renderSemaphore(cart, renderer, whiteTexture);
+        }
     }
 
-    // 4. Спливаючий коміксний текст (CRUNCH! / SPLAT!)
+    // 2. Системы частиц (дым и искры)
+    renderParticles(renderer, whiteTexture);
+
+    // 3. Движущиеся вагонетки с рудой и отбойником
+    for (const auto& cart : m_carts) {
+        if (cart.state == CartState::Moving) {
+            renderMovingCart(cart, renderer, whiteTexture);
+        }
+    }
+
+    // 4. Всплывающий комиксный текст (CRUNCH! / SPLAT!)
     renderFloatingTexts(renderer, whiteTexture);
 }
 

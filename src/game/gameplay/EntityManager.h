@@ -13,10 +13,25 @@ struct PlayerStats;
 
 class EntityManager {
 private:
+	static constexpr size_t MAX_ACTIVE_PROJECTILES = 1024;
+
 	std::vector<Projectile> m_projectiles; // проджектайлы
 	std::vector<std::unique_ptr<Tower>> m_towers;// БАШНИ
 	std::vector<std::unique_ptr<Enemy>> m_enemies; // вектор для хранения всех врагов на уровне
 	std::unique_ptr<ParticleSystem> m_particleSystem; // партиклы
+
+	// Кэшированные буферы для минимизации аллокаций и O(1) поиска цели пулями
+	std::vector<std::unique_ptr<Enemy>> m_spawnedChildrenBuffer;
+	std::vector<Enemy*> m_enemyLookup;
+	int m_enemyLookupBaseId = 0;
+	bool m_enemyLookupValid = false;
+	std::vector<Enemy*> m_renderEnemyBuffer;
+	const Texture2D* m_coalGlowTexture = nullptr;
+	bool m_coalGlowResolved = false;
+	const Texture2D* m_whiteTexture = nullptr;
+
+	void rebuildEnemyLookup();
+	Enemy* findAliveEnemyById(int id) const;
 
 public:
 	// конструктор
@@ -29,13 +44,13 @@ public:
 	std::vector<Projectile>& getProjectilePool() { return m_projectiles; }
 
 	// методы обновления и рендера
-	void update(float dt, Grid& gameGrid);
+	void update(float dt, Grid& gameGrid, float timeScale = 1.0f);
 	void render(SpriteRenderer* renderer,
-		std::shared_ptr<Texture2D> mainAtlas, // атлас карты и башен
-		std::shared_ptr<Texture2D> enemyAtlas, // атлас врагов
-		std::shared_ptr<Texture2D> radiusTex,
-		std::shared_ptr<Texture2D> arrowTex,
-		std::shared_ptr<Texture2D> particleTex,
+		const Texture2D* mainAtlas, // атлас карты и башен
+		const Texture2D* enemyAtlas, // атлас врагов
+		const Texture2D* radiusTex,
+		const Texture2D* arrowTex,
+		const Texture2D* particleTex,
 		Grid& gameGrid,
 		Tower* selectedTower = nullptr);
 	// методы добавления

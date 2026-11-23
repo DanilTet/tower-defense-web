@@ -5,19 +5,28 @@
 #include "core/ConfigManager.h"
 #include "gameplay/PlayerStats.h"
 #include "entities/Enemy.h"
+#include "world/PathService.h"
+#include "world/Pathfinder.h"
+
+void PlacementUI::invalidateCache() {
+    m_hasCachedPlacement = false;
+    m_cachedGridPtr = nullptr;
+    m_cachedGridPos = glm::ivec2(-9999, -9999);
+}
 
 void PlacementUI::renderHologram(
     SpriteRenderer* renderer,
-    std::shared_ptr<Texture2D> mainAtlas,
-    std::shared_ptr<Texture2D> radiusTexture,
-    const Grid& gameGrid,
+    const Texture2D* mainAtlas,
+    const Texture2D* radiusTexture,
+    Grid& gameGrid,
     glm::vec2 currentMousePos,
     const std::string& selectedTower,
     const PlayerStats& stats,
     glm::vec2 panelPos,
     bool hasValidPath,
     const std::vector<std::unique_ptr<Enemy>>* activeEnemies,
-    float placementAngle) {
+    float placementAngle,
+    const PlacementPathContext* pathContext) {
 
     // если рука пустая то выходим
     if (selectedTower.empty()) {
@@ -36,7 +45,7 @@ void PlacementUI::renderHologram(
     }
 
     // получаем данные выбранной башни
-    TowerStats towerstats = ConfigManager::getTowerStats(selectedTower);
+    const TowerStats& towerstats = ConfigManager::getTowerStats(selectedTower);
 
     // проверяем, можно ли тут строить
     bool hasMoney = (stats.money >= towerstats.cost);
@@ -54,10 +63,50 @@ void PlacementUI::renderHologram(
         }
     }
 
+    // проверяем, не перекроет ли постройка маршрут врагов (результат кэшируется по клетке, версии сетки и таймеру)
+    bool blocksPath = false;
+    if (canBuildHere && !hasEnemyHere && pathContext && pathContext->pathfinder && pathContext->spawners && pathContext->bases) {
+        uint64_t currentGridVersion = gameGrid.getVersion();
+        bool hasActiveEnemies = false;
+        if (activeEnemies && !activeEnemies->empty()) {
+            hasActiveEnemies = true;
+        }
+
+        double now = glfwGetTime();
+        bool needRecalculate = false;
+        if (!m_hasCachedPlacement) {
+            needRecalculate = true;
+        } else if (m_cachedGridPos != gridPos) {
+            needRecalculate = true;
+        } else if (m_cachedGridPtr != &gameGrid || m_cachedGridVersion != currentGridVersion) {
+            needRecalculate = true;
+        } else if (m_cachedHadEnemies != hasActiveEnemies) {
+            needRecalculate = true;
+        } else if (hasActiveEnemies && (now - m_lastValidationTime) >= VALIDATION_REFRESH_INTERVAL) {
+            needRecalculate = true;
+        }
+
+        if (needRecalculate) {
+            std::vector<std::vector<glm::ivec2>> newPaths;
+            bool placementValid = PathService::isPlacementValid(
+                gameGrid, *pathContext->pathfinder, *pathContext->spawners, *pathContext->bases,
+                gridPos.x, gridPos.y, newPaths, pathContext->currentPaths, activeEnemies);
+            m_cachedBlocksPath = !placementValid;
+            m_cachedGridPos = gridPos;
+            m_cachedGridPtr = &gameGrid;
+            m_cachedGridVersion = gameGrid.getVersion();
+            m_cachedHadEnemies = hasActiveEnemies;
+            m_lastValidationTime = now;
+            m_hasCachedPlacement = true;
+        }
+
+        blocksPath = m_cachedBlocksPath;
+    }
+
     // задаем цвет голограмы
     glm::vec3 holoColor;
 
-    if (hasMoney && canBuildHere && !hasEnemyHere) {
+    if (hasMoney && canBuildHere && !hasEnemyHere && !blocksPath) {
         holoColor = glm::vec3(0.2f, 1.0f, 0.2f); // Зелёная голограмма все ок
     }
     else {
@@ -70,7 +119,7 @@ void PlacementUI::renderHologram(
     glm::vec2 cellCenter = cellPixelPos + glm::vec2(cellSize / 2.0f);
 
     // включаем режим свечения
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    renderer->setAdditiveBlending(true);
 
     if (selectedTower == "Piston") {
         // Для поршня подсвечиваем строго 1 клетку удара перед бойком
@@ -111,5 +160,5 @@ void PlacementUI::renderHologram(
     renderer->drawSprite(mainAtlas, cellPixelPos, glm::vec2(cellSize), drawAngle, holoColor, towerUV);
 
     // выключаем свечение
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    renderer->setAdditiveBlending(false);
 }

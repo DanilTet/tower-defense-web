@@ -14,7 +14,7 @@ class PathVisualizer {
 public:
     void renderPathArrows(
         SpriteRenderer* renderer,// для рендера
-        std::shared_ptr<Texture2D> arrowTex, // текстура стрелки
+        const Texture2D* arrowTex, // текстура стрелки
         const std::vector<glm::ivec2>& levelPath, // путь
         const Grid& gameGrid, // сетка
         glm::vec3 arrowColor = glm::vec3(1.0f, 1.0f, 1.0f)

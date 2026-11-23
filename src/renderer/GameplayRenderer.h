@@ -19,14 +19,14 @@ private:
     std::shared_ptr<SpriteRenderer> m_renderer;
     TextRenderer* m_textRenderer;
 
-    std::shared_ptr<Texture2D> m_mainAtlas;
-    std::shared_ptr<Texture2D> m_enemyAtlas;
-    std::shared_ptr<Texture2D> m_transitionsAtlas;
-    std::shared_ptr<Texture2D> m_radiusTexture;
-    std::shared_ptr<Texture2D> m_particleTexture;
-    std::shared_ptr<Texture2D> m_arrowTexture;
-    std::shared_ptr<Texture2D> m_uiBaseTexture;
-    std::shared_ptr<Texture2D> m_whiteTexture;
+    const Texture2D* m_mainAtlas;
+    const Texture2D* m_enemyAtlas;
+    const Texture2D* m_transitionsAtlas;
+    const Texture2D* m_radiusTexture;
+    const Texture2D* m_particleTexture;
+    const Texture2D* m_arrowTexture;
+    const Texture2D* m_uiBaseTexture;
+    const Texture2D* m_whiteTexture;
 
 public:
     GameplayRenderer(std::shared_ptr<SpriteRenderer> renderer, TextRenderer* textRenderer);
@@ -47,7 +47,8 @@ public:
         int windowHeight,
         float pistonPlacementAngle = 270.0f,
         float timeScale = 1.0f,
-        bool isPaused = false
+        bool isPaused = false,
+        bool showPathArrows = true
     );
 };
 

@@ -1,14 +1,132 @@
 {
+  "allowedTowers": [
+    "Basic",
+    "Mercury",
+    "Piston"
+  ],
+  "background": "default",
+  "enemyBountyRules": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ]
+  },
+  "enemyGlobalBounties": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ]
+  },
+  "hasSidePockets": false,
   "isCampaign": true,
   "map": {
+    "allowedTowers": [
+      "Basic",
+      "Mercury",
+      "Piston"
+    ],
     "bases": [
       {
+        "enableFadeOut": true,
         "id": 0,
+        "visibleInGame": false,
         "x": 19,
         "y": 1
       }
     ],
-    "cellSize": 102.25,
+    "cellSize": 99.41666412353516,
+    "enemyBountyRules": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ]
+    },
+    "enemyGlobalBounties": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ]
+    },
     "height": 12,
     "layout": [
       [
@@ -71,7 +189,7 @@
         2,
         5,
         0,
-        2,
+        0,
         2,
         2,
         2,
@@ -200,7 +318,7 @@
         2,
         2,
         2,
-        3,
+        2,
         3,
         3,
         3,
@@ -221,7 +339,7 @@
         0,
         2,
         2,
-        3,
+        2,
         3,
         3,
         3,
@@ -234,10 +352,10 @@
       [
         0,
         1,
-        1,
-        1,
-        1,
-        1,
+        4,
+        4,
+        4,
+        4,
         0,
         5,
         0,
@@ -256,10 +374,10 @@
       [
         0,
         1,
-        1,
-        1,
-        1,
-        1,
+        4,
+        4,
+        4,
+        4,
         0,
         5,
         2,
@@ -276,6 +394,7 @@
         3
       ]
     ],
+    "maxUpgradeTier": 3,
     "minecarts": [
       {
         "end": {
@@ -291,31 +410,322 @@
         "warningTime": 3.0
       }
     ],
-    "offsetX": 257.5,
+    "noBuildMask": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "offsetX": 285.8333740234375,
     "offsetY": 62.0,
+    "outerCells": [],
     "spawners": [
       {
+        "enableFadeIn": true,
+        "groupId": -1,
         "targetBaseIndex": -1,
+        "visibleInGame": false,
         "x": 0,
         "y": 9
       },
       {
+        "enableFadeIn": true,
+        "groupId": -1,
         "targetBaseIndex": -1,
+        "visibleInGame": false,
         "x": 0,
         "y": 10
       },
       {
+        "enableFadeIn": true,
+        "groupId": -1,
         "targetBaseIndex": -1,
+        "visibleInGame": false,
         "x": 0,
         "y": 11
       }
     ],
+    "startingHealth": 20,
+    "startingMoney": 10000,
+    "towerMaxTiers": {
+      "Basic": 3,
+      "Mercury": 3,
+      "Piston": 3
+    },
     "width": 20
   },
+  "maxUpgradeTier": 3,
   "name": "Вагонетка",
+  "startingHealth": 20,
+  "startingMoney": 10000,
   "tags": [
     "Кампания"
   ],
+  "towerMaxTiers": {
+    "Basic": 3,
+    "Mercury": 3,
+    "Piston": 3
+  },
   "waves": [
     {
       "parts": [
@@ -323,18 +733,27 @@
           "count": 20,
           "delayAfter": 3.0,
           "interval": 0.5,
-          "type": "Basic"
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
+          "type": "Tank"
         },
         {
           "count": 5,
           "delayAfter": 3.0,
           "interval": 1.0,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         },
         {
           "count": 3,
           "delayAfter": 2.0,
           "interval": 2.0,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Tank"
         }
       ]
@@ -345,24 +764,36 @@
           "count": 20,
           "delayAfter": 5.0,
           "interval": 1.0,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         },
         {
           "count": 10,
           "delayAfter": 5.0,
           "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         },
         {
           "count": 20,
           "delayAfter": 4.0,
           "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         },
         {
           "count": 3,
           "delayAfter": 2.0,
           "interval": 0.5,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Tank"
         }
       ]
@@ -373,12 +804,18 @@
           "count": 2,
           "delayAfter": 3.0,
           "interval": 2.0,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Tank"
         },
         {
           "count": 15,
           "delayAfter": 0.0,
           "interval": 0.5,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         }
       ]
@@ -389,18 +826,27 @@
           "count": 20,
           "delayAfter": 4.0,
           "interval": 0.15000000596046448,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         },
         {
           "count": 4,
           "delayAfter": 1.0,
           "interval": 1.5,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Tank"
         },
         {
           "count": 10,
           "delayAfter": 0.0,
           "interval": 0.20000000298023224,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         }
       ]
@@ -411,18 +857,27 @@
           "count": 8,
           "delayAfter": 2.0,
           "interval": 1.0,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Tank"
         },
         {
           "count": 30,
           "delayAfter": 2.0,
           "interval": 0.20000000298023224,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         },
         {
           "count": 25,
           "delayAfter": 0.0,
           "interval": 0.10000000149011612,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         }
       ]

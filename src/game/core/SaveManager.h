@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <map>
 #include <filesystem>
 #include <nlohmann/json.hpp>
 
@@ -16,13 +17,16 @@ public:
         const std::string& levelPath,
         const PlayerStats& stats,
         const WaveManager& waveManager,
-        EntityManager& entityManager);
+        EntityManager& entityManager,
+        const std::map<std::string, int>& enemyKillCounts);
 
     // чтение файла сохранения
     bool readSave(const std::string& saveName,
         std::string& outLevelPath,
         PlayerStats& outStats,
         int& outWaveIndex,
+        bool& outGameStarted,
+        std::map<std::string, int>& outEnemyKillCounts,
         nlohmann::json& outTowersArray);
 
 private:

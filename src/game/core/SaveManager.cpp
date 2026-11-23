@@ -17,12 +17,21 @@ void SaveManager::writeSave(const std::string& saveName,
     const std::string& levelPath,
     const PlayerStats& stats,
     const WaveManager& waveManager,
-    EntityManager& entityManager) {
+    EntityManager& entityManager,
+    const std::map<std::string, int>& enemyKillCounts) {
     json saveJson;
 
     // сохраняем информацию об уровне и текущей волне (0-based индекс)
     saveJson["level_path"] = levelPath;
-    saveJson["current_wave_index"] = waveManager.getCurrentWaveNumber() - 1;
+    saveJson["current_wave_index"] = waveManager.getCurrentWaveIndex();
+    saveJson["game_started"] = waveManager.isGameStarted();
+
+    // счётчики убийств врагов по типам (для пошаговых правил награды rewardStep)
+    json killsJson = json::object();
+    for (const auto& kv : enemyKillCounts) {
+        killsJson[kv.first] = kv.second;
+    }
+    saveJson["enemy_kill_counts"] = killsJson;
 
     // статистика игрока
     saveJson["player_stats"] = {
@@ -40,7 +49,8 @@ void SaveManager::writeSave(const std::string& saveName,
                 {"grid_x", tower->getGridX()},
                 {"grid_y", tower->getGridY()},
                 {"level", tower->getLevel()},
-                {"target_mode", static_cast<int>(tower->getTargetMode())}
+                {"target_mode", static_cast<int>(tower->getTargetMode())},
+                {"angle", tower->getAngle()}
                 });
         }
     }
@@ -62,6 +72,8 @@ bool SaveManager::readSave(const std::string& saveName,
     std::string& outLevelPath,
     PlayerStats& outStats,
     int& outWaveIndex,
+    bool& outGameStarted,
+    std::map<std::string, int>& outEnemyKillCounts,
     json& outTowersArray) {
     std::filesystem::path filePath = m_saveDirectory / (saveName + ".json");
     if (!std::filesystem::exists(filePath)) return false;
@@ -75,6 +87,24 @@ bool SaveManager::readSave(const std::string& saveName,
 
         outLevelPath = saveJson.at("level_path").get<std::string>();
         outWaveIndex = saveJson.at("current_wave_index").get<int>();
+
+        if (saveJson.contains("game_started") && saveJson["game_started"].is_boolean()) {
+            outGameStarted = saveJson["game_started"].get<bool>();
+        } else {
+            outGameStarted = (outWaveIndex > 0);
+        }
+
+        outEnemyKillCounts.clear();
+        if (saveJson.contains("enemy_kill_counts") && saveJson["enemy_kill_counts"].is_object()) {
+            for (auto it = saveJson["enemy_kill_counts"].begin(); it != saveJson["enemy_kill_counts"].end(); ++it) {
+                if (it.value().is_number_integer()) {
+                    int count = it.value().get<int>();
+                    if (count > 0) {
+                        outEnemyKillCounts[it.key()] = count;
+                    }
+                }
+            }
+        }
 
         auto& statsJson = saveJson.at("player_stats");
         outStats.money = statsJson.at("money").get<int>();

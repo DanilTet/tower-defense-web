@@ -53,8 +53,8 @@ bool CampaignManager::loadCampaign(const std::string& filepath) {
         std::cout << "[CampaignManager] campaign.json not found, initializing default..." << std::endl;
         s_campaignTitle = "Горловские Рудники";
         s_missions = {
-            { "mission_1", "level_1.json", "Шурф №1: Вход в выработку", "Первая линия обороны рудника от мутантов", 1 },
-            { "mission_2", "level_2.json", "Горизонт -200: Ртутные пути", "Оборона узких переходов над глубокими обрывами", 2 }
+            { "mission_1", "kanal.json", "Канал", "Первая линия обороны: канал на подступах к руднику", 1 },
+            { "mission_2", "rtutnaya_shchakhta.json", "Вход в ртутную шахту", "Оборона входа в ртутную шахту", 2 }
         };
         saveCampaign();
         return true;
@@ -84,8 +84,8 @@ bool CampaignManager::loadCampaign(const std::string& filepath) {
 
         if (s_missions.empty()) {
             s_missions = {
-                { "mission_1", "level_1.json", "Шурф №1: Вход в выработку", "Первая линия обороны рудника от мутантов", 1 },
-                { "mission_2", "level_2.json", "Горизонт -200: Ртутные пути", "Оборона узких переходов над глубокими обрывами", 2 }
+                { "mission_1", "kanal.json", "Канал", "Первая линия обороны: канал на подступах к руднику", 1 },
+                { "mission_2", "rtutnaya_shchakhta.json", "Вход в ртутную шахту", "Оборона входа в ртутную шахту", 2 }
             };
             saveCampaign();
         }

@@ -27,7 +27,8 @@ public:
         Tower* selectedTower,
         SpriteRenderer* renderer,
         TextRenderer* textRenderer,
-        std::shared_ptr<Texture2D> cellTexture, // используем базовую текстуру как заглушку
-        const Grid& gameGrid
+        const Texture2D* cellTexture, // используем базовую текстуру как заглушку
+        const Grid& gameGrid,
+        int maxUpgradeTier = 3
     );
 };

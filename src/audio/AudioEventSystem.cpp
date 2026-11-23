@@ -5,25 +5,25 @@
 void AudioEventSystem::init() {
     EventBus::subscribe(EventType::EnemyDied, [](const Event& e) {
         if (!e.textData.empty()) {
-            AudioManager::playSound(e.textData.c_str(), 0.1f);
+            AudioManager::playSound(e.textData, 0.1f);
         }
     });
 
     EventBus::subscribe(EventType::TowerFired, [](const Event& e) {
         if (!e.textData.empty()) {
-            AudioManager::playSound(e.textData.c_str(), 0.1f);
+            AudioManager::playSound(e.textData, 0.1f);
         }
     });
 
     EventBus::subscribe(EventType::TowerBuilt, [](const Event& e) {
         if (!e.textData.empty()) {
-            AudioManager::playSound(e.textData.c_str(), 0.1f);
+            AudioManager::playSound(e.textData, 0.1f);
         }
     });
 }
 
 void AudioEventSystem::playThemeMusic(const std::string& musicPath) {
-    AudioManager::playMusic(musicPath.c_str());
+    AudioManager::playMusic(musicPath);
 }
 
 void AudioEventSystem::cleanup() {

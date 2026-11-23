@@ -2,6 +2,7 @@
 #include "IGameState.h"
 #include <memory>
 #include <string>
+#include <map>
 #include <glm/glm.hpp>
 #include "../world/GameWorld.h"
 #include "../ui/BuildPanel.h"
@@ -55,6 +56,8 @@ private:
 
     float m_timeScale = 1.0f;
     bool m_isPaused = false;
+
+    std::map<std::string, int> enemyKillCounts;
 
     void setupUI();
     void setupEventListeners();

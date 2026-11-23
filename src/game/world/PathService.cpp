@@ -17,9 +17,10 @@ static bool doesPathIntersectCell(const std::vector<glm::ivec2>& path, int gridX
             int dx = path[i + 1].x - path[i].x;
             int dy = path[i + 1].y - path[i].y;
             if (std::abs(dx) == 1 && std::abs(dy) == 1) {
-                // Если новая башня ставится на любой из двух углов диагонального шага
-                if ((gridX == path[i].x + dx && gridY == path[i].y) ||
-                    (gridX == path[i].x && gridY == path[i].y + dy)) {
+                // Любая из двух ортогональных клеток диагонального шага блокирует его (corner-cutting)
+                bool isCornerA = (gridX == path[i].x + dx && gridY == path[i].y);
+                bool isCornerB = (gridX == path[i].x && gridY == path[i].y + dy);
+                if (isCornerA || isCornerB) {
                     return true;
                 }
             }
@@ -100,7 +101,14 @@ bool PathService::isPlacementValid(
     const std::vector<std::vector<glm::ivec2>>* currentPaths,
     const std::vector<std::unique_ptr<Enemy>>* activeEnemies)
 {
-    // --- 0. ПРОВЕРКА: Не стоит ли на клетке живой враг? ---
+    // --- 0. ПРОВЕРКА: Не стоит ли на клетке живой враг, спавнер или база? ---
+    for (const auto& sp : spawners) {
+        if (sp.pos.x == gridX && sp.pos.y == gridY) return false;
+    }
+    for (const auto& b : bases) {
+        if (b.x == gridX && b.y == gridY) return false;
+    }
+
     if (activeEnemies) {
         for (const auto& enemy : *activeEnemies) {
             if (!enemy || enemy->isDead() || enemy->isReachedEnd()) continue;
@@ -132,7 +140,6 @@ bool PathService::isPlacementValid(
         }
 
         if (!intersectsAny) {
-            grid.setCellType(gridX, gridY, CellType::Tower);
             outNewPaths = *currentPaths;
             return true; // 0 ms instant exit!
         }
@@ -140,7 +147,7 @@ bool PathService::isPlacementValid(
 
     // --- 2. ПРОВЕРКА С ПОСТАНОВКОЙ БАШНИ ЧЕРЕЗ БЫСТРЫЙ FLOW FIELD ---
     CellType oldCellType = grid.getCellType(gridX, gridY);
-    grid.setCellType(gridX, gridY, CellType::Tower);
+    grid.setCellType(gridX, gridY, CellType::Tower, false);
 
     outNewPaths.clear();
     outNewPaths.resize(spawners.size());
@@ -219,12 +226,13 @@ bool PathService::isPlacementValid(
     }
 
     if (isPathBlocked) {
-        grid.setCellType(gridX, gridY, oldCellType);
+        grid.setCellType(gridX, gridY, oldCellType, false);
         outNewPaths.clear();
         return false;
     }
 
-    grid.setCellType(gridX, gridY, CellType::Tower);
+    // Предикат не должен мутировать сетку — возвращаем исходный тип клетки
+    grid.setCellType(gridX, gridY, oldCellType, false);
     return true;
 }
 

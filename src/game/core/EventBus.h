@@ -19,6 +19,9 @@ struct Event {
     float x = 0.0f; // Координата X (для частиц или звука в пространстве)
     float y = 0.0f; // Координата Y
     std::string textData = "";
+    std::string enemyType = "";
+    int rewardStep = 1;
+    int waveIndex = 0;
 };
 
 class EventBus {

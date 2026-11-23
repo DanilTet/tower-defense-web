@@ -10,12 +10,12 @@ void PathVisualizer::update(float dt, float cellSize) {
 
 void PathVisualizer::renderPathArrows(
     SpriteRenderer* renderer,
-    std::shared_ptr<Texture2D> arrowTex,
+    const Texture2D* arrowTex,
     const std::vector<glm::ivec2>& levelPath,
     const Grid& gameGrid,
     glm::vec3 arrowColor) {
     // защита если текстурка не подгрузило или пустой путь
-    if (!arrowTex || levelPath.size() < 2) return;
+    if (!renderer || !arrowTex || levelPath.size() < 2) return;
 
     float cellSize = gameGrid.getCellSize(); // размер клетки
     float halfCell = cellSize / 2.0f; // половина клетки
@@ -23,9 +23,8 @@ void PathVisualizer::renderPathArrows(
     glm::vec2 arrowSize(cellSize * 0.20f, cellSize * 0.20f); // Размер стрелки — 25% от ширины клетки
     float arrowSpacing = cellSize * 0.50f; // Расстояние между стрелками — 60% от ширины клетки
 
-    // СУПЕР КРУТОЙ ЄФЕКТ СВЕЧЕНИЯ
-    // переключаем бленд-функцию в режим сложения цветов
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    // Аддитивное свечение стрелок пути через батчер SpriteRenderer
+    renderer->setAdditiveBlending(true);
 
     // пробегаемся по всем отрезкам пути
     for (size_t i = 0; i < levelPath.size() - 1; ++i) {
@@ -55,6 +54,6 @@ void PathVisualizer::renderPathArrows(
         }
     }
 
-    // возражение режима прозрачности
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Возврат обычного альфа-блендинга через батчер SpriteRenderer
+    renderer->setAdditiveBlending(false);
 }

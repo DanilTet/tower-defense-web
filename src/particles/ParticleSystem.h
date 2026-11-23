@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <vector>
 #include <memory>
 #include <glm/glm.hpp>
@@ -28,23 +29,33 @@ struct Particle {
 	float startSize, endSize;
 	float lifeTime;
 	float lifeRemaining;
-	bool active = false; // флаг для пула обьектов
 };
 
 
 class ParticleSystem {
 public:
-	// в пуле будет 2000 частиц
-	ParticleSystem(size_t maxParticles = 2000);
+	// жёсткий лимит активных частиц с предвыделением памяти
+	explicit ParticleSystem(size_t maxParticles = 800);
 
 	void update(float dt);
 
-	void render(SpriteRenderer* renderer, std::shared_ptr<Texture2D> texture, const Grid& grid);
+	void render(SpriteRenderer* renderer, const Texture2D* texture, const Grid& grid);
 
 	// выстрелить пачкой частиц
-	void emit(const ParticleEmitterProps& props, int count = 1);
+	void emit(const ParticleEmitterProps& props, int count = 1, bool isTrail = false);
+
+	void setTimeScale(float timeScale);
+	float getTimeScale() const { return m_timeScale; }
+	size_t getActiveCount() const { return m_particles.size(); }
+	size_t getMaxParticles() const { return m_maxParticles; }
+	size_t getTrailSoftCap() const { return m_trailSoftCap; }
 
 private:
-	std::vector<Particle> m_pool;
-	size_t m_poolIndex; // указатель на следующую свободную частицу
+	float nextRandomSigned();
+
+	std::vector<Particle> m_particles;
+	size_t m_maxParticles;
+	size_t m_trailSoftCap;
+	float m_timeScale = 1.0f;
+	uint32_t m_rngState = 0x9E3779B9u;
 };

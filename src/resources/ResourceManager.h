@@ -17,6 +17,7 @@ public:
 
     static Texture2D* loadTexture(const std::string& name, const std::string& path);
     static Texture2D* getTexture(const std::string& name);
+    static bool hasTexture(const std::string& name);
     static Texture2D* getWhiteTexture();
 
     static void clear();

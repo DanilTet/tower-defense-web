@@ -16,7 +16,7 @@
 VictoryState::VictoryState(GameStateManager& stateManager, int width, int height, std::shared_ptr<SpriteRenderer> renderer, TextRenderer* textRenderer, const std::string& levelPath, bool isEditorTest, GameplayOrigin origin)
     : m_stateManager(stateManager), m_width(width), m_height(height), m_renderer(renderer), m_textRenderer(textRenderer), m_levelPath(levelPath), m_isEditorTest(isEditorTest), m_origin(origin)
 {
-    m_uiTexture = std::shared_ptr<Texture2D>(ResourceManager::getTexture("uiBaseTexture"), [](Texture2D*) {});
+    m_uiTexture = ResourceManager::getTexture("uiBaseTexture");
     m_mousePressedLastFrame = true;
 }
 
@@ -40,16 +40,23 @@ void VictoryState::updateLayout() {
     m_btnNext.size = glm::vec2(btnW, btnH);
     m_btnMenu.size = glm::vec2(btnW, btnH);
 
-    m_btnNext.text = m_isEditorTest ? LOC("PAUSE_BACK_TO_EDITOR") : LOC("VICTORY_NEXT");
-    m_btnMenu.text = m_isEditorTest ? LOC("PAUSE_BACK_TO_EDITOR") : LOC("VICTORY_MENU");
-
     float fTitle = std::clamp(0.95f * scale, 0.65f, 1.30f);
     float titleTopOffset = std::clamp(36.0f * scale, 24.0f, 50.0f);
-    float startBtnY = m_windowPos.y + titleTopOffset + fTitle * 28.0f + std::clamp(28.0f * scale, 18.0f, 42.0f);
-
     float btnX = m_windowPos.x + (m_windowSize.x - btnW) * 0.5f;
-    m_btnNext.pos = glm::vec2(btnX, startBtnY);
-    m_btnMenu.pos = glm::vec2(btnX, startBtnY + btnH + spacing);
+
+    if (m_isEditorTest) {
+        m_btnNext.text = LOC("PAUSE_BACK_TO_EDITOR");
+        float titleBottom = m_windowPos.y + titleTopOffset + fTitle * 28.0f;
+        float availH = (m_windowPos.y + m_windowSize.y) - titleBottom;
+        float centerBtnY = titleBottom + (availH - btnH) * 0.5f;
+        m_btnNext.pos = glm::vec2(btnX, centerBtnY);
+    } else {
+        m_btnNext.text = LOC("VICTORY_NEXT");
+        m_btnMenu.text = LOC("VICTORY_MENU");
+        float startBtnY = m_windowPos.y + titleTopOffset + fTitle * 28.0f + std::clamp(28.0f * scale, 18.0f, 42.0f);
+        m_btnNext.pos = glm::vec2(btnX, startBtnY);
+        m_btnMenu.pos = glm::vec2(btnX, startBtnY + btnH + spacing);
+    }
 }
 
 void VictoryState::init() {
@@ -86,7 +93,9 @@ void VictoryState::processInput(GLFWwindow* window, float dt) {
     };
 
     updateButtonState(m_btnNext);
-    updateButtonState(m_btnMenu);
+    if (!m_isEditorTest) {
+        updateButtonState(m_btnMenu);
+    }
 
     int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
     if (mouseState == GLFW_PRESS && !m_mousePressedLastFrame) {
@@ -95,7 +104,7 @@ void VictoryState::processInput(GLFWwindow* window, float dt) {
         if (m_btnNext.state == 2) {
             if (m_isEditorTest) {
                 std::cout << "[VictoryState] Returning to MapEditor..." << std::endl;
-                m_stateManager.returnToMapEditor("", m_width, m_height, m_renderer, m_textRenderer);
+                m_stateManager.returnToMapEditor(m_levelPath, m_width, m_height, m_renderer, m_textRenderer);
             } else if (m_origin == GameplayOrigin::Campaign) {
                 std::string nextFile = CampaignManager::getNextMissionFile(m_levelPath);
                 if (!nextFile.empty()) {
@@ -115,7 +124,7 @@ void VictoryState::processInput(GLFWwindow* window, float dt) {
         else if (m_btnMenu.state == 2) {
             if (m_isEditorTest) {
                 std::cout << "[VictoryState] Returning to MapEditor..." << std::endl;
-                m_stateManager.returnToMapEditor("", m_width, m_height, m_renderer, m_textRenderer);
+                m_stateManager.returnToMapEditor(m_levelPath, m_width, m_height, m_renderer, m_textRenderer);
             } else if (m_origin == GameplayOrigin::Custom) {
                 std::cout << "[VictoryState] Returning to Custom LevelSelect..." << std::endl;
                 m_stateManager.setState(std::make_unique<LevelSelectState>(m_stateManager, m_width, m_height, m_renderer, m_textRenderer, LevelTab::Custom));
@@ -145,10 +154,12 @@ void VictoryState::render() {
     m_renderer->drawSprite(m_uiTexture, m_windowPos, m_windowSize, 0.0f, glm::vec3(0.12f, 0.15f, 0.2f));
 
     glm::vec3 nextColor = (m_btnNext.state == 1) ? glm::vec3(0.3f, 0.5f, 0.3f) : ((m_btnNext.state == 2) ? glm::vec3(0.1f, 0.3f, 0.1f) : glm::vec3(0.2f, 0.4f, 0.2f));
-    glm::vec3 menuColor = (m_btnMenu.state == 1) ? glm::vec3(0.5f) : ((m_btnMenu.state == 2) ? glm::vec3(0.2f) : glm::vec3(0.3f));
 
     m_renderer->drawSprite(m_uiTexture, m_btnNext.pos, m_btnNext.size, 0.0f, nextColor);
-    m_renderer->drawSprite(m_uiTexture, m_btnMenu.pos, m_btnMenu.size, 0.0f, menuColor);
+    if (!m_isEditorTest) {
+        glm::vec3 menuColor = (m_btnMenu.state == 1) ? glm::vec3(0.5f) : ((m_btnMenu.state == 2) ? glm::vec3(0.2f) : glm::vec3(0.3f));
+        m_renderer->drawSprite(m_uiTexture, m_btnMenu.pos, m_btnMenu.size, 0.0f, menuColor);
+    }
     m_renderer->endBatch();
 
     float fTitle = std::clamp(0.95f * m_uiScale, 0.65f, 1.30f);
@@ -164,10 +175,12 @@ void VictoryState::render() {
     float tyNext = m_btnNext.pos.y + (m_btnNext.size.y - fBtn * 28.0f) * 0.5f + 2.0f;
     m_textRenderer->RenderText(m_btnNext.text, txNext, tyNext, fBtn, glm::vec3(0.95f));
 
-    float twMenu = m_textRenderer->CalculateTextWidth(m_btnMenu.text, fBtn);
-    float txMenu = m_btnMenu.pos.x + (m_btnMenu.size.x - twMenu) * 0.5f;
-    float tyMenu = m_btnMenu.pos.y + (m_btnMenu.size.y - fBtn * 28.0f) * 0.5f + 2.0f;
-    m_textRenderer->RenderText(m_btnMenu.text, txMenu, tyMenu, fBtn, glm::vec3(0.95f));
+    if (!m_isEditorTest) {
+        float twMenu = m_textRenderer->CalculateTextWidth(m_btnMenu.text, fBtn);
+        float txMenu = m_btnMenu.pos.x + (m_btnMenu.size.x - twMenu) * 0.5f;
+        float tyMenu = m_btnMenu.pos.y + (m_btnMenu.size.y - fBtn * 28.0f) * 0.5f + 2.0f;
+        m_textRenderer->RenderText(m_btnMenu.text, txMenu, tyMenu, fBtn, glm::vec3(0.95f));
+    }
 }
 
 void VictoryState::resize(int width, int height) {

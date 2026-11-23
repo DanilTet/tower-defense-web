@@ -15,8 +15,8 @@ private:
     int m_width, m_height;
     std::shared_ptr<SpriteRenderer> m_renderer;
     TextRenderer* m_textRenderer;
-    std::shared_ptr<Texture2D> m_whiteTexture;
-    std::shared_ptr<Texture2D> m_uiTexture;
+    const Texture2D* m_whiteTexture;
+    const Texture2D* m_uiTexture;
 
     glm::vec2 m_windowPos;
     glm::vec2 m_windowSize;

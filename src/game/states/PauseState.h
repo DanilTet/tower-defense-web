@@ -28,8 +28,8 @@ private:
     std::shared_ptr<SpriteRenderer> m_renderer;
     TextRenderer* m_textRenderer;
     // Ui текстурка
-    std::shared_ptr<Texture2D> m_uiTexture;
-    std::shared_ptr<Texture2D> m_whiteTexture;
+    const Texture2D* m_uiTexture;
+    const Texture2D* m_whiteTexture;
     // переменные мыши и клавиатуры
     bool m_mousePressedLastFrame;
     bool m_escPressedLastFrame = false;

@@ -39,13 +39,23 @@ Texture2D& Texture2D::operator=(Texture2D&& other) noexcept {
 bool Texture2D::load(const std::string& path) {
     stbi_set_flip_vertically_on_load(false);
 
-    int channels;
-    unsigned char* data = stbi_load(path.c_str(), &m_width, &m_height, &channels, 0);
+    int loadedWidth = 0;
+    int loadedHeight = 0;
+    int channels = 0;
+    unsigned char* data = stbi_load(path.c_str(), &loadedWidth, &loadedHeight, &channels, 0);
 
     if (!data) {
         std::cerr << "Failed to load texture at path: " << path << std::endl;
         return false;
     }
+
+    if (m_id != 0) {
+        glDeleteTextures(1, &m_id);
+        m_id = 0;
+    }
+
+    m_width = loadedWidth;
+    m_height = loadedHeight;
 
     GLenum format = GL_RGB;
     if (channels == 4) {

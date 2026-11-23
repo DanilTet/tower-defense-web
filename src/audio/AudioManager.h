@@ -6,6 +6,9 @@ public:
     static bool init(); // инициализация
     static void cleanup(); // выгрузка из памяти музыки
 
+    // предзагрузка и декодирование звука в кэш (чтобы playSound не читал диск)
+    static void preloadSound(const std::string& filepath);
+
     // функция проигрывания звуков передается путь к файлу и громкость (по умолчанию 1.0)
     static void playSound(const std::string& filepath, float volume = 1.0f);
 

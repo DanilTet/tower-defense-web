@@ -37,8 +37,19 @@ LevelMapData LevelManager::loadLevelMap(const std::string& filepath) {
         file >> j;
 
         data.name = j.value("name", "");
+        data.background = j.value("background", "default");
+        if (data.background.empty() && j.contains("map") && j["map"].contains("background")) {
+            data.background = j["map"].value("background", "default");
+        }
+        if (data.background.empty()) {
+            data.background = "default";
+        }
+        data.hasSidePockets = j.value("hasSidePockets", false);
+        if (!data.hasSidePockets && j.contains("map") && j["map"].contains("hasSidePockets")) {
+            data.hasSidePockets = j["map"].value("hasSidePockets", false);
+        }
         std::string fname = fs::path(filepath).filename().string();
-        bool defaultCampaign = (fname == "level_1.json" || fname == "level_2.json");
+        bool defaultCampaign = (fname == "kanal.json" || fname == "rtutnaya_shchakhta.json");
         data.isCampaign = j.value("isCampaign", defaultCampaign);
 
         if (j.contains("tags") && j["tags"].is_array()) {
@@ -50,6 +61,243 @@ LevelMapData LevelManager::loadLevelMap(const std::string& filepath) {
         }
         if (data.tags.empty() && data.isCampaign) {
             data.tags.push_back("Кампания");
+        }
+
+        data.startingMoney = 50;
+        if (j.contains("startingMoney") && j["startingMoney"].is_number_integer()) {
+            data.startingMoney = j["startingMoney"].get<int>();
+        } else if (j.contains("map") && j["map"].contains("startingMoney") && j["map"]["startingMoney"].is_number_integer()) {
+            data.startingMoney = j["map"]["startingMoney"].get<int>();
+        }
+
+        data.startingHealth = 20;
+        if (j.contains("startingHealth") && j["startingHealth"].is_number_integer()) {
+            data.startingHealth = j["startingHealth"].get<int>();
+        } else if (j.contains("map") && j["map"].contains("startingHealth") && j["map"]["startingHealth"].is_number_integer()) {
+            data.startingHealth = j["map"]["startingHealth"].get<int>();
+        }
+
+        data.allowedTowers = { "Basic", "Mercury", "Piston" };
+        if (j.contains("allowedTowers") && j["allowedTowers"].is_array()) {
+            data.allowedTowers.clear();
+            for (const auto& item : j["allowedTowers"]) {
+                if (item.is_string()) {
+                    data.allowedTowers.push_back(item.get<std::string>());
+                }
+            }
+            if (data.allowedTowers.empty()) {
+                data.allowedTowers = { "Basic", "Mercury", "Piston" };
+            }
+        } else if (j.contains("map") && j["map"].contains("allowedTowers") && j["map"]["allowedTowers"].is_array()) {
+            data.allowedTowers.clear();
+            for (const auto& item : j["map"]["allowedTowers"]) {
+                if (item.is_string()) {
+                    data.allowedTowers.push_back(item.get<std::string>());
+                }
+            }
+            if (data.allowedTowers.empty()) {
+                data.allowedTowers = { "Basic", "Mercury", "Piston" };
+            }
+        }
+
+        data.maxUpgradeTier = 3;
+        if (j.contains("maxUpgradeTier") && j["maxUpgradeTier"].is_number_integer()) {
+            data.maxUpgradeTier = std::clamp(j["maxUpgradeTier"].get<int>(), 1, 3);
+        } else if (j.contains("map") && j["map"].contains("maxUpgradeTier") && j["map"]["maxUpgradeTier"].is_number_integer()) {
+            data.maxUpgradeTier = std::clamp(j["map"]["maxUpgradeTier"].get<int>(), 1, 3);
+        }
+
+        data.towerMaxTiers = { { "Basic", 3 }, { "Mercury", 3 }, { "Piston", 3 } };
+        if (j.contains("towerMaxTiers") && j["towerMaxTiers"].is_object()) {
+            for (auto& [tName, val] : j["towerMaxTiers"].items()) {
+                if (val.is_number_integer()) {
+                    data.towerMaxTiers[tName] = std::clamp(val.get<int>(), 1, 3);
+                }
+            }
+        } else if (j.contains("map") && j["map"].contains("towerMaxTiers") && j["map"]["towerMaxTiers"].is_object()) {
+            for (auto& [tName, val] : j["map"]["towerMaxTiers"].items()) {
+                if (val.is_number_integer()) {
+                    data.towerMaxTiers[tName] = std::clamp(val.get<int>(), 1, 3);
+                }
+            }
+        } else {
+            for (const auto& t : data.allowedTowers) {
+                data.towerMaxTiers[t] = std::clamp(data.maxUpgradeTier, 1, 3);
+            }
+        }
+
+        // Экономика врагов (Правила наград по волнам)
+        bool isKanal = (data.name == "Канал" || filepath.find("kanal") != std::string::npos);
+        if (isKanal) {
+            data.enemyBountyRules = {
+                { "Coal", {
+                    { 1, 3, 1, 1 },
+                    { 4, 11, 1, 2 },
+                    { 12, 15, 1, 1 }
+                }},
+                { "Spark", {
+                    { 1, 99, 1, 1 }
+                }},
+                { "Mercury", {
+                    { 1, 99, 1, 1 }
+                }}
+            };
+        } else {
+            data.enemyBountyRules = {
+                { "Coal",    { { 1, 99, 1, 1 } } },
+                { "Spark",   { { 1, 99, 1, 1 } } },
+                { "Mercury", { { 1, 99, 1, 1 } } }
+            };
+        }
+
+        auto parseBounties = [&data](const json& bj) {
+            for (auto& [eType, bVal] : bj.items()) {
+                if (bVal.is_array()) {
+                    std::vector<EnemyWaveBountyRule> rules;
+                    for (const auto& item : bVal) {
+                        if (!item.is_object()) continue;
+                        EnemyWaveBountyRule r;
+                        if (item.contains("fromWave")) r.fromWave = item["fromWave"].get<int>();
+                        else if (item.contains("from_wave")) r.fromWave = item["from_wave"].get<int>();
+                        else if (item.contains("from")) r.fromWave = item["from"].get<int>();
+                        else r.fromWave = 1;
+
+                        if (item.contains("toWave")) r.toWave = item["toWave"].get<int>();
+                        else if (item.contains("to_wave")) r.toWave = item["to_wave"].get<int>();
+                        else if (item.contains("to")) r.toWave = item["to"].get<int>();
+                        else r.toWave = 99;
+
+                        r.reward = item.value("reward", 1);
+                        if (item.contains("reward_step")) r.rewardStep = item.value("reward_step", 1);
+                        else if (item.contains("rewardStep")) r.rewardStep = item.value("rewardStep", 1);
+                        else if (item.contains("step")) r.rewardStep = item.value("step", 1);
+                        else r.rewardStep = 1;
+
+                        if (r.fromWave < 1) r.fromWave = 1;
+                        if (r.toWave < r.fromWave) r.toWave = r.fromWave;
+                        if (r.reward < 0) r.reward = 0;
+                        if (r.rewardStep < 1) r.rewardStep = 1;
+
+                        rules.push_back(r);
+                    }
+                    if (!rules.empty()) {
+                        data.enemyBountyRules[eType] = rules;
+                    }
+                } else if (bVal.is_object()) {
+                    EnemyWaveBountyRule r;
+                    r.fromWave = 1;
+                    r.toWave = 99;
+                    r.reward = bVal.value("reward", 1);
+                    if (bVal.contains("reward_step")) r.rewardStep = bVal.value("reward_step", 1);
+                    else if (bVal.contains("rewardStep")) r.rewardStep = bVal.value("rewardStep", 1);
+                    else if (bVal.contains("step")) r.rewardStep = bVal.value("step", 1);
+                    else r.rewardStep = 1;
+                    if (r.reward < 0) r.reward = 0;
+                    if (r.rewardStep < 1) r.rewardStep = 1;
+
+                    data.enemyBountyRules[eType] = { r };
+                }
+            }
+        };
+
+        if (j.contains("enemyBountyRules") && j["enemyBountyRules"].is_object()) {
+            parseBounties(j["enemyBountyRules"]);
+        } else if (j.contains("map") && j["map"].contains("enemyBountyRules") && j["map"]["enemyBountyRules"].is_object()) {
+            parseBounties(j["map"]["enemyBountyRules"]);
+        } else if (j.contains("enemyGlobalBounties") && j["enemyGlobalBounties"].is_object()) {
+            parseBounties(j["enemyGlobalBounties"]);
+        } else if (j.contains("map") && j["map"].contains("enemyGlobalBounties") && j["map"]["enemyGlobalBounties"].is_object()) {
+            parseBounties(j["map"]["enemyGlobalBounties"]);
+        }
+
+        // Для обратной совместимости
+        data.enemyGlobalBounties.clear();
+        for (const auto& [eType, rules] : data.enemyBountyRules) {
+            if (!rules.empty()) {
+                data.enemyGlobalBounties[eType] = { rules.front().reward, rules.front().rewardStep };
+            }
+        }
+
+        // Правила прогрессии HP врагов по диапазонам волн (опционально, по умолчанию пусто -> базовое HP из enemies.json)
+        data.enemyHpRules.clear();
+        auto parseHpRules = [&data](const json& hj) {
+            for (auto& [eType, hVal] : hj.items()) {
+                if (hVal.is_array()) {
+                    std::vector<EnemyHpRule> rules;
+                    for (const auto& item : hVal) {
+                        if (!item.is_object()) continue;
+                        EnemyHpRule r;
+                        if (item.contains("fromWave")) {
+                            r.fromWave = item["fromWave"].get<int>();
+                        } else if (item.contains("from_wave")) {
+                            r.fromWave = item["from_wave"].get<int>();
+                        } else if (item.contains("from")) {
+                            r.fromWave = item["from"].get<int>();
+                        } else {
+                            r.fromWave = 1;
+                        }
+
+                        if (item.contains("toWave")) {
+                            r.toWave = item["toWave"].get<int>();
+                        } else if (item.contains("to_wave")) {
+                            r.toWave = item["to_wave"].get<int>();
+                        } else if (item.contains("to")) {
+                            r.toWave = item["to"].get<int>();
+                        } else {
+                            r.toWave = 99;
+                        }
+
+                        r.hp = item.value("hp", 0);
+
+                        if (r.fromWave < 1) r.fromWave = 1;
+                        if (r.toWave < r.fromWave) r.toWave = r.fromWave;
+                        if (r.hp >= 1) {
+                            rules.push_back(r);
+                        }
+                    }
+                    if (!rules.empty()) {
+                        data.enemyHpRules[eType] = rules;
+                    }
+                }
+            }
+        };
+
+        if (j.contains("enemyHpRules") && j["enemyHpRules"].is_object()) {
+            parseHpRules(j["enemyHpRules"]);
+        } else if (j.contains("map") && j["map"].contains("enemyHpRules") && j["map"]["enemyHpRules"].is_object()) {
+            parseHpRules(j["map"]["enemyHpRules"]);
+        }
+
+        // Читаем настройки камеры (Camera Viewport)
+        bool hadExplicitTileCoord = false;
+        auto parseCamera = [&data, &hadExplicitTileCoord](const json& cam) {
+            float tx = -1.0f;
+            float ty = -1.0f;
+            if (cam.contains("tileX")) {
+                tx = cam["tileX"].get<float>();
+                hadExplicitTileCoord = true;
+            } else if (cam.contains("x")) {
+                tx = cam["x"].get<float>();
+            }
+
+            if (cam.contains("tileY")) {
+                ty = cam["tileY"].get<float>();
+                hadExplicitTileCoord = true;
+            } else if (cam.contains("y")) {
+                ty = cam["y"].get<float>();
+            }
+
+            data.camera.targetTile = glm::vec2(tx, ty);
+            data.camera.zoom = cam.value("zoom", 1.0f);
+            data.camera.isCustom = cam.value("isCustom", (tx >= -100.0f && ty >= -100.0f && (tx >= 0.0f || ty >= 0.0f)));
+            data.camera.viewTilesW = cam.value("viewTilesW", 0.0f);
+            data.camera.viewTilesH = cam.value("viewTilesH", 0.0f);
+        };
+
+        if (j.contains("camera") && j["camera"].is_object()) {
+            parseCamera(j["camera"]);
+        } else if (j.contains("map") && j["map"].contains("camera") && j["map"]["camera"].is_object()) {
+            parseCamera(j["map"]["camera"]);
         }
 
         // если есть блок map в json то читаем его 
@@ -65,6 +313,9 @@ LevelMapData LevelManager::loadLevelMap(const std::string& filepath) {
                 SpawnerData sd;
                 sd.pos = { spawner["x"], spawner["y"] };
                 sd.targetBaseIndex = spawner.value("targetBaseIndex", -1);
+                sd.groupId = spawner.value("groupId", spawner.value("group_id", sd.targetBaseIndex));
+                sd.visibleInGame = spawner.value("visibleInGame", false);
+                sd.enableFadeIn = spawner.value("enableFadeIn", true);
                 data.spawners.push_back(sd);
             }
 
@@ -74,6 +325,8 @@ LevelMapData LevelManager::loadLevelMap(const std::string& filepath) {
                 bd.x = base["x"];
                 bd.y = base["y"];
                 bd.id = base.value("id", 0);
+                bd.visibleInGame = base.value("visibleInGame", false);
+                bd.enableFadeOut = base.value("enableFadeOut", true);
                 data.bases.push_back(bd);
             }
             // парсинг сетки
@@ -113,6 +366,60 @@ LevelMapData LevelManager::loadLevelMap(const std::string& filepath) {
                 minecartsJson = &j["minecarts"];
             }
 
+            // no-build mask (backward compat if missing: all false)
+            const json* nbmJson = nullptr;
+            if (j["map"].contains("noBuildMask")) {
+                nbmJson = &j["map"]["noBuildMask"];
+            } else if (j.contains("noBuildMask")) {
+                nbmJson = &j["noBuildMask"];
+            } else if (j["map"].contains("blockedTiles")) {
+                nbmJson = &j["map"]["blockedTiles"];
+            } else if (j.contains("blockedTiles")) {
+                nbmJson = &j["blockedTiles"];
+            } else if (j["map"].contains("forbiddenCells")) {
+                nbmJson = &j["map"]["forbiddenCells"];
+            } else if (j.contains("forbiddenCells")) {
+                nbmJson = &j["forbiddenCells"];
+            }
+
+            if (nbmJson && nbmJson->is_array()) {
+                for (const auto& row : *nbmJson) {
+                    std::vector<bool> rowData;
+                    if (row.is_array()) {
+                        for (const auto& cell : row) {
+                            bool val = false;
+                            if (cell.is_boolean()) val = cell.get<bool>();
+                            else if (cell.is_number()) val = (cell.get<int>() != 0);
+                            rowData.push_back(val);
+                        }
+                    }
+                    data.noBuildMask.push_back(rowData);
+                }
+            }
+            data.noBuildMask.resize(
+                static_cast<size_t>(data.gridHeight),
+                std::vector<bool>(static_cast<size_t>(data.gridWidth), false));
+            for (auto& row : data.noBuildMask) {
+                row.resize(static_cast<size_t>(data.gridWidth), false);
+            }
+
+            const json* outerCellsJson = nullptr;
+            if (j["map"].contains("outerCells") && j["map"]["outerCells"].is_array()) {
+                outerCellsJson = &j["map"]["outerCells"];
+            } else if (j.contains("outerCells") && j["outerCells"].is_array()) {
+                outerCellsJson = &j["outerCells"];
+            }
+            if (outerCellsJson) {
+                for (const auto& ocNode : *outerCellsJson) {
+                    LevelMapData::OuterCellData oc;
+                    oc.x = ocNode.value("x", 0);
+                    oc.y = ocNode.value("y", 0);
+                    oc.type = ocNode.value("type", 0);
+                    oc.noBuild = ocNode.value("noBuild", false);
+                    data.outerCells.push_back(oc);
+                }
+            }
+
             if (minecartsJson) {
                 auto parsePoint = [](const json& p) -> glm::ivec2 {
                     if (p.is_array() && p.size() >= 2) {
@@ -137,6 +444,125 @@ LevelMapData LevelManager::loadLevelMap(const std::string& filepath) {
                     data.minecarts.push_back(cart);
                 }
             }
+
+            // Читаем эмиттеры частиц ("emitters")
+            const json* emittersJson = nullptr;
+            if (j["map"].contains("emitters") && j["map"]["emitters"].is_array()) {
+                emittersJson = &j["map"]["emitters"];
+            } else if (j.contains("emitters") && j["emitters"].is_array()) {
+                emittersJson = &j["emitters"];
+            }
+
+            if (emittersJson) {
+                for (const auto& emNode : *emittersJson) {
+                    ParticleEmitterConfig em;
+                    em.id = emNode.value("id", 0);
+                    em.type = emNode.value("type", "steam_jet");
+                    if (emNode.contains("tilePos")) {
+                        const auto& tp = emNode["tilePos"];
+                        if (tp.is_array() && tp.size() >= 2) {
+                            em.tilePos = glm::vec2(tp[0].get<float>(), tp[1].get<float>());
+                        } else if (tp.is_object()) {
+                            em.tilePos = glm::vec2(tp.value("x", 0.0f), tp.value("y", 0.0f));
+                        }
+                    } else {
+                        em.tilePos = glm::vec2(emNode.value("x", 0.0f), emNode.value("y", 0.0f));
+                    }
+                    em.angleDeg = emNode.value("angleDeg", 90.0f);
+                    em.speed = emNode.value("speed", 180.0f);
+                    em.particleScale = emNode.value("particleScale", 1.0f);
+                    em.periodMin = emNode.value("periodMin", 5.0f);
+                    em.periodMax = emNode.value("periodMax", 12.0f);
+                    em.burstDuration = emNode.value("burstDuration", 2.2f);
+                    em.loopContinuous = emNode.value("loop", emNode.value("loopContinuous", false));
+                    em.zIndex = emNode.value("zIndex", 0);
+                    data.emitters.push_back(em);
+                }
+                std::stable_sort(data.emitters.begin(), data.emitters.end(), [](const ParticleEmitterConfig& a, const ParticleEmitterConfig& b) {
+                    return a.zIndex < b.zIndex;
+                });
+            }
+
+            // Читаем свободные декорации ("decorations")
+            const json* decorJson = nullptr;
+            if (j["map"].contains("decorations") && j["map"]["decorations"].is_array()) {
+                decorJson = &j["map"]["decorations"];
+            } else if (j.contains("decorations") && j["decorations"].is_array()) {
+                decorJson = &j["decorations"];
+            }
+
+            if (decorJson) {
+                float cs = (data.cellSize > 0.001f) ? data.cellSize : 64.0f;
+                for (const auto& decNode : *decorJson) {
+                    DecorationConfig dec;
+                    dec.id = decNode.value("id", 0);
+                    dec.type = decNode.value("type", "bush");
+                    if (decNode.contains("tilePos")) {
+                        const auto& tp = decNode["tilePos"];
+                        if (tp.is_array() && tp.size() >= 2) {
+                            dec.tilePos = glm::vec2(tp[0].get<float>(), tp[1].get<float>());
+                        } else if (tp.is_object()) {
+                            dec.tilePos = glm::vec2(tp.value("x", 0.0f), tp.value("y", 0.0f));
+                        }
+                    } else if (decNode.contains("tileX") || decNode.contains("tileY")) {
+                        dec.tilePos = glm::vec2(decNode.value("tileX", 0.0f), decNode.value("tileY", 0.0f));
+                    } else if (decNode.contains("worldPos")) {
+                        const auto& wp = decNode["worldPos"];
+                        glm::vec2 rawPos(0.0f);
+                        if (wp.is_array() && wp.size() >= 2) {
+                            rawPos = glm::vec2(wp[0].get<float>(), wp[1].get<float>());
+                        } else if (wp.is_object()) {
+                            rawPos = glm::vec2(wp.value("x", 0.0f), wp.value("y", 0.0f));
+                        }
+                        // Обратная совместимость: если сохранено в абсолютных мировых координатах, конвертируем в tilePos
+                        dec.tilePos = (rawPos - glm::vec2(data.offsetX, data.offsetY)) / cs;
+                    } else if (decNode.contains("pos")) {
+                        const auto& wp = decNode["pos"];
+                        glm::vec2 rawPos(0.0f);
+                        if (wp.is_array() && wp.size() >= 2) {
+                            rawPos = glm::vec2(wp[0].get<float>(), wp[1].get<float>());
+                        } else if (wp.is_object()) {
+                            rawPos = glm::vec2(wp.value("x", 0.0f), wp.value("y", 0.0f));
+                        }
+                        dec.tilePos = (rawPos - glm::vec2(data.offsetX, data.offsetY)) / cs;
+                    } else {
+                        glm::vec2 rawPos = glm::vec2(decNode.value("x", 0.0f), decNode.value("y", 0.0f));
+                        dec.tilePos = (rawPos - glm::vec2(data.offsetX, data.offsetY)) / cs;
+                    }
+                    dec.worldPos = glm::vec2(data.offsetX, data.offsetY) + dec.tilePos * cs;
+                    dec.scale = decNode.value("scale", 1.0f);
+                    dec.scaleX = decNode.value("scaleX", 1.0f);
+                    dec.scaleY = decNode.value("scaleY", 1.0f);
+                    dec.opacity = decNode.value("opacity", 0.5f);
+                    dec.rotation = decNode.value("rotation", 0.0f);
+                    dec.destructible = decNode.value("destructible", true);
+                    dec.zIndex = decNode.value("zIndex", 0);
+                    data.decorations.push_back(dec);
+                }
+                std::stable_sort(data.decorations.begin(), data.decorations.end(), [](const DecorationConfig& a, const DecorationConfig& b) {
+                    return a.zIndex < b.zIndex;
+                });
+            }
+
+            // Обратная совместимость для старых карт, где x/y были сохранены в пикселях (только если не было явного tileX/tileY и координаты явно в пикселях > 50px)
+            if (data.camera.isCustom && !hadExplicitTileCoord) {
+                if ((data.camera.targetTile.x > static_cast<float>(data.gridWidth) * 2.0f && data.camera.targetTile.x > 50.0f) ||
+                    (data.camera.targetTile.y > static_cast<float>(data.gridHeight) * 2.0f && data.camera.targetTile.y > 50.0f)) {
+                    float cs = (data.cellSize > 0.001f) ? data.cellSize : 64.0f;
+                    data.camera.targetTile.x = (data.camera.targetTile.x - data.offsetX) / cs;
+                    data.camera.targetTile.y = (data.camera.targetTile.y - data.offsetY) / cs;
+                }
+            }
+
+            // Вычисляем viewTilesW и viewTilesH, если они не были сохранены явно
+            if (data.camera.isCustom) {
+                if (data.camera.viewTilesW <= 0.01f || data.camera.viewTilesH <= 0.01f) {
+                    float cs = (data.cellSize > 0.001f) ? data.cellSize : 64.0f;
+                    float z = (data.camera.zoom > 0.001f) ? data.camera.zoom : 1.0f;
+                    data.camera.viewTilesW = (1280.0f / z) / cs;
+                    data.camera.viewTilesH = (720.0f / z) / cs;
+                }
+            }
         }
         else {
             std::cerr << "WARNING::LEVELMANAGER: No 'map' section found in " << filepath << std::endl;
@@ -157,6 +583,21 @@ LevelMapData LevelManager::loadLevelMap(const std::string& filepath) {
                             part.spawnInterwal = partJson["spawnInterwal"].get<float>();
                         }
                         part.delayAfter = partJson.value("delayAfter", 2.0f);
+                        if (partJson.contains("spawner_id")) {
+                            part.spawnerId = partJson.value("spawner_id", -1);
+                        } else if (partJson.contains("spawnerId")) {
+                            part.spawnerId = partJson.value("spawnerId", -1);
+                        } else {
+                            part.spawnerId = -1;
+                        }
+                        part.reward = partJson.value("reward", -1);
+                        if (partJson.contains("reward_step")) {
+                            part.rewardStep = partJson.value("reward_step", -1);
+                        } else if (partJson.contains("rewardStep")) {
+                            part.rewardStep = partJson.value("rewardStep", -1);
+                        } else {
+                            part.rewardStep = -1;
+                        }
                         wave.parts.push_back(part);
                     }
                 }
@@ -193,6 +634,23 @@ bool LevelManager::saveLevelMap(const std::string& filepath, const LevelMapData&
     }
     j["isCampaign"] = data.isCampaign;
     j["tags"] = data.tags;
+    j["background"] = data.background.empty() ? "default" : data.background;
+    j["hasSidePockets"] = data.hasSidePockets;
+
+    if (data.camera.isCustom) {
+        j["camera"] = {
+            { "tileX", data.camera.targetTile.x },
+            { "tileY", data.camera.targetTile.y },
+            { "x", data.camera.targetTile.x },
+            { "y", data.camera.targetTile.y },
+            { "zoom", data.camera.zoom },
+            { "isCustom", true },
+            { "viewTilesW", data.camera.viewTilesW },
+            { "viewTilesH", data.camera.viewTilesH }
+        };
+    } else if (j.contains("camera")) {
+        j.erase("camera");
+    }
 
     j["map"]["width"] = data.gridWidth;
     j["map"]["height"] = data.gridHeight;
@@ -200,13 +658,89 @@ bool LevelManager::saveLevelMap(const std::string& filepath, const LevelMapData&
     j["map"]["offsetX"] = data.offsetX;
     j["map"]["offsetY"] = data.offsetY;
     j["map"]["layout"] = data.layout;
+    // сохраняем маску запрета постройки как 2D массив 0/1
+    {
+        json nbm = json::array();
+        for (int y = 0; y < data.gridHeight; ++y) {
+            json jrow = json::array();
+            for (int x = 0; x < data.gridWidth; ++x) {
+                bool val = (y < (int)data.noBuildMask.size() && x < (int)data.noBuildMask[y].size()) ? data.noBuildMask[y][x] : false;
+                jrow.push_back(val ? 1 : 0);
+            }
+            nbm.push_back(jrow);
+        }
+        j["map"]["noBuildMask"] = nbm;
+    }
+
+    // Сохраняем внешние клетки outerCells
+    {
+        json ocArr = json::array();
+        for (const auto& oc : data.outerCells) {
+            ocArr.push_back({
+                { "x", oc.x },
+                { "y", oc.y },
+                { "type", oc.type },
+                { "noBuild", oc.noBuild }
+            });
+        }
+        j["map"]["outerCells"] = ocArr;
+    }
+    j["startingMoney"] = data.startingMoney;
+    j["startingHealth"] = data.startingHealth;
+    j["allowedTowers"] = data.allowedTowers;
+    j["maxUpgradeTier"] = data.maxUpgradeTier;
+    j["towerMaxTiers"] = data.towerMaxTiers;
+    j["map"]["startingMoney"] = data.startingMoney;
+    j["map"]["startingHealth"] = data.startingHealth;
+    j["map"]["allowedTowers"] = data.allowedTowers;
+    j["map"]["maxUpgradeTier"] = data.maxUpgradeTier;
+    j["map"]["towerMaxTiers"] = data.towerMaxTiers;
+
+    json bountiesJson = json::object();
+    for (const auto& [eType, rules] : data.enemyBountyRules) {
+        json arr = json::array();
+        for (const auto& r : rules) {
+            arr.push_back({
+                { "fromWave", r.fromWave },
+                { "toWave", r.toWave },
+                { "reward", r.reward },
+                { "rewardStep", r.rewardStep }
+            });
+        }
+        bountiesJson[eType] = arr;
+    }
+    j["enemyBountyRules"] = bountiesJson;
+    j["map"]["enemyBountyRules"] = bountiesJson;
+    j["enemyGlobalBounties"] = bountiesJson;
+    j["map"]["enemyGlobalBounties"] = bountiesJson;
+
+    json hpRulesJson = json::object();
+    for (const auto& [eType, rules] : data.enemyHpRules) {
+        if (rules.empty()) continue;
+        json arr = json::array();
+        for (const auto& r : rules) {
+            arr.push_back({
+                { "fromWave", r.fromWave },
+                { "toWave", r.toWave },
+                { "hp", r.hp }
+            });
+        }
+        hpRulesJson[eType] = arr;
+    }
+    if (!hpRulesJson.empty()) {
+        j["enemyHpRules"] = hpRulesJson;
+        j["map"]["enemyHpRules"] = hpRulesJson;
+    }
 
     json spawnersJson = json::array();
     for (const auto& spawner : data.spawners) {
         spawnersJson.push_back({
             { "x", spawner.pos.x },
             { "y", spawner.pos.y },
-            { "targetBaseIndex", spawner.targetBaseIndex }
+            { "targetBaseIndex", spawner.targetBaseIndex },
+            { "groupId", spawner.groupId >= 0 ? spawner.groupId : spawner.targetBaseIndex },
+            { "visibleInGame", spawner.visibleInGame },
+            { "enableFadeIn", spawner.enableFadeIn }
         });
     }
     j["map"]["spawners"] = spawnersJson;
@@ -216,7 +750,9 @@ bool LevelManager::saveLevelMap(const std::string& filepath, const LevelMapData&
         basesJson.push_back({
             { "x", base.x },
             { "y", base.y },
-            { "id", base.id }
+            { "id", base.id },
+            { "visibleInGame", base.visibleInGame },
+            { "enableFadeOut", base.enableFadeOut }
         });
     }
     j["map"]["bases"] = basesJson;
@@ -238,6 +774,54 @@ bool LevelManager::saveLevelMap(const std::string& filepath, const LevelMapData&
         j["map"].erase("minecarts");
     }
 
+    // Сохраняем эмиттеры частиц
+    if (!data.emitters.empty()) {
+        json emittersJson = json::array();
+        for (const auto& em : data.emitters) {
+            emittersJson.push_back({
+                { "id", em.id },
+                { "type", em.type },
+                { "tilePos", { { "x", em.tilePos.x }, { "y", em.tilePos.y } } },
+                { "angleDeg", em.angleDeg },
+                { "speed", em.speed },
+                { "particleScale", em.particleScale },
+                { "periodMin", em.periodMin },
+                { "periodMax", em.periodMax },
+                { "burstDuration", em.burstDuration },
+                { "loop", em.loopContinuous },
+                { "zIndex", em.zIndex }
+            });
+        }
+        j["map"]["emitters"] = emittersJson;
+    } else if (j["map"].contains("emitters")) {
+        j["map"].erase("emitters");
+    }
+
+    // Сохраняем свободные декорации
+    if (!data.decorations.empty()) {
+        json decsJson = json::array();
+        for (const auto& dec : data.decorations) {
+            decsJson.push_back({
+                { "id", dec.id },
+                { "type", dec.type },
+                { "tilePos", { { "x", dec.tilePos.x }, { "y", dec.tilePos.y } } },
+                { "tileX", dec.tilePos.x },
+                { "tileY", dec.tilePos.y },
+                { "worldPos", { { "x", dec.worldPos.x }, { "y", dec.worldPos.y } } },
+                { "scale", dec.scale },
+                { "scaleX", dec.scaleX },
+                { "scaleY", dec.scaleY },
+                { "opacity", dec.opacity },
+                { "rotation", dec.rotation },
+                { "destructible", dec.destructible },
+                { "zIndex", dec.zIndex }
+            });
+        }
+        j["map"]["decorations"] = decsJson;
+    } else if (j["map"].contains("decorations")) {
+        j["map"].erase("decorations");
+    }
+
     // Сохраняем волны
     if (!data.waves.empty()) {
         json wavesJson = json::array();
@@ -248,7 +832,10 @@ bool LevelManager::saveLevelMap(const std::string& filepath, const LevelMapData&
                     { "type", part.type },
                     { "count", part.count },
                     { "interval", part.spawnInterwal },
-                    { "delayAfter", part.delayAfter }
+                    { "delayAfter", part.delayAfter },
+                    { "spawner_id", part.spawnerId },
+                    { "reward", part.reward },
+                    { "reward_step", part.rewardStep }
                 });
             }
             wavesJson.push_back({
@@ -265,7 +852,10 @@ bool LevelManager::saveLevelMap(const std::string& filepath, const LevelMapData&
                         { "type", "Basic" },
                         { "count", 10 },
                         { "interval", 1.0f },
-                        { "delayAfter", 2.0f }
+                        { "delayAfter", 2.0f },
+                        { "spawner_id", -1 },
+                        { "reward", 1 },
+                        { "reward_step", 1 }
                     }
                 }) }
             }
@@ -348,42 +938,45 @@ void LevelManager::syncLevelsBetweenSourceAndBuild() {
     auto dirs = getLevelDirectories();
     if (dirs.size() < 2) return;
 
-    for (size_t i = 0; i < dirs.size(); ++i) {
-        for (size_t j = i + 1; j < dirs.size(); ++j) {
-            std::error_code ec;
-            if (!fs::exists(dirs[i], ec) || !fs::exists(dirs[j], ec)) continue;
+    const auto& primaryDir = dirs[0];
+    std::error_code ec;
+    if (!fs::exists(primaryDir, ec)) return;
 
-            // Синхронизируем из dirs[i] в dirs[j]
-            for (const auto& entry : fs::directory_iterator(dirs[i], ec)) {
-                if (entry.is_regular_file() && entry.path().extension() == ".json") {
-                    std::string fname = entry.path().filename().string();
-                    if (fname == "textures.json") continue;
+    for (size_t i = 1; i < dirs.size(); ++i) {
+        if (!fs::exists(dirs[i], ec)) continue;
 
-                    fs::path target = fs::path(dirs[j]) / fname;
-                    if (!fs::exists(target, ec)) {
+        // 1. Синхронизируем из primaryDir в secondary dir (копируем если отсутствует или обновляем если новее)
+        for (const auto& entry : fs::directory_iterator(primaryDir, ec)) {
+            if (entry.is_regular_file() && entry.path().extension() == ".json") {
+                std::string fname = entry.path().filename().string();
+                if (fname == "textures.json" || fname == "settings.json") continue;
+
+                fs::path target = fs::path(dirs[i]) / fname;
+                if (!fs::exists(target, ec)) {
+                    fs::copy_file(entry.path(), target, fs::copy_options::overwrite_existing, ec);
+                } else {
+                    auto t1 = fs::last_write_time(entry.path(), ec);
+                    auto t2 = fs::last_write_time(target, ec);
+                    if (t1 > t2) {
                         fs::copy_file(entry.path(), target, fs::copy_options::overwrite_existing, ec);
-                    } else {
-                        auto t1 = fs::last_write_time(entry.path(), ec);
-                        auto t2 = fs::last_write_time(target, ec);
-                        if (t1 > t2) {
-                            fs::copy_file(entry.path(), target, fs::copy_options::overwrite_existing, ec);
-                        } else if (t2 > t1) {
-                            fs::copy_file(target, entry.path(), fs::copy_options::overwrite_existing, ec);
-                        }
+                    } else if (t2 > t1) {
+                        fs::copy_file(target, entry.path(), fs::copy_options::overwrite_existing, ec);
                     }
                 }
             }
+        }
 
-            // Синхронизируем из dirs[j] в dirs[i]
-            for (const auto& entry : fs::directory_iterator(dirs[j], ec)) {
-                if (entry.is_regular_file() && entry.path().extension() == ".json") {
-                    std::string fname = entry.path().filename().string();
-                    if (fname == "textures.json") continue;
+        // 2. НЕ воскрешаем удаленные файлы из secondary dirs в primaryDir!
+        // Если файл уровня есть в secondary dir, но отсутствует в primaryDir — удаляем его из secondary dir,
+        // чтобы удаленные/устаревшие уровни не плодились обратно при каждом запуске.
+        for (const auto& entry : fs::directory_iterator(dirs[i], ec)) {
+            if (entry.is_regular_file() && entry.path().extension() == ".json") {
+                std::string fname = entry.path().filename().string();
+                if (fname == "textures.json" || fname == "settings.json" || fname == "campaign.json") continue;
 
-                    fs::path target = fs::path(dirs[i]) / fname;
-                    if (!fs::exists(target, ec)) {
-                        fs::copy_file(entry.path(), target, fs::copy_options::overwrite_existing, ec);
-                    }
+                fs::path primaryFile = fs::path(primaryDir) / fname;
+                if (!fs::exists(primaryFile, ec)) {
+                    fs::remove(entry.path(), ec);
                 }
             }
         }
@@ -396,7 +989,7 @@ std::vector<LevelInfo> LevelManager::getAvailableLevels() {
     std::vector<LevelInfo> levels;
     std::unordered_set<std::string> seen;
 
-    std::vector<std::string> builtIns = { "level_1.json", "level_2.json" };
+    std::vector<std::string> builtIns = { "kanal.json", "rtutnaya_shchakhta.json" };
     auto dirs = getLevelDirectories();
 
     for (const auto& bi : builtIns) {
@@ -410,7 +1003,7 @@ std::vector<LevelInfo> LevelManager::getAvailableLevels() {
                 if (!mapData.name.empty()) {
                     info.name = mapData.name;
                 } else {
-                    info.name = (bi == "level_1.json") ? "LEVEL 1" : "LEVEL 2";
+                    info.name = (bi == "kanal.json") ? "Канал" : "Вход в ртутную шахту";
                 }
                 info.fullPath = "res/levels/" + bi;
                 info.isCampaign = mapData.isCampaign;
@@ -618,6 +1211,22 @@ std::string LevelManager::createNewLevel(const std::string& displayName, bool is
     newMap.offsetX = 20.0f;
     newMap.offsetY = 20.0f;
     newMap.layout.assign(12, std::vector<int>(20, 0));
+    newMap.noBuildMask.assign(12, std::vector<bool>(20, false));
+    newMap.startingMoney = 50;
+    newMap.startingHealth = 20;
+    newMap.allowedTowers = { "Basic", "Mercury", "Piston" };
+    newMap.maxUpgradeTier = 3;
+    newMap.towerMaxTiers = { { "Basic", 3 }, { "Mercury", 3 }, { "Piston", 3 } };
+    newMap.enemyBountyRules = {
+        { "Coal",    { { 1, 99, 1, 1 } } },
+        { "Spark",   { { 1, 99, 1, 1 } } },
+        { "Mercury", { { 1, 99, 1, 1 } } }
+    };
+    newMap.enemyGlobalBounties = {
+        { "Coal", { 1, 1 } },
+        { "Spark", { 1, 1 } },
+        { "Mercury", { 1, 1 } }
+    };
 
     newMap.bases.push_back(BaseData(17, 6, 0));
     newMap.layout[6][17] = 0;
@@ -625,6 +1234,7 @@ std::string LevelManager::createNewLevel(const std::string& displayName, bool is
     SpawnerData sp;
     sp.pos = glm::ivec2(2, 6);
     sp.targetBaseIndex = 0;
+    sp.groupId = 0;
     newMap.spawners.push_back(sp);
     newMap.layout[6][2] = 0;
 

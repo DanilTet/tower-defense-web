@@ -1,14 +1,132 @@
 {
+  "allowedTowers": [
+    "Basic",
+    "Mercury",
+    "Piston"
+  ],
+  "background": "default",
+  "enemyBountyRules": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ]
+  },
+  "enemyGlobalBounties": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ]
+  },
+  "hasSidePockets": false,
   "isCampaign": false,
   "map": {
+    "allowedTowers": [
+      "Basic",
+      "Mercury",
+      "Piston"
+    ],
     "bases": [
       {
+        "enableFadeOut": true,
         "id": 0,
+        "visibleInGame": false,
         "x": 17,
         "y": 4
       }
     ],
-    "cellSize": 136.3333282470703,
+    "cellSize": 60.44444274902344,
+    "enemyBountyRules": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ]
+    },
+    "enemyGlobalBounties": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ]
+    },
     "height": 9,
     "layout": [
       [
@@ -192,19 +310,221 @@
         0
       ]
     ],
-    "offsetX": 53.0,
+    "maxUpgradeTier": 3,
+    "noBuildMask": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "offsetX": 96.0,
     "offsetY": 62.0,
+    "outerCells": [],
     "spawners": [
       {
+        "enableFadeIn": true,
+        "groupId": -1,
         "targetBaseIndex": -1,
+        "visibleInGame": false,
         "x": 0,
         "y": 4
       }
     ],
+    "startingHealth": 20,
+    "startingMoney": 1000000,
+    "towerMaxTiers": {
+      "Basic": 3,
+      "Mercury": 3,
+      "Piston": 3
+    },
     "width": 18
   },
+  "maxUpgradeTier": 3,
   "name": "тест поршня",
+  "startingHealth": 20,
+  "startingMoney": 1000000,
   "tags": [],
+  "towerMaxTiers": {
+    "Basic": 3,
+    "Mercury": 3,
+    "Piston": 3
+  },
   "waves": [
     {
       "parts": [
@@ -212,12 +532,18 @@
           "count": 1,
           "delayAfter": 5.0,
           "interval": 0.05000000074505806,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         },
         {
           "count": 2,
           "delayAfter": 2.0,
           "interval": 2.0,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         }
       ]
@@ -228,12 +554,18 @@
           "count": 8,
           "delayAfter": 2.0,
           "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         },
         {
           "count": 10,
           "delayAfter": 0.0,
           "interval": 0.30000001192092896,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         }
       ]
@@ -244,12 +576,18 @@
           "count": 2,
           "delayAfter": 3.0,
           "interval": 2.0,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Tank"
         },
         {
           "count": 15,
           "delayAfter": 0.0,
           "interval": 0.5,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         }
       ]
@@ -260,18 +598,27 @@
           "count": 20,
           "delayAfter": 4.0,
           "interval": 0.15000000596046448,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         },
         {
           "count": 4,
           "delayAfter": 1.0,
           "interval": 1.5,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Tank"
         },
         {
           "count": 10,
           "delayAfter": 0.0,
           "interval": 0.20000000298023224,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         }
       ]
@@ -282,18 +629,27 @@
           "count": 8,
           "delayAfter": 2.0,
           "interval": 1.0,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Tank"
         },
         {
           "count": 30,
           "delayAfter": 2.0,
           "interval": 0.20000000298023224,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Basic"
         },
         {
           "count": 25,
           "delayAfter": 0.0,
           "interval": 0.10000000149011612,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
           "type": "Fast"
         }
       ]

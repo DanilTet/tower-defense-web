@@ -15,13 +15,14 @@ Enemy* TowerTargetingSystem::selectTarget(
     Enemy* bestTarget = nullptr;
     float maxTraveled = -1.0f;
     float minTraveled = 999999.0f;
-    float minDistance = 999999.0f;
+    float minDistSq = 999999999999.0f;
     int minHealth = 999999;
 
     for (const auto& enemy : enemies) {
         if (!enemy || enemy->isReachedEnd() || enemy->isDead() || enemy->isFalling()) continue;
 
-        if (towerCollider.intersects(enemy->getCollider(grid))) {
+        CircleCollider enemyCol = enemy->getCollider(grid);
+        if (towerCollider.intersects(enemyCol)) {
             switch (mode) {
             case TargetMode::First:
                 if (enemy->getDistanceTraveled() > maxTraveled) {
@@ -38,9 +39,10 @@ Enemy* TowerTargetingSystem::selectTarget(
                 break;
 
             case TargetMode::Close: {
-                float dist = glm::distance(towerCenter, enemy->getCollider(grid).center);
-                if (dist < minDistance) {
-                    minDistance = dist;
+                glm::vec2 diff = towerCenter - enemyCol.center;
+                float distSq = diff.x * diff.x + diff.y * diff.y;
+                if (distSq < minDistSq) {
+                    minDistSq = distSq;
                     bestTarget = enemy.get();
                 }
                 break;

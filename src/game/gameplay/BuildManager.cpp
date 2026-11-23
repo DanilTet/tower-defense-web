@@ -37,7 +37,6 @@ void BuildManager::tryBuildOrUpgrade(
 
         std::vector<std::vector<glm::ivec2>> newPaths;
         if (!PathService::isPlacementValid(*world.grid, *world.pathfinder, world.spawners, world.bases, clickedCell.x, clickedCell.y, newPaths, &world.paths, &world.entityManager->getEnemies())) {
-            std::cout << "Path Blocked! Cannot build here." << std::endl;
             return;
         }
 
@@ -45,6 +44,9 @@ void BuildManager::tryBuildOrUpgrade(
 
         // Помечаем клетку как занятую башней на сетке
         world.grid->setCellType(clickedCell.x, clickedCell.y, CellType::Tower);
+
+        // Сносим разрушаемые декорации на этой клетке со спавном частиц
+        world.demolishDecorationsInCell(clickedCell.x, clickedCell.y);
 
         // спавнить башню через entityManager с заданным направлением
         auto newTower = std::make_unique<Tower>(clickedCell.x, clickedCell.y, selectedType, placementAngle);
@@ -59,7 +61,9 @@ void BuildManager::tryBuildOrUpgrade(
 
         // обновляем все маршруты
         world.paths = newPaths;
-        world.levelPath = world.paths[0];
+        if (!world.paths.empty()) {
+            world.levelPath = world.paths[0];
+        }
 
         // даем врагам новый путь (только тем, чей маршрут пересекает новую башню)
         world.notifyEnemiesPathChanged(clickedCell);
@@ -75,7 +79,9 @@ void BuildManager::sellTower(
     int tx = tower->getGridX();
     int ty = tower->getGridY();
 
-    world.playerStats.money += 50;
+    int towerCost = ConfigManager::getTowerStats(tower->getType(), tower->getLevel()).cost;
+    int refund = std::max(1, static_cast<int>(towerCost * 0.7f));
+    world.playerStats.money += refund;
 
     // освобождаем клетку на сетке (возвращаем исходный тип террейна)
     world.grid->setCellType(tx, ty, world.grid->getOriginalCellType(tx, ty));

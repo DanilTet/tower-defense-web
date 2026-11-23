@@ -1,5 +1,7 @@
 #include "GameStateManager.h"
 #include "MapEditorState.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 GameStateManager::~GameStateManager() {
@@ -82,6 +84,8 @@ void GameStateManager::applyPendingChanges() {
 				m_states.back()->cleanup();
 				m_states.pop_back();
 			}
+			// Force editor to sync with actual current window size
+			m_states.back()->resize(m_editorWidth, m_editorHeight);
 		} else {
 			std::cout << "[GameStateManager] MapEditorState not in stack, creating fresh instance for level: " << m_editorFallbackLevel << std::endl;
 			while (!m_states.empty()) {
@@ -121,7 +125,8 @@ void GameStateManager::applyPendingChanges() {
 }
 
 void GameStateManager::resize(int width, int height) {
-	if (!m_states.empty()) {
-		m_states.back()->resize(width, height);
+	// Broadcast resize to ALL states so background states stay up-to-date
+	for (auto& state : m_states) {
+		if (state) state->resize(width, height);
 	}
 }

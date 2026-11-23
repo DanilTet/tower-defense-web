@@ -4,11 +4,35 @@
 #include <cctype>
 
 std::string InputManager::s_frameInputUtf8 = "";
+float InputManager::s_scrollY = 0.0f;
+float InputManager::s_scrollX = 0.0f;
 
 void InputManager::init(GLFWwindow* window) {
     glfwSetCharCallback(window, [](GLFWwindow* win, unsigned int codepoint) {
         InputManager::onCharCallback(win, codepoint);
     });
+
+    glfwSetScrollCallback(window, [](GLFWwindow* win, double xoffset, double yoffset) {
+        InputManager::onScrollCallback(win, xoffset, yoffset);
+    });
+}
+
+void InputManager::onScrollCallback(GLFWwindow* /*window*/, double xoffset, double yoffset) {
+    s_scrollX += static_cast<float>(xoffset);
+    s_scrollY += static_cast<float>(yoffset);
+}
+
+float InputManager::getScrollY() {
+    return s_scrollY;
+}
+
+float InputManager::getScrollX() {
+    return s_scrollX;
+}
+
+void InputManager::clearScroll() {
+    s_scrollY = 0.0f;
+    s_scrollX = 0.0f;
 }
 
 void InputManager::onCharCallback(GLFWwindow* /*window*/, unsigned int codepoint) {
@@ -25,6 +49,7 @@ std::string InputManager::getFrameText() {
 
 void InputManager::clearFrameText() {
     s_frameInputUtf8.clear();
+    clearScroll();
 }
 
 void InputManager::popUtf8(std::string& s) {

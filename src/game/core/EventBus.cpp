@@ -9,8 +9,9 @@ void EventBus::subscribe(EventType type, EventCallback callback) {
 
 void EventBus::publish(const Event& event) {
     // если на это событие кто-то подписан то вызываем всех подписчиков
-    if (m_subscribers.find(event.type) != m_subscribers.end()) {
-        for (auto& callback : m_subscribers[event.type]) {
+    auto it = m_subscribers.find(event.type);
+    if (it != m_subscribers.end()) {
+        for (auto& callback : it->second) {
             callback(event);
         }
     }

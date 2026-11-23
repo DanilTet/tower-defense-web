@@ -103,6 +103,7 @@ bool ShaderProgram::loadShaders(const std::string& vertexPath, const std::string
 	glShaderSource(vertex, 1, &vShaderCode, nullptr);
 	glCompileShader(vertex);
 	if (!checkCompileErrors(vertex, "VERTEX")) {
+		glDeleteShader(vertex);
 		return false;
 	}
 
@@ -110,17 +111,27 @@ bool ShaderProgram::loadShaders(const std::string& vertexPath, const std::string
 	glShaderSource(fragment, 1, &fShaderCode, nullptr);
 	glCompileShader(fragment);
 	if (!checkCompileErrors(fragment, "FRAGMENT")) {
+		glDeleteShader(vertex);
+		glDeleteShader(fragment);
 		return false;
 	}
 
-	m_id = glCreateProgram();
-	glAttachShader(m_id, vertex);
-	glAttachShader(m_id, fragment);
-	glLinkProgram(m_id);
-	if (!checkCompileErrors(m_id, "PROGRAM")) return false;
+	deleteProgram();
+
+	GLuint program = glCreateProgram();
+	glAttachShader(program, vertex);
+	glAttachShader(program, fragment);
+	glLinkProgram(program);
+	if (!checkCompileErrors(program, "PROGRAM")) {
+		glDeleteShader(vertex);
+		glDeleteShader(fragment);
+		glDeleteProgram(program);
+		return false;
+	}
 
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
+	m_id = program;
 
 	return true;
 }

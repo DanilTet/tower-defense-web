@@ -85,6 +85,10 @@ add_executable(${PROJECT_NAME}
     src/renderer/TextRenderer.cpp
     src/renderer/GameplayRenderer.h
     src/renderer/GameplayRenderer.cpp
+    src/renderer/BackgroundRenderer.h
+    src/renderer/BackgroundRenderer.cpp
+    src/renderer/DecorationRenderer.h
+    src/renderer/DecorationRenderer.cpp
 
     # Resources (Ресурсы)
     src/resources/ResourceManager.h
@@ -126,6 +130,11 @@ add_executable(${PROJECT_NAME}
     src/game/ui/VolumeSliderWidget.h
     src/game/ui/VolumeSliderWidget.cpp
 
+    src/game/ui/level_select/CampaignTabView.h
+    src/game/ui/level_select/CampaignTabView.cpp
+    src/game/ui/level_select/CustomMapsTabView.h
+    src/game/ui/level_select/CustomMapsTabView.cpp
+
     src/game/gameplay/BuildManager.h
     src/game/gameplay/BuildManager.cpp
 
@@ -158,6 +167,8 @@ add_executable(${PROJECT_NAME}
     src/game/states/GameplayState.cpp
 
     src/particles/ParticleSystem.cpp
+    src/particles/EnvironmentParticleManager.h
+    src/particles/EnvironmentParticleManager.cpp
     src/game/states/MainMenuState.cpp
     src/game/states/PauseState.cpp
     src/game/states/GameOverState.cpp
@@ -165,6 +176,36 @@ add_executable(${PROJECT_NAME}
     src/game/states/LevelSelectState.cpp
     src/game/states/MapEditorState.h
     src/game/states/MapEditorState.cpp
+    src/game/editor/EditorMinecartModal.h
+    src/game/editor/EditorMinecartModal.cpp
+    src/game/editor/EditorWaveModal.h
+    src/game/editor/EditorWaveModal.cpp
+    src/game/editor/EditorMapsBrowserModal.h
+    src/game/editor/EditorMapsBrowserModal.cpp
+    src/game/editor/EditorHelpModal.h
+    src/game/editor/EditorHelpModal.cpp
+    src/game/editor/EditorCamera.h
+    src/game/editor/EditorCamera.cpp
+    src/game/editor/EditorHudPreviewRenderer.h
+    src/game/editor/EditorHudPreviewRenderer.cpp
+    src/game/editor/EditorTileInfoOverlay.h
+    src/game/editor/EditorTileInfoOverlay.cpp
+    src/game/editor/EditorGizmoController.h
+    src/game/editor/EditorGizmoController.cpp
+    src/game/editor/EditorEmitterRenderer.h
+    src/game/editor/EditorEmitterRenderer.cpp
+    src/game/editor/EditorToolbarUI.h
+    src/game/editor/EditorToolbarUI.cpp
+    src/game/editor/EditorLevelSettingsModal.h
+    src/game/editor/EditorLevelSettingsModal.cpp
+    src/game/editor/EditorExitModal.h
+    src/game/editor/EditorExitModal.cpp
+    src/game/editor/EditorEmitterInspector.h
+    src/game/editor/EditorEmitterInspector.cpp
+    src/game/editor/EditorDecorInspector.h
+    src/game/editor/EditorDecorInspector.cpp
+    src/game/editor/EditorEntityInspector.h
+    src/game/editor/EditorEntityInspector.cpp
     src/game/states/SettingsState.h
     src/game/states/SettingsState.cpp
     src/game/core/SaveManager.cpp

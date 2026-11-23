@@ -7,6 +7,7 @@
 #include "../gameplay/BuildManager.h"
 #include "../entities/Tower.h"
 #include "../ui/UICommon.h"
+#include "../core/CampaignManager.h"
 
 bool GameplayInputHandler::isKeyJustPressed(GLFWwindow* window, int key) {
     if (key < 0 || key >= 1024) return false;
@@ -46,9 +47,16 @@ void GameplayInputHandler::processInput(
         return;
     }
 
-    // Пауза по клавишам Space или P
-    if (isKeyJustPressed(window, GLFW_KEY_SPACE) || isKeyJustPressed(window, GLFW_KEY_P)) {
+    // Пауза по клавише P
+    if (isKeyJustPressed(window, GLFW_KEY_P)) {
         if (onTogglePauseRequested) onTogglePauseRequested();
+    }
+
+    // Ранний вызов волны по клавишам Space (Пробел) и Enter
+    if (isKeyJustPressed(window, GLFW_KEY_SPACE) || isKeyJustPressed(window, GLFW_KEY_ENTER)) {
+        if (world.canCallEarlyWave()) {
+            if (onNextWaveRequested) onNextWaveRequested();
+        }
     }
 
     // Переключение множителя скорости времени по клавише Tab
@@ -73,12 +81,10 @@ void GameplayInputHandler::processInput(
         }
     }
 
-    if (isKeyJustPressed(window, GLFW_KEY_ENTER)) {
-        if (onNextWaveRequested) onNextWaveRequested();
-    }
-
     if (isKeyJustPressed(window, GLFW_KEY_M)) {
-        world.playerStats.money += 99999;
+        if (CampaignManager::isDevMode()) {
+            world.playerStats.money += 99999;
+        }
     }
 
     if (isKeyJustPressed(window, GLFW_KEY_R)) {
@@ -144,24 +150,32 @@ void GameplayInputHandler::processInput(
                 return;
             }
 
+            UIRect waveRect = TimeControlUI::getWaveButtonRect(windowWidth, windowHeight);
+            if (waveRect.contains(static_cast<float>(mouseX), static_cast<float>(mouseY))) {
+                if (world.canCallEarlyWave()) {
+                    if (onNextWaveRequested) onNextWaveRequested();
+                }
+                return;
+            }
+
             // Клик пришелся на поля или разделители панели — поглощаем его, чтобы не прокликивать карту
             return;
         }
 
-        float bottomBarHeight = Buildpanel::getBottomBarHeight(windowWidth, windowHeight);
-        if (mouseY >= static_cast<double>(windowHeight) - bottomBarHeight) {
-            if (buildPanel.checkClick(mouseX, mouseY, windowWidth, windowHeight, selectedTowerType)) {
-                selectedTowerOnMap = nullptr;
-            }
+        // 4. Плавающий остров выбора башен (Floating Island Dock)
+        if (buildPanel.checkClick(mouseX, mouseY, windowWidth, windowHeight, selectedTowerType)) {
+            selectedTowerOnMap = nullptr;
             return;
         }
 
-        if (towerMenuUI.processClick(mouseX, mouseY, selectedTowerOnMap, &buildManager, world, selectedTowerOnMap)) {
+        glm::vec2 worldMouse = world.screenToWorld(glm::vec2(mouseX, mouseY), windowWidth, windowHeight);
+
+        if (towerMenuUI.processClick(worldMouse.x, worldMouse.y, selectedTowerOnMap, &buildManager, world, selectedTowerOnMap)) {
             return;
         }
 
         if (world.grid && world.entityManager) {
-            glm::ivec2 clickedCell = world.grid->pixelToGrid(glm::vec2(mouseX, mouseY));
+            glm::ivec2 clickedCell = world.grid->pixelToGrid(worldMouse);
             Tower* clickedTower = world.entityManager->getTowerAt(clickedCell.x, clickedCell.y);
 
             if (clickedTower != nullptr) {
@@ -175,7 +189,7 @@ void GameplayInputHandler::processInput(
         }
 
         buildManager.tryBuildOrUpgrade(
-            m_currentMousePos,
+            worldMouse,
             selectedTowerType,
             world,
             m_pistonPlacementAngle
