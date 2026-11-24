@@ -41,6 +41,10 @@ public:
 		m_poisonDamagePerTick = poisonDamagePerTick;
 	}
 
+	void setMercuryDamage(bool isMercury) {
+		m_isMercuryDamage = isMercury;
+	}
+
 	// двигаем пулу и проверяем столкновение
 	void update(float dt, const std::vector<std::unique_ptr<Enemy>>& enemies, const Grid& grid, ParticleSystem& particleSystem, Enemy* resolvedTarget = nullptr, bool hasResolvedTarget = false, float timeScale = 1.0f);
 	// отрисовка
@@ -100,4 +104,5 @@ private:
 	float m_poisonDuration = 0.0f;
 	float m_poisonInterval = 0.5f;
 	int m_poisonDamagePerTick = 0;
+	bool m_isMercuryDamage = false;
 };

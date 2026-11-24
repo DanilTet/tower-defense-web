@@ -104,7 +104,7 @@ void Grid::renderCellVisual(SpriteRenderer* renderer,
 	const Texture2D* whiteTexture,
 	int x, int y, CellType type,
 	glm::vec2 pixelPos, glm::vec3 color,
-	bool isMineTheme, bool isCanalTheme) const
+	bool isMineTheme, bool isCanalTheme, bool isCinnabarTheme) const
 {
 	glm::vec2 cellSizeVec(m_cellSize, m_cellSize);
 	float borderWidth = std::max(1.0f, std::round(m_cellSize * 0.04f));
@@ -122,6 +122,9 @@ void Grid::renderCellVisual(SpriteRenderer* renderer,
 				} else if (isMineTheme) {
 					fillColor   = glm::vec3(0.52f, 0.46f, 0.40f);
 					borderColor = glm::vec3(0.34f, 0.30f, 0.26f);
+				} else if (isCinnabarTheme) {
+					fillColor   = glm::vec3(0.28f, 0.24f, 0.24f);
+					borderColor = glm::vec3(0.18f, 0.15f, 0.16f);
 				} else {
 					fillColor   = glm::vec3(0.70f, 0.72f, 0.76f);
 					borderColor = glm::vec3(0.40f, 0.42f, 0.46f);
@@ -134,6 +137,9 @@ void Grid::renderCellVisual(SpriteRenderer* renderer,
 				} else if (isMineTheme) {
 					fillColor   = glm::vec3(0.46f, 0.29f, 0.17f);
 					borderColor = glm::vec3(0.36f, 0.22f, 0.12f);
+				} else if (isCinnabarTheme) {
+					fillColor   = glm::vec3(0.165f, 0.176f, 0.212f);
+					borderColor = glm::vec3(0.110f, 0.118f, 0.145f);
 				} else {
 					fillColor   = glm::vec3(0.38f, 0.65f, 0.38f);
 					borderColor = glm::vec3(0.20f, 0.42f, 0.20f);
@@ -143,6 +149,9 @@ void Grid::renderCellVisual(SpriteRenderer* renderer,
 				if (isMineTheme) {
 					fillColor   = glm::vec3(0.48f, 0.31f, 0.18f);
 					borderColor = glm::vec3(0.36f, 0.22f, 0.12f);
+				} else if (isCinnabarTheme) {
+					fillColor   = glm::vec3(0.235f, 0.208f, 0.218f);
+					borderColor = glm::vec3(0.150f, 0.132f, 0.142f);
 				} else {
 					fillColor   = glm::vec3(0.80f, 0.70f, 0.52f);
 					borderColor = glm::vec3(0.52f, 0.42f, 0.28f);
@@ -152,6 +161,9 @@ void Grid::renderCellVisual(SpriteRenderer* renderer,
 				if (isMineTheme) {
 					fillColor   = glm::vec3(0.52f, 0.34f, 0.19f); // Деревянный ящик в теме шахты
 					borderColor = glm::vec3(0.28f, 0.16f, 0.09f);
+				} else if (isCinnabarTheme) {
+					fillColor   = glm::vec3(0.195f, 0.205f, 0.245f); // Целик сланца с жилой киновари
+					borderColor = glm::vec3(0.085f, 0.090f, 0.112f);
 				} else {
 					fillColor   = glm::vec3(0.20f, 0.35f, 0.52f); // Классическая стена (Канал, стандарт, дефолт)
 					borderColor = glm::vec3(0.11f, 0.20f, 0.32f);
@@ -239,6 +251,67 @@ void Grid::renderCellVisual(SpriteRenderer* renderer,
 			drawCornerBracket(glm::vec2(pixelPos.x + m_cellSize - bracketSz, pixelPos.y), glm::vec2(pixelPos.x + m_cellSize - bracketSz * 0.75f, pixelPos.y + bracketSz * 0.25f));
 			drawCornerBracket(glm::vec2(pixelPos.x, pixelPos.y + m_cellSize - bracketSz), glm::vec2(pixelPos.x + bracketSz * 0.25f, pixelPos.y + m_cellSize - bracketSz * 0.75f));
 			drawCornerBracket(glm::vec2(pixelPos.x + m_cellSize - bracketSz, pixelPos.y + m_cellSize - bracketSz), glm::vec2(pixelPos.x + m_cellSize - bracketSz * 0.75f, pixelPos.y + m_cellSize - bracketSz * 0.75f));
+		}
+
+		// 2.3. Для темы "Киноварный штрек" (cinnabar_mine): каменная крошка на полу и целики породы с киноварью
+		if (isCinnabarTheme) {
+			uint32_t seed = static_cast<uint32_t>(std::abs(x * 7919 + y * 65537));
+			if (type == CellType::Ground || type == CellType::Path) {
+				float p1x = static_cast<float>((seed % 52) + 12) * 0.01f;
+				float p1y = static_cast<float>(((seed / 53) % 52) + 12) * 0.01f;
+				float p2x = static_cast<float>(((seed / 2809) % 48) + 22) * 0.01f;
+				float p2y = static_cast<float>(((seed / 134832) % 48) + 22) * 0.01f;
+				float pSz = std::max(2.0f, std::round(m_cellSize * 0.055f));
+				renderer->drawSprite(whiteTexture, pixelPos + glm::vec2(p1x * m_cellSize, p1y * m_cellSize), glm::vec2(pSz, pSz), 0.0f, glm::vec3(0.11f, 0.12f, 0.15f) * color);
+				if ((seed % 5) == 0) {
+					// Редкая искорка рудной крошки киновари на полу штрека
+					renderer->drawSprite(whiteTexture, pixelPos + glm::vec2(p2x * m_cellSize, p2y * m_cellSize), glm::vec2(pSz * 0.85f, pSz * 0.85f), 0.0f, glm::vec3(0.68f, 0.16f, 0.18f) * color);
+				} else {
+					renderer->drawSprite(whiteTexture, pixelPos + glm::vec2(p2x * m_cellSize, p2y * m_cellSize), glm::vec2(pSz * 0.8f, pSz * 0.8f), 0.0f, glm::vec3(0.24f, 0.25f, 0.30f) * color);
+				}
+			} else if (type == CellType::Platform) {
+				// Укрепленный строительный уступ с деревянной окантовкой по углам
+				float studSz = std::max(3.0f, std::round(m_cellSize * 0.09f));
+				float pad = borderWidth + 2.0f;
+				glm::vec3 timberCol = glm::vec3(0.42f, 0.28f, 0.17f) * color;
+				renderer->drawSprite(whiteTexture, pixelPos + glm::vec2(pad, pad), glm::vec2(studSz), 0.0f, timberCol);
+				renderer->drawSprite(whiteTexture, pixelPos + glm::vec2(m_cellSize - pad - studSz, pad), glm::vec2(studSz), 0.0f, timberCol);
+				renderer->drawSprite(whiteTexture, pixelPos + glm::vec2(pad, m_cellSize - pad - studSz), glm::vec2(studSz), 0.0f, timberCol);
+				renderer->drawSprite(whiteTexture, pixelPos + glm::vec2(m_cellSize - pad - studSz, m_cellSize - pad - studSz), glm::vec2(studSz), 0.0f, timberCol);
+			} else if (type == CellType::Scenery) {
+				// Каменный целик сланца и кварцита, прорезанный жилой алой киновари и каплями ртути
+				float bevel = std::max(3.0f, std::round(m_cellSize * 0.10f));
+				glm::vec3 topBevel = glm::vec3(0.28f, 0.29f, 0.35f) * color;
+				glm::vec3 botBevel = glm::vec3(0.11f, 0.12f, 0.15f) * color;
+				glm::vec3 coreRock = glm::vec3(0.165f, 0.175f, 0.215f) * color;
+
+				renderer->drawSprite(whiteTexture, pixelPos + innerOffset, glm::vec2(innerSize.x, bevel), 0.0f, topBevel);
+				renderer->drawSprite(whiteTexture, pixelPos + innerOffset, glm::vec2(bevel, innerSize.y), 0.0f, topBevel);
+				renderer->drawSprite(whiteTexture, glm::vec2(pixelPos.x + innerOffset.x, pixelPos.y + m_cellSize - innerOffset.y - bevel), glm::vec2(innerSize.x, bevel), 0.0f, botBevel);
+				renderer->drawSprite(whiteTexture, glm::vec2(pixelPos.x + m_cellSize - innerOffset.x - bevel, pixelPos.y + innerOffset.y), glm::vec2(bevel, innerSize.y), 0.0f, botBevel);
+
+				glm::vec2 corePos = pixelPos + innerOffset + glm::vec2(bevel);
+				glm::vec2 coreSz = innerSize - glm::vec2(bevel * 2.0f);
+				if (coreSz.x > 2.0f && coreSz.y > 2.0f) {
+					renderer->drawSprite(whiteTexture, corePos, coreSz, 0.0f, coreRock);
+				}
+
+				float angles[4] = { 28.0f, -34.0f, 52.0f, -48.0f };
+				float veinAngle = angles[seed % 4];
+				float veinLen = m_cellSize * 0.68f;
+				float veinThick = std::max(3.0f, std::round(m_cellSize * 0.11f));
+				glm::vec2 cellCenter = pixelPos + glm::vec2(m_cellSize * 0.5f);
+
+				renderer->drawSprite(whiteTexture, cellCenter - glm::vec2(veinLen * 0.5f, (veinThick + 3.0f) * 0.5f), glm::vec2(veinLen, veinThick + 3.0f), veinAngle, glm::vec3(0.06f, 0.04f, 0.06f) * color);
+				renderer->drawSprite(whiteTexture, cellCenter - glm::vec2(veinLen * 0.5f, veinThick * 0.5f), glm::vec2(veinLen, veinThick), veinAngle, glm::vec3(0.72f, 0.13f, 0.16f) * color);
+				renderer->drawSprite(whiteTexture, cellCenter - glm::vec2(veinLen * 0.26f, veinThick * 0.28f), glm::vec2(veinLen * 0.52f, std::max(2.0f, veinThick * 0.55f)), veinAngle, glm::vec3(0.95f, 0.24f, 0.26f) * color);
+
+				if ((seed % 3) != 0) {
+					float hgSz = std::max(2.0f, std::round(m_cellSize * 0.065f));
+					float offX = ((seed % 2) == 0) ? (m_cellSize * 0.16f) : (-m_cellSize * 0.18f);
+					renderer->drawSprite(whiteTexture, cellCenter + glm::vec2(offX, -m_cellSize * 0.14f), glm::vec2(hgSz, hgSz), 0.0f, glm::vec3(0.85f, 0.90f, 0.96f) * color);
+				}
+			}
 		}
 
 		// 3. Для клетки обрыва (Chasm) рисуем глубокую сердцевину провала
@@ -360,6 +433,7 @@ void Grid::drawBaseCells(SpriteRenderer* renderer,
 
 	const bool isMineTheme = (backgroundPreset == "mine_entrance" || backgroundPreset == "mine");
 	const bool isCanalTheme = (backgroundPreset == "pipes_canal" || backgroundPreset == "channel");
+	const bool isCinnabarTheme = (backgroundPreset == "cinnabar_mine" || backgroundPreset == "cinnabar");
 
 	// 1. Отрисовка базовых клеток основной матрицы (без Scenery)
 	for (int y = 0; y < m_height; ++y) {
@@ -372,7 +446,7 @@ void Grid::drawBaseCells(SpriteRenderer* renderer,
 				type = CellType::Ground;
 			}
 			if (type == CellType::Scenery || type == CellType::Empty) continue;
-			renderCellVisual(renderer, whiteTexture, x, y, type, gridToPixel(x, y), color, isMineTheme, isCanalTheme);
+			renderCellVisual(renderer, whiteTexture, x, y, type, gridToPixel(x, y), color, isMineTheme, isCanalTheme, isCinnabarTheme);
 		}
 	}
 
@@ -383,7 +457,7 @@ void Grid::drawBaseCells(SpriteRenderer* renderer,
 			ct = CellType::Ground;
 		}
 		if (ct == CellType::Scenery || ct == CellType::Empty) continue;
-		renderCellVisual(renderer, whiteTexture, pos.first, pos.second, ct, gridToPixel(pos.first, pos.second), color, isMineTheme, isCanalTheme);
+		renderCellVisual(renderer, whiteTexture, pos.first, pos.second, ct, gridToPixel(pos.first, pos.second), color, isMineTheme, isCanalTheme, isCinnabarTheme);
 	}
 }
 
@@ -420,8 +494,9 @@ void Grid::drawObstacleCells(SpriteRenderer* renderer,
 
 	const bool isMineTheme = (backgroundPreset == "mine_entrance" || backgroundPreset == "mine");
 	const bool isCanalTheme = (backgroundPreset == "pipes_canal" || backgroundPreset == "channel");
+	const bool isCinnabarTheme = (backgroundPreset == "cinnabar_mine" || backgroundPreset == "cinnabar");
 
-	// 1. Отрисовка препятствий Scenery ("Ящики" / "Стены") в матрице
+	// 1. Отрисовка препятствий Scenery ("Ящики" / "Стены" / "Киноварь") в матрице
 	for (int y = 0; y < m_height; ++y) {
 		for (int x = 0; x < m_width; ++x) {
 			CellType type = m_grid[y][x];
@@ -429,7 +504,7 @@ void Grid::drawObstacleCells(SpriteRenderer* renderer,
 				type = m_originalGrid[y][x];
 			}
 			if (type == CellType::Scenery) {
-				renderCellVisual(renderer, whiteTexture, x, y, type, gridToPixel(x, y), color, isMineTheme, isCanalTheme);
+				renderCellVisual(renderer, whiteTexture, x, y, type, gridToPixel(x, y), color, isMineTheme, isCanalTheme, isCinnabarTheme);
 			}
 		}
 	}
@@ -437,7 +512,7 @@ void Grid::drawObstacleCells(SpriteRenderer* renderer,
 	// 2. Отрисовка препятствий Scenery во внешних клетках
 	for (const auto& [pos, type] : m_outerCells) {
 		if (type == CellType::Scenery) {
-			renderCellVisual(renderer, whiteTexture, pos.first, pos.second, type, gridToPixel(pos.first, pos.second), color, isMineTheme, isCanalTheme);
+			renderCellVisual(renderer, whiteTexture, pos.first, pos.second, type, gridToPixel(pos.first, pos.second), color, isMineTheme, isCanalTheme, isCinnabarTheme);
 		}
 	}
 }

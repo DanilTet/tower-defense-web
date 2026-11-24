@@ -262,7 +262,7 @@ void MapEditorState::loadLevelByName(const std::string& fileName) {
 
     m_grid = std::make_unique<Grid>(m_gridWidth, m_gridHeight, m_cellSize);
     m_grid->setNoBuildMask(m_noBuildMask);
-    m_grid->setHasSidePockets(m_hasSidePockets || m_background == "mine_entrance");
+    m_grid->setHasSidePockets(m_hasSidePockets || BackgroundRenderer::usesSidePocketsByDefault(m_background));
     updateGridDimensions();
 
     for (int y = 0; y < m_gridHeight; ++y) {
@@ -1860,7 +1860,7 @@ void MapEditorState::processInput(GLFWwindow* window, float dt) {
                                                        m_allowedTowers, m_towerMaxTiers,
                                                        m_maxUpgradeTier, m_enemyBountyRules, m_enemyHpRules, m_hasSidePockets, m_isDirty);
         if (handled && m_grid) {
-            m_grid->setHasSidePockets(m_hasSidePockets || m_background == "mine_entrance");
+            m_grid->setHasSidePockets(m_hasSidePockets || BackgroundRenderer::usesSidePocketsByDefault(m_background));
             recalculatePaths();
         }
         if (keyEscCheck && !m_keyEscPressedLastFrame) {
@@ -2868,18 +2868,10 @@ void MapEditorState::processInput(GLFWwindow* window, float dt) {
                 m_minecartModal.toggle();
                 break;
             case EditorActionType::ToggleBackground:
-                if (m_background == "default") {
-                    m_background = "pipes_canal";
-                    showToast("Фон: Дюкеры Канала");
-                } else if (m_background == "pipes_canal") {
-                    m_background = "mine_entrance";
-                    showToast("Фон: Вход в шахту");
-                } else {
-                    m_background = "default";
-                    showToast("Фон: Стандартный");
-                }
+                m_background = BackgroundRenderer::nextBackgroundPreset(m_background);
+                showToast(BackgroundRenderer::getBackgroundToast(m_background));
                 if (m_grid) {
-                    m_grid->setHasSidePockets(m_hasSidePockets || m_background == "mine_entrance");
+                    m_grid->setHasSidePockets(m_hasSidePockets || BackgroundRenderer::usesSidePocketsByDefault(m_background));
                     recalculatePaths();
                 }
                 m_isDirty = true;
@@ -4298,7 +4290,7 @@ void MapEditorState::executePipette(int gx, int gy, glm::vec2 worldMouse) {
     if (!canInteract) return;
 
     EditorBrush pickedBrush = EditorBrush::Ground;
-    std::string tileName = (m_background == "pipes_canal" || m_background == "channel") ? "Асфальт" : "Грунт";
+    std::string tileName = BackgroundRenderer::getEditorGroundName(m_background);
     bool foundObj = false;
 
     // 1. Спавнеры
@@ -4345,7 +4337,7 @@ void MapEditorState::executePipette(int gx, int gy, glm::vec2 worldMouse) {
         switch (ct) {
             case CellType::Ground:
                 pickedBrush = EditorBrush::Ground;
-                tileName = (m_background == "pipes_canal" || m_background == "channel") ? "Асфальт" : "Грунт";
+                tileName = BackgroundRenderer::getEditorGroundName(m_background);
                 break;
             case CellType::Path:
                 pickedBrush = EditorBrush::Path;
@@ -4353,11 +4345,11 @@ void MapEditorState::executePipette(int gx, int gy, glm::vec2 worldMouse) {
                 break;
             case CellType::Platform:
                 pickedBrush = EditorBrush::Platform;
-                tileName = (m_background == "pipes_canal" || m_background == "channel") ? "Трава/Обочина" : ((m_background == "mine_entrance" || m_background == "mine") ? "Сланец" : "Платформа");
+                tileName = BackgroundRenderer::getEditorPlatformName(m_background);
                 break;
             case CellType::Scenery:
                 pickedBrush = EditorBrush::Wall;
-                tileName = (m_background == "mine_entrance" || m_background == "mine") ? "Ящики" : "Стена";
+                tileName = BackgroundRenderer::getEditorWallName(m_background);
                 break;
             case CellType::Chasm:
                 pickedBrush = EditorBrush::Chasm;
@@ -4373,7 +4365,7 @@ void MapEditorState::executePipette(int gx, int gy, glm::vec2 worldMouse) {
                 break;
             default:
                 pickedBrush = EditorBrush::Ground;
-                tileName = (m_background == "pipes_canal" || m_background == "channel") ? "Асфальт" : "Грунт";
+                tileName = BackgroundRenderer::getEditorGroundName(m_background);
                 break;
         }
     }

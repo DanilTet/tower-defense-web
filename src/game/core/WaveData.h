@@ -17,5 +17,6 @@ using WaveEnemyGroupData = WavePart;
 
 struct WaveConfig {
 	std::vector<WavePart> parts;
+	float nextWaveDelay = 12.0f; // задержка до следующей волны после выхода последнего врага (сек)
 };
 

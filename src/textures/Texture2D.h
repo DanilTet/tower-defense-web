@@ -13,7 +13,7 @@ public:
 	Texture2D(Texture2D&& other) noexcept;
 	Texture2D& operator=(Texture2D&& other) noexcept;
 
-	bool load(const std::string& path);
+	bool load(const std::string& path, GLint filter = GL_LINEAR);
 	bool loadFromMemory(int width, int height, const unsigned char* data, int channels = 4);
 
 	void bind(unsigned int unit = 0) const;

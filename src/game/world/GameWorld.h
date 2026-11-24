@@ -55,8 +55,10 @@ struct GameWorld {
     void spawnEnemy(const std::string& type, int spawnerIndex = 0, int reward = 1, int rewardStep = 1, int waveIndex = -1);
     void demolishDecorationsInCell(int gridX, int gridY);
 
-    // Ранний вызов волны (Фаза 4.2)
+    // Ранний вызов волны (Фаза 4.2) и автопродолжение волн
     bool canCallEarlyWave() const;
     int getEarlyCallBonus() const;
     void triggerEarlyWave();
+    void toggleAutoStartWaves();
+    bool isAutoStartWaves() const;
 };

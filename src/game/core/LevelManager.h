@@ -220,7 +220,7 @@ struct LevelMapData {
     std::string name = "";          // Отображаемое имя (UTF-8, RU/UA/EN)
     bool isCampaign = false;        // true = Кампания, false = Тестовый / Кастомный
     std::vector<std::string> tags;  // Теги для фильтрации и поиска (например: "Ртуть", "Тест", "Сложный")
-    std::string background = "default"; // "default", "pipes_canal", "mine_entrance"
+    std::string background = "default"; // "default", "pipes_canal", "mine_entrance", "cinnabar_mine"
     bool hasSidePockets = false;        // Включает боковые карманы (настил слева и вход в шахту справа) внутри матрицы
 
     struct CameraSettings {

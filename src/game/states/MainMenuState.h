@@ -1,5 +1,6 @@
 #pragma once
 #include "IGameState.h"
+#include "../ui/UICommon.h"
 #include <memory>
 
 class GameStateManager;
@@ -16,6 +17,7 @@ private:
 	bool m_mousePressedLastFrame = false;
 	bool m_suppressClickUntilRelease = true;
 	bool m_ctrlShiftDWasDown = false;
+	bool m_isArtCreditHovered = false;
 
 	struct MenuLayout {
 		float btnW;
@@ -29,6 +31,10 @@ private:
 		float btnFontScale;
 		float titleFontScale;
 		float titleY;
+		float creditFontScale;
+		UIRect creditRect;
+		float creditTextX;
+		float creditTextY;
 	};
 	MenuLayout calculateLayout() const;
 

@@ -47,7 +47,7 @@ private:
 		const Texture2D* whiteTexture,
 		int x, int y, CellType type,
 		glm::vec2 pixelPos, glm::vec3 color,
-		bool isMineTheme, bool isCanalTheme) const;
+		bool isMineTheme, bool isCanalTheme, bool isCinnabarTheme) const;
 
 public:
 	Grid(int width, int height, float cellSize, glm::vec2 offset = glm::vec2(0.0f, 0.0f));

@@ -123,8 +123,13 @@ void EditorHudPreviewRenderer::renderWorldOverlay(
         renderer->drawSpriteRGBA(whiteTexture, glm::vec2(bx, btnY), glm::vec2(timeBtnW, btnH), 0.0f, glm::vec4(0.15f, 0.18f, 0.26f, 0.85f));
     }
 
+    // Кнопка автопродолжения волн (Auto)
+    float autoBtnX = hudPanelX + padX + 4.0f * (timeBtnW + btnGap);
+    float autoBtnW = TimeControlUI::AUTO_BTN_W * s;
+    renderer->drawSpriteRGBA(whiteTexture, glm::vec2(autoBtnX, btnY), glm::vec2(autoBtnW, btnH), 0.0f, glm::vec4(0.15f, 0.18f, 0.26f, 0.85f));
+
     // Кнопка вызова волны (Start / Call Wave)
-    float waveBtnX = hudPanelX + padX + 4.0f * (timeBtnW + btnGap);
+    float waveBtnX = autoBtnX + autoBtnW + btnGap;
     float waveBtnW = std::max(0.0f, (hudPanelX + hudPanelW - padX) - waveBtnX);
     renderer->drawSpriteRGBA(whiteTexture, glm::vec2(waveBtnX, btnY), glm::vec2(waveBtnW, btnH), 0.0f, glm::vec4(0.18f, 0.45f, 0.24f, 0.90f));
 
@@ -268,8 +273,9 @@ void EditorHudPreviewRenderer::renderScreenText(
     float statsH = TimeControlUI::STATS_ROW_H * s;
     float btnY = hudPanelY + padY + statsH + TimeControlUI::ROW_GAP * s;
     float timeBtnW = TimeControlUI::TIME_BTN_W * s;
+    float autoBtnW = TimeControlUI::AUTO_BTN_W * s;
     float btnGap = TimeControlUI::BTN_GAP * s;
-    float waveBtnX = hudPanelX + padX + 4.0f * (timeBtnW + btnGap);
+    float waveBtnX = hudPanelX + padX + 4.0f * (timeBtnW + btnGap) + autoBtnW + btnGap;
 
     float topLeftBtnX = framePos.x + 20.0f * s;
     float topLeftBtnY = framePos.y + 20.0f * s;

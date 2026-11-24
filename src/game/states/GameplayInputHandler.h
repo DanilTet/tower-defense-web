@@ -38,7 +38,8 @@ public:
         std::function<void()> onNextWaveRequested,
         std::function<void()> onTogglePauseRequested = nullptr,
         std::function<void()> onCycleSpeedRequested = nullptr,
-        std::function<void(float)> onSetSpeedRequested = nullptr
+        std::function<void(float)> onSetSpeedRequested = nullptr,
+        std::function<void()> onToggleAutoWaveRequested = nullptr
     );
 
     glm::vec2 getMousePos() const { return m_currentMousePos; }

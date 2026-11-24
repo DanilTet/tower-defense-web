@@ -34,6 +34,8 @@ void Enemy::initFromStats(const EnemyStats& stats) {
 
     m_isSpark = (m_type == "Spark");
     m_isCoal = (m_type == "Coal");
+    m_isMercury = (m_type == "Mercury_Large" || m_type == "Mercury_Medium" || m_type == "Mercury_Small" || m_type.rfind("Mercury", 0) == 0);
+    m_mercuryImmune = stats.mercuryImmune;
 
     if (!m_textureId.empty() && ResourceManager::hasTexture(m_textureId)) {
         m_cachedTexture = ResourceManager::getTexture(m_textureId);
@@ -465,14 +467,15 @@ Enemy::RenderGeometry Enemy::computeRenderGeometry(const Grid& grid) const {
 
     geom.baseEnemyDim = cellSize * m_sizeScale;
     geom.currentEnemyDim = geom.baseEnemyDim;
-    geom.drawAngle = m_angle;
+    float baseAngle = m_isMercury ? 0.0f : m_angle;
+    geom.drawAngle = baseAngle;
     geom.renderColor = m_color;
 
     if (m_isFalling) {
         float progress = std::clamp(m_fallTimer / FALL_DURATION, 0.0f, 1.0f);
         float scale = 1.0f - progress;
         geom.currentEnemyDim = geom.baseEnemyDim * scale;
-        geom.drawAngle = m_angle + progress * 720.0f;
+        geom.drawAngle = baseAngle + progress * 720.0f;
         float shade = (1.0f - progress * 0.90f);
         geom.renderColor = glm::mix(m_color, glm::vec3(0.02f, 0.02f, 0.04f), progress) * shade;
     }
@@ -512,10 +515,23 @@ Enemy::RenderGeometry Enemy::computeRenderGeometry(const Grid& grid) const {
         }
     }
 
+    geom.uv = m_animator.getCurrentUV();
     geom.size = glm::vec2(geom.currentEnemyDim, geom.currentEnemyDim);
+    const Texture2D* bodyTex = getBodyTexture();
+    if (bodyTex != nullptr && bodyTex->getWidth() > 0 && bodyTex->getHeight() > 0) {
+        float srcW = static_cast<float>(bodyTex->getWidth()) * std::abs(geom.uv.uvMax.x - geom.uv.uvMin.x);
+        float srcH = static_cast<float>(bodyTex->getHeight()) * std::abs(geom.uv.uvMax.y - geom.uv.uvMin.y);
+        if (srcW > 0.0f && srcH > 0.0f) {
+            if (srcH >= srcW) {
+                geom.size = glm::vec2(geom.currentEnemyDim * (srcW / srcH), geom.currentEnemyDim);
+            }
+            else {
+                geom.size = glm::vec2(geom.currentEnemyDim, geom.currentEnemyDim * (srcH / srcW));
+            }
+        }
+    }
     geom.cellCenter = m_pixelPos + glm::vec2(cellSize * 0.5f);
     geom.drawPos = geom.cellCenter - geom.size * 0.5f + m_wallImpactOffset;
-    geom.uv = m_animator.getCurrentUV();
     return geom;
 }
 
@@ -622,7 +638,7 @@ void Enemy::renderHealthBar(SpriteRenderer* renderer, const Texture2D* barTex, c
 }
 
 void Enemy::renderDebugHitbox(SpriteRenderer* renderer, const Texture2D* radiusTex, const Grid& grid) const {
-    if (m_reachedEnd || m_isFalling || m_isCoal || m_isSpark || m_visibilityAlpha <= 0.001f || !radiusTex) {
+    if (m_reachedEnd || m_isFalling || m_isCoal || m_isSpark || m_isMercury || m_visibilityAlpha <= 0.001f || !radiusTex) {
         return;
     }
 
@@ -873,6 +889,9 @@ void Enemy::applySlow(float duration, float slowPercent) {
 }
 
 void Enemy::applyPoison(float duration, float tickInterval, int damagePerTick) {
+    if (m_mercuryImmune) {
+        return;
+    }
     for (auto& effect : m_statusEffects) {
         if (effect.type == StatusType::Poison) {
             effect.duration = std::max(effect.duration, duration);

@@ -221,8 +221,7 @@ void EditorWaveModal::update(float dt) {
 }
 
 void EditorWaveModal::commitFocusedInput(std::vector<WaveConfig>& waves) {
-    if (m_focusedField == WaveFocusedField::None || m_focusedPartIdx < 0) {
-        m_focusedField = WaveFocusedField::None;
+    if (m_focusedField == WaveFocusedField::None) {
         m_focusedPartIdx = -1;
         m_inputText.clear();
         m_fieldJustFocused = false;
@@ -237,7 +236,24 @@ void EditorWaveModal::commitFocusedInput(std::vector<WaveConfig>& waves) {
     }
 
     WaveConfig& wave = waves[m_selectedWaveIdx];
-    if (m_focusedPartIdx >= static_cast<int>(wave.parts.size())) {
+
+    if (m_focusedField == WaveFocusedField::NextWaveDelay) {
+        if (!m_inputText.empty()) {
+            try {
+                float val = std::stof(m_inputText);
+                wave.nextWaveDelay = std::clamp(val, 0.0f, 120.0f);
+            } catch (...) {
+                // Оставляем прошлое корректное значение
+            }
+        }
+        m_focusedField = WaveFocusedField::None;
+        m_focusedPartIdx = -1;
+        m_inputText.clear();
+        m_fieldJustFocused = false;
+        return;
+    }
+
+    if (m_focusedPartIdx < 0 || m_focusedPartIdx >= static_cast<int>(wave.parts.size())) {
         m_focusedField = WaveFocusedField::None;
         m_focusedPartIdx = -1;
         m_inputText.clear();
@@ -279,7 +295,10 @@ void EditorWaveModal::startEditingField(int partIdx, WaveFocusedField field, con
         m_cursorBlinkTimer = 0.0f;
 
         const WaveConfig& wave = waves[m_selectedWaveIdx];
-        if (partIdx >= 0 && partIdx < static_cast<int>(wave.parts.size())) {
+        if (field == WaveFocusedField::NextWaveDelay) {
+            m_focusedPartIdx = -1;
+            m_inputText = formatFloat1(wave.nextWaveDelay);
+        } else if (partIdx >= 0 && partIdx < static_cast<int>(wave.parts.size())) {
             const WavePart& part = wave.parts[partIdx];
             if (field == WaveFocusedField::Count) {
                 m_inputText = std::to_string(part.count);
@@ -293,14 +312,20 @@ void EditorWaveModal::startEditingField(int partIdx, WaveFocusedField field, con
 }
 
 void EditorWaveModal::cycleNextInputField(std::vector<WaveConfig>& waves) {
-    if (m_focusedField == WaveFocusedField::None || m_focusedPartIdx < 0) return;
+    if (m_focusedField == WaveFocusedField::None) return;
     int curPart = m_focusedPartIdx;
     WaveFocusedField curField = m_focusedField;
     commitFocusedInput(waves);
 
     if (m_selectedWaveIdx < 0 || m_selectedWaveIdx >= static_cast<int>(waves.size())) return;
     WaveConfig& wave = waves[m_selectedWaveIdx];
-    if (wave.parts.empty()) return;
+    if (curField == WaveFocusedField::NextWaveDelay) {
+        if (!wave.parts.empty()) {
+            startEditingField(0, WaveFocusedField::Count, waves);
+        }
+        return;
+    }
+    if (curPart < 0 || wave.parts.empty()) return;
 
     if (curField == WaveFocusedField::Count) {
         startEditingField(curPart, WaveFocusedField::Interval, waves);
@@ -373,6 +398,16 @@ void EditorWaveModal::updateLayout(int screenWidth, int screenHeight) {
     m_layout.btnAddPartSize = glm::vec2(std::clamp(145.0f * scale, 120.0f, 165.0f), std::clamp(28.0f * scale, 24.0f, 32.0f));
     m_layout.btnAddPartPos = glm::vec2(rightEdge - m_layout.btnAddPartSize.x, headerY);
 
+    float hdrCtrlH = m_layout.btnAddPartSize.y;
+    float nudgeW = std::clamp(22.0f * scale, 18.0f, 26.0f);
+    float delayBoxW = std::clamp(58.0f * scale, 48.0f, 68.0f);
+    float ctrlGap = 3.0f * scale;
+    m_layout.waveDelayNudgeSize = glm::vec2(nudgeW, hdrCtrlH);
+    m_layout.btnWaveDelayIncPos = glm::vec2(m_layout.btnAddPartPos.x - 12.0f * scale - nudgeW, headerY);
+    m_layout.boxWaveDelaySize = glm::vec2(delayBoxW, hdrCtrlH);
+    m_layout.boxWaveDelayPos = glm::vec2(m_layout.btnWaveDelayIncPos.x - ctrlGap - delayBoxW, headerY);
+    m_layout.btnWaveDelayDecPos = glm::vec2(m_layout.boxWaveDelayPos.x - ctrlGap - nudgeW, headerY);
+
     // 2) Карточки пачек стартуют строго под шапкой: cardsStartY = headerY + 45.0f * scale.
     m_layout.cardsStartY = headerY + 45.0f * scale;
 
@@ -401,7 +436,8 @@ bool EditorWaveModal::handleInput(GLFWwindow* window, glm::vec2 mousePos, bool l
                                  glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS);
 
     // 1. Ввод с клавиатуры в активное числовое поле
-    if (window && m_focusedField != WaveFocusedField::None && m_focusedPartIdx >= 0) {
+    if (window && m_focusedField != WaveFocusedField::None &&
+        (m_focusedField == WaveFocusedField::NextWaveDelay || m_focusedPartIdx >= 0)) {
         auto checkKeyInput = [&](int key) -> bool {
             bool down = (glfwGetKey(window, key) == GLFW_PRESS);
             auto& ks = m_keyStates[key];
@@ -697,6 +733,29 @@ bool EditorWaveModal::handleInput(GLFWwindow* window, glm::vec2 mousePos, bool l
         if (m_selectedWaveIdx >= 0 && m_selectedWaveIdx < static_cast<int>(waves.size())) {
             WaveConfig& curWave = waves[m_selectedWaveIdx];
 
+            // Контролы окна бонуса раннего вызова волны (nextWaveDelay)
+            float delayStep = 1.0f;
+            if (isShiftDown) {
+                delayStep = 4.0f;
+            }
+            if (isPointInRect(mousePos, l.btnWaveDelayDecPos, l.waveDelayNudgeSize)) {
+                commitFocusedInput(waves);
+                curWave.nextWaveDelay = std::clamp(curWave.nextWaveDelay - delayStep, 0.0f, 120.0f);
+                isDirty = true;
+                return true;
+            }
+            if (isPointInRect(mousePos, l.btnWaveDelayIncPos, l.waveDelayNudgeSize)) {
+                commitFocusedInput(waves);
+                curWave.nextWaveDelay = std::clamp(curWave.nextWaveDelay + delayStep, 0.0f, 120.0f);
+                isDirty = true;
+                return true;
+            }
+            if (isPointInRect(mousePos, l.boxWaveDelayPos, l.boxWaveDelaySize)) {
+                commitFocusedInput(waves);
+                startEditingField(-1, WaveFocusedField::NextWaveDelay, waves);
+                return true;
+            }
+
             // [+ Add Batch]
             if (isPointInRect(mousePos, l.btnAddPartPos, l.btnAddPartSize)) {
                 commitFocusedInput(waves);
@@ -985,6 +1044,35 @@ void EditorWaveModal::render(SpriteRenderer* renderer, TextRenderer* textRendere
     renderer->drawSprite(whiteTexture, l.btnAddPartPos, l.btnAddPartSize, 0.0f, addPartHov ? glm::vec3(0.35f, 0.85f, 0.50f) : glm::vec3(0.25f, 0.70f, 0.40f));
     renderer->drawSprite(whiteTexture, l.btnAddPartPos + glm::vec2(1.0f), l.btnAddPartSize - glm::vec2(2.0f), 0.0f, addPartHov ? glm::vec3(0.18f, 0.42f, 0.24f) : glm::vec3(0.13f, 0.32f, 0.18f));
 
+    // Контрол окна бонуса раннего вызова ([-] [12.0s] [+])
+    if (m_selectedWaveIdx >= 0 && m_selectedWaveIdx < static_cast<int>(waves.size())) {
+        bool wdDecHov = isPointInRect(mousePos, l.btnWaveDelayDecPos, l.waveDelayNudgeSize);
+        glm::vec3 wdDecBrd = wdDecHov ? glm::vec3(0.45f, 0.50f, 0.60f) : glm::vec3(0.32f, 0.36f, 0.45f);
+        glm::vec3 wdDecBg  = wdDecHov ? glm::vec3(0.24f, 0.27f, 0.34f) : glm::vec3(0.18f, 0.20f, 0.26f);
+        renderer->drawSprite(whiteTexture, l.btnWaveDelayDecPos, l.waveDelayNudgeSize, 0.0f, wdDecBrd);
+        renderer->drawSprite(whiteTexture, l.btnWaveDelayDecPos + glm::vec2(1.0f), l.waveDelayNudgeSize - glm::vec2(2.0f), 0.0f, wdDecBg);
+
+        bool isWdFocused = (m_focusedField == WaveFocusedField::NextWaveDelay);
+        bool wdBoxHov = isPointInRect(mousePos, l.boxWaveDelayPos, l.boxWaveDelaySize);
+        glm::vec3 wdBoxBrd = glm::vec3(0.28f, 0.32f, 0.40f);
+        glm::vec3 wdBoxBg  = glm::vec3(0.08f, 0.09f, 0.12f);
+        if (isWdFocused) {
+            wdBoxBrd = glm::vec3(0.35f, 0.85f, 1.0f);
+            wdBoxBg  = glm::vec3(0.10f, 0.15f, 0.24f);
+        } else if (wdBoxHov) {
+            wdBoxBrd = glm::vec3(0.40f, 0.46f, 0.58f);
+            wdBoxBg  = glm::vec3(0.11f, 0.13f, 0.17f);
+        }
+        renderer->drawSprite(whiteTexture, l.boxWaveDelayPos, l.boxWaveDelaySize, 0.0f, wdBoxBrd);
+        renderer->drawSprite(whiteTexture, l.boxWaveDelayPos + glm::vec2(1.0f), l.boxWaveDelaySize - glm::vec2(2.0f), 0.0f, wdBoxBg);
+
+        bool wdIncHov = isPointInRect(mousePos, l.btnWaveDelayIncPos, l.waveDelayNudgeSize);
+        glm::vec3 wdIncBrd = wdIncHov ? glm::vec3(0.45f, 0.50f, 0.60f) : glm::vec3(0.32f, 0.36f, 0.45f);
+        glm::vec3 wdIncBg  = wdIncHov ? glm::vec3(0.24f, 0.27f, 0.34f) : glm::vec3(0.18f, 0.20f, 0.26f);
+        renderer->drawSprite(whiteTexture, l.btnWaveDelayIncPos, l.waveDelayNudgeSize, 0.0f, wdIncBrd);
+        renderer->drawSprite(whiteTexture, l.btnWaveDelayIncPos + glm::vec2(1.0f), l.waveDelayNudgeSize - glm::vec2(2.0f), 0.0f, wdIncBg);
+    }
+
     // Расчет метрик волны (Длительность и общее число мобов)
     int totalMobsInWave = 0;
     float waveTotalTime = 0.0f;
@@ -1219,6 +1307,7 @@ void EditorWaveModal::render(SpriteRenderer* renderer, TextRenderer* textRendere
         // Правая колонка
         if (m_selectedWaveIdx >= 0 && m_selectedWaveIdx < static_cast<int>(waves.size())) {
             const auto& curWave = waves[m_selectedWaveIdx];
+            bool showBlinkCursor = (m_cursorBlinkTimer < 0.53f);
 
             // Шапка правой колонки
             std::string wNumStr = "ВОЛНА #" + std::to_string(m_selectedWaveIdx + 1);
@@ -1226,9 +1315,38 @@ void EditorWaveModal::render(SpriteRenderer* renderer, TextRenderer* textRendere
             textRenderer->RenderText(wNumStr, l.colRightPos.x + 8.0f * scale, headerTextY, fTitle, glm::vec3(0.95f, 0.95f, 0.95f));
 
             float twNum = textRenderer->CalculateTextWidth(wNumStr, fTitle);
-            std::string statsStr = "Время: ~" + formatFloat1(waveTotalTime) + "s  |  Врагов: " + std::to_string(totalMobsInWave);
+            std::string statsStr = "Спавн: ~" + formatFloat1(waveTotalTime) + "s  |  Врагов: " + std::to_string(totalMobsInWave);
             float statsTextY = l.btnAddPartPos.y + (l.btnAddPartSize.y - fSub * 28.0f) * 0.5f + 2.0f;
-            textRenderer->RenderText(statsStr, l.colRightPos.x + twNum + 24.0f * scale, statsTextY, fSub, glm::vec3(0.40f, 0.95f, 0.70f));
+            textRenderer->RenderText(statsStr, l.colRightPos.x + twNum + 18.0f * scale, statsTextY, fSub, glm::vec3(0.40f, 0.95f, 0.70f));
+
+            // Подпись и значение бонусного таймера волны (Бонус: [-] [12.0s] [+])
+            std::string wdLabel = "Бонус:";
+            float twWdLabel = textRenderer->CalculateTextWidth(wdLabel, fSub);
+            textRenderer->RenderText(wdLabel, l.btnWaveDelayDecPos.x - twWdLabel - 6.0f * scale, statsTextY, fSub, glm::vec3(0.88f, 0.88f, 0.92f));
+
+            float twHdrM = textRenderer->CalculateTextWidth("-", fBtn * 1.1f);
+            float hdrNudgeTextY = l.btnWaveDelayDecPos.y + (l.waveDelayNudgeSize.y - fBtn * 1.1f * 28.0f) * 0.5f + 2.0f;
+            textRenderer->RenderText("-", l.btnWaveDelayDecPos.x + (l.waveDelayNudgeSize.x - twHdrM) * 0.5f, hdrNudgeTextY, fBtn * 1.1f, glm::vec3(1.0f));
+
+            bool isWdFocused = (m_focusedField == WaveFocusedField::NextWaveDelay);
+            std::string wdValStr;
+            glm::vec3 wdValCol;
+            if (isWdFocused) {
+                wdValStr = m_inputText;
+                if (showBlinkCursor) {
+                    wdValStr += "|";
+                }
+                wdValCol = glm::vec3(0.4f, 1.0f, 1.0f);
+            } else {
+                wdValStr = formatFloat1(curWave.nextWaveDelay) + "s";
+                wdValCol = glm::vec3(1.0f, 0.90f, 0.40f);
+            }
+            float twWdVal = textRenderer->CalculateTextWidth(wdValStr, fSub);
+            float wdValY = l.boxWaveDelayPos.y + (l.boxWaveDelaySize.y - fSub * 28.0f) * 0.5f + 2.0f;
+            textRenderer->RenderText(wdValStr, l.boxWaveDelayPos.x + (l.boxWaveDelaySize.x - twWdVal) * 0.5f, wdValY, fSub, wdValCol);
+
+            float twHdrP = textRenderer->CalculateTextWidth("+", fBtn * 1.1f);
+            textRenderer->RenderText("+", l.btnWaveDelayIncPos.x + (l.waveDelayNudgeSize.x - twHdrP) * 0.5f, hdrNudgeTextY, fBtn * 1.1f, glm::vec3(1.0f));
 
             float twAddPart = textRenderer->CalculateTextWidth("+ Добавить пачку", fBtn);
             textRenderer->RenderText("+ Добавить пачку", l.btnAddPartPos.x + (l.btnAddPartSize.x - twAddPart) * 0.5f, l.btnAddPartPos.y + (l.btnAddPartSize.y - fBtn * 28.0f) * 0.5f + 2.0f, fBtn, glm::vec3(0.9f, 1.0f, 0.9f));
@@ -1238,7 +1356,6 @@ void EditorWaveModal::render(SpriteRenderer* renderer, TextRenderer* textRendere
                 textRenderer->RenderText("В этой волне нет настроенных пачек.", l.colRightPos.x + 20.0f * scale, l.cardsStartY + 28.0f * scale, fSub * 1.1f, glm::vec3(0.7f));
                 textRenderer->RenderText("Нажмите '+ Добавить пачку' для настройки спавна мобов!", l.colRightPos.x + 20.0f * scale, l.cardsStartY + 54.0f * scale, fSub, glm::vec3(0.35f, 0.85f, 1.0f));
             } else {
-                bool showBlinkCursor = (m_cursorBlinkTimer < 0.53f);
 
                 for (int v = 0; v < l.maxVisibleParts; ++v) {
                     int pIdx = m_wavePartsScrollOffset + v;

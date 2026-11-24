@@ -15,7 +15,7 @@ public:
     static ShaderProgram* loadShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath);
     static ShaderProgram* getShader(const std::string& name);
 
-    static Texture2D* loadTexture(const std::string& name, const std::string& path);
+    static Texture2D* loadTexture(const std::string& name, const std::string& path, GLint filter = GL_LINEAR);
     static Texture2D* getTexture(const std::string& name);
     static bool hasTexture(const std::string& name);
     static Texture2D* getWhiteTexture();

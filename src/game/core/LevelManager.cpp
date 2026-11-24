@@ -572,6 +572,13 @@ LevelMapData LevelManager::loadLevelMap(const std::string& filepath) {
         if (j.contains("waves") && j["waves"].is_array()) {
             for (const auto& waveJson : j["waves"]) {
                 WaveConfig wave;
+                if (waveJson.contains("nextWaveDelay") && waveJson["nextWaveDelay"].is_number()) {
+                    wave.nextWaveDelay = std::max(0.0f, waveJson["nextWaveDelay"].get<float>());
+                } else if (waveJson.contains("waveDuration") && waveJson["waveDuration"].is_number()) {
+                    wave.nextWaveDelay = std::max(0.0f, waveJson["waveDuration"].get<float>());
+                } else {
+                    wave.nextWaveDelay = 12.0f;
+                }
                 if (waveJson.contains("parts") && waveJson["parts"].is_array()) {
                     for (const auto& partJson : waveJson["parts"]) {
                         WavePart part;
@@ -839,6 +846,7 @@ bool LevelManager::saveLevelMap(const std::string& filepath, const LevelMapData&
                 });
             }
             wavesJson.push_back({
+                { "nextWaveDelay", wave.nextWaveDelay },
                 { "parts", partsJson }
             });
         }
@@ -847,6 +855,7 @@ bool LevelManager::saveLevelMap(const std::string& filepath, const LevelMapData&
         // Если нет секции waves, добавим базовую волну для тестирования
         j["waves"] = json::array({
             {
+                { "nextWaveDelay", 12.0f },
                 { "parts", json::array({
                     {
                         { "type", "Basic" },

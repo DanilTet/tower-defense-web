@@ -1,5 +1,6 @@
 #include "EditorTileInfoOverlay.h"
 #include "EditorCamera.h"
+#include "../renderer/BackgroundRenderer.h"
 #include "../renderer/SpriteRenderer.h"
 #include "../renderer/TextRenderer.h"
 #include "../textures/Texture2D.h"
@@ -38,16 +39,16 @@ void EditorTileInfoOverlay::render(
     std::string typeName;
     switch (ct) {
         case CellType::Ground:
-            typeName = (params.background == "pipes_canal" || params.background == "channel") ? "Асфальт" : "Грунт";
+            typeName = BackgroundRenderer::getEditorGroundName(params.background);
             break;
         case CellType::Path:
             typeName = "Дорога";
             break;
         case CellType::Platform:
-            typeName = (params.background == "pipes_canal" || params.background == "channel") ? "Трава/Обочина" : ((params.background == "mine_entrance" || params.background == "mine") ? "Сланец" : "Платформа");
+            typeName = BackgroundRenderer::getEditorPlatformName(params.background);
             break;
         case CellType::Scenery:
-            typeName = (params.background == "mine_entrance" || params.background == "mine") ? "Ящики" : "Стена";
+            typeName = BackgroundRenderer::getEditorWallName(params.background);
             break;
         case CellType::Chasm:
             typeName = "Шурф";

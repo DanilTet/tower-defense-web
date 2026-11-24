@@ -12,6 +12,45 @@
 #include "../resources/ResourceManager.h"
 #include <iostream>
 #include <algorithm>
+#include <string>
+
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#ifdef APIENTRY
+#undef APIENTRY
+#endif
+#include <windows.h>
+#include <shellapi.h>
+#elif defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#else
+#include <cstdlib>
+#endif
+
+namespace {
+constexpr const char* kArtistTelegramUrl = "https://t.me/porisulkiotisa";
+
+void openUrlInBrowser(const char* url) {
+    if (!url) {
+        return;
+    }
+#ifdef _WIN32
+    ShellExecuteA(nullptr, "open", url, nullptr, nullptr, SW_SHOWNORMAL);
+#elif defined(__EMSCRIPTEN__)
+    std::string script = std::string("window.open('") + url + "', '_blank');";
+    emscripten_run_script(script.c_str());
+#else
+    std::string cmd = std::string("xdg-open '") + url + "' >/dev/null 2>&1 &";
+    int res = std::system(cmd.c_str());
+    (void)res;
+#endif
+}
+} // namespace
 
 MainMenuState::MainMenuState(GameStateManager& stateManager, int width, int height, std::shared_ptr<SpriteRenderer> renderer, TextRenderer* textRenderer)
     : m_stateManager(stateManager), m_width(width), m_height(height), m_renderer(renderer), m_textRenderer(textRenderer), m_mousePressedLastFrame(false), m_suppressClickUntilRelease(true) {
@@ -20,9 +59,12 @@ MainMenuState::MainMenuState(GameStateManager& stateManager, int width, int heig
 void MainMenuState::init() {
     std::cout << "[MainMenu] Initialized (resolution: " << m_width << "x" << m_height << ")" << std::endl;
     ResourceManager::loadTexture("uiBaseTexture", "res/textures/ui_space.png");
+    m_isArtCreditHovered = false;
 }
 
-void MainMenuState::cleanup() {}
+void MainMenuState::cleanup() {
+    m_isArtCreditHovered = false;
+}
 
 MainMenuState::MenuLayout MainMenuState::calculateLayout() const {
     MenuLayout layout;
@@ -49,6 +91,37 @@ MainMenuState::MenuLayout MainMenuState::calculateLayout() const {
     layout.exitBtnY = layout.startBtnY + 4.0f * btnSpacing;
 
     layout.titleY = layout.startBtnY - 70.0f * uiScale;
+
+    float scale = GetUIScale(m_width, m_height);
+    layout.creditFontScale = std::clamp(0.55f * scale, 0.38f, 0.72f);
+
+    std::string creditText = LOC("MENU_ART_CREDIT");
+    float creditTextW = 200.0f;
+    if (m_textRenderer != nullptr) {
+        creditTextW = m_textRenderer->CalculateTextWidth(creditText, layout.creditFontScale);
+    }
+
+    float creditPadX = std::clamp(12.0f * scale, 8.0f, 18.0f);
+    float creditPadY = std::clamp(6.0f * scale, 4.0f, 10.0f);
+    float creditW = creditTextW + creditPadX * 2.0f;
+    float creditH = layout.creditFontScale * 28.0f + creditPadY * 2.0f;
+    float bottomMargin = std::clamp(18.0f * scale, 10.0f, 28.0f);
+
+    float creditX = (static_cast<float>(m_width) - creditW) * 0.5f;
+    float creditY = static_cast<float>(m_height) - creditH - bottomMargin;
+#ifdef __EMSCRIPTEN__
+    float minCreditY = layout.settingsBtnY + layout.btnH + std::clamp(10.0f * scale, 6.0f, 16.0f);
+#else
+    float minCreditY = layout.exitBtnY + layout.btnH + std::clamp(10.0f * scale, 6.0f, 16.0f);
+#endif
+    if (creditY < minCreditY) {
+        creditY = minCreditY;
+    }
+
+    layout.creditRect = UIRect{ creditX, creditY, creditW, creditH };
+    layout.creditTextX = layout.creditRect.x + (layout.creditRect.width - creditTextW) * 0.5f;
+    layout.creditTextY = layout.creditRect.y + (layout.creditRect.height - layout.creditFontScale * 28.0f) * 0.5f + 2.0f;
+
     return layout;
 }
 
@@ -59,6 +132,9 @@ bool MainMenuState::isButtonClicked(double mouseX, double mouseY, float btnX, fl
 void MainMenuState::processInput(GLFWwindow* window, float dt) {
     double mouseX, mouseY;
     glfwGetCursorPos(window, &mouseX, &mouseY);
+
+    MenuLayout layout = calculateLayout();
+    m_isArtCreditHovered = layout.creditRect.contains(static_cast<float>(mouseX), static_cast<float>(mouseY));
 
     // Хоткей переключения Dev Mode: Ctrl + Shift + D
     bool ctrlDown = (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS);
@@ -90,8 +166,6 @@ void MainMenuState::processInput(GLFWwindow* window, float dt) {
 
     if (mouseState == GLFW_PRESS && !m_mousePressedLastFrame) {
         m_mousePressedLastFrame = true;
-
-        MenuLayout layout = calculateLayout();
 
         // если клик по старт гейм
         if (isButtonClicked(mouseX, mouseY, layout.btnX, layout.startBtnY, layout.btnW, layout.btnH)) {
@@ -129,8 +203,15 @@ void MainMenuState::processInput(GLFWwindow* window, float dt) {
         if (isButtonClicked(mouseX, mouseY, layout.btnX, layout.exitBtnY, layout.btnW, layout.btnH)) {
             std::cout << "[MainMenu] Clicked 'Exit' (mouse=" << mouseX << "," << mouseY << ") -> Closing game" << std::endl;
             glfwSetWindowShouldClose(window, true);
+            return;
         }
 #endif
+
+        if (layout.creditRect.contains(static_cast<float>(mouseX), static_cast<float>(mouseY))) {
+            std::cout << "[MainMenu] Clicked artist credit -> opening " << kArtistTelegramUrl << std::endl;
+            openUrlInBrowser(kArtistTelegramUrl);
+            return;
+        }
     }
     else if (mouseState == GLFW_RELEASE) {
         m_mousePressedLastFrame = false;
@@ -167,6 +248,15 @@ void MainMenuState::render() {
         std::string devBadge = "[ DEV MODE: ON ]";
         float dbw = m_textRenderer->CalculateTextWidth(devBadge, fDev);
         m_textRenderer->RenderText(devBadge, static_cast<float>(m_width) - dbw - 20.0f, 20.0f, fDev, glm::vec3(0.95f, 0.65f, 0.20f));
+    }
+
+    if (m_textRenderer != nullptr) {
+        std::string creditText = LOC("MENU_ART_CREDIT");
+        glm::vec3 creditColor(0.68f, 0.74f, 0.82f);
+        if (m_isArtCreditHovered) {
+            creditColor = glm::vec3(0.40f, 0.88f, 1.0f);
+        }
+        m_textRenderer->RenderText(creditText, layout.creditTextX, layout.creditTextY, layout.creditFontScale, creditColor);
     }
 
     m_renderer->endBatch(); // закрываем пакет

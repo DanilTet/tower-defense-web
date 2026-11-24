@@ -34,6 +34,11 @@ public:
 	int getEarlyCallBonus() const;
 	void triggerEarlyWave(PlayerStats* player = nullptr);
 
+	// Автопродолжение волн (Auto-Start Waves)
+	void toggleAutoStartWaves();
+	void setAutoStartWaves(bool enabled);
+	bool isAutoStartWaves() const { return m_autoStartWaves; }
+
 	// геттеры состояния
 	void setBountyRules(const std::map<std::string, std::vector<EnemyWaveBountyRule>>& rules) { m_bountyRules = rules; }
 	const std::map<std::string, std::vector<EnemyWaveBountyRule>>& getBountyRules() const { return m_bountyRules; }
@@ -47,18 +52,20 @@ public:
 	const std::map<std::string, std::vector<EnemyWaveBountyRule>>& getGlobalBounties() const { return m_bountyRules; }
 
 	int getCurrentWaveIndex() const { return m_currentWaveIndex; }
-	int getCurrentWaveNumber() const { return m_currentWaveIndex + 1; }
+	int getCurrentWaveNumber() const { return m_activeWaveNumber; }
 	int getTotalWaves() const { return static_cast<int>(m_waves.size()); }
 	bool isWaveActive() const { return m_isWaveActive; }
 	bool isGameStarted() const { return m_gameStarted; }
+	bool areAllEnemiesCleared() const { return m_noActiveEnemies; }
 	float getWaveCountdown() const { return m_waveCountdown; }
+	float getEffectiveWaveCountdown() const;
 	float getTimeBetweenWaves() const { return m_timeBetweenWaves; }
 
 	bool isAllWavesCompleted() const {
 		if (m_waves.empty()) {
 			return false;
 		}
-		return !m_isWaveActive && m_currentWaveIndex >= static_cast<int>(m_waves.size());
+		return !m_isWaveActive && m_noActiveEnemies && m_currentWaveIndex >= static_cast<int>(m_waves.size());
 	}
 	// Реестр поддерживаемых типов врагов
 	static const std::vector<std::string>& getRegisteredEnemyTypes() {
@@ -78,10 +85,14 @@ public:
 	void setGameStarted(bool started);
 
 private:
+	void finishSpawningCurrentWave();
+
 	std::vector<WaveConfig> m_waves;
 	std::map<std::string, std::vector<EnemyWaveBountyRule>> m_bountyRules;
-	bool m_isWaveActive; // флаг активна ли волна
-	int m_currentWaveIndex; // индекс текущей волны
+	bool m_isWaveActive; // идёт ли сейчас спавн пачек текущей волны
+	int m_currentWaveIndex; // индекс следующей волны для запуска (0-based)
+	int m_spawningWaveIndex = 0; // индекс волны, которая сейчас спавнится
+	int m_activeWaveNumber = 1;  // отображаемый номер текущей волны (1-based)
 
 	size_t m_currentPartIndex; // какая пачка щас идет
 	int m_enemiesSpawnedInCurrentPart; // количество врагов заспавненых из текущей пачки
@@ -89,8 +100,16 @@ private:
 
 	int m_currentSpawnerIndex = 0;
 
-	// Межволновая пауза и ранний старт (Фаза 4.2)
-	float m_timeBetweenWaves = 15.0f; // базовое время паузы между волнами (сек)
+	// Таймер после выхода последнего моба волны и ранний старт
+	static constexpr float DEFAULT_NEXT_WAVE_DELAY = 12.0f;
+	float m_timeBetweenWaves = DEFAULT_NEXT_WAVE_DELAY; // дефолтное время до следующей волны (сек)
 	float m_waveCountdown = 0.0f;    // оставшиеся секунды до следующей волны
+	bool m_countdownActive = false;  // запущен ли отсчёт до следующей волны
 	bool m_gameStarted = false;      // запущена ли игра (первая волна)
+	bool m_noActiveEnemies = true;   // нет ли живых врагов на карте
+
+	// Автопродолжение волн
+	static constexpr float AUTO_START_DELAY = 1.0f;
+	bool m_autoStartWaves = false;
+	float m_autoStartTimer = 0.0f;
 };

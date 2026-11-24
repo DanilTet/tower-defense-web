@@ -45,6 +45,8 @@ struct TowerStats {
 	std::string attackSound; // звук атаки
 
 	std::string textureId; // ID текстуры
+	float visualScale = 1.0f; // масштаб отрисовки спрайта относительно клетки
+	float muzzleOffset = 0.42f; // смещение точки дула от центра (в долях от размера спрайта башни)
 	glm::vec3 color; // цвет башни
 
 	// ефекты партиклы
@@ -103,6 +105,8 @@ private:
 	std::string m_attackSound;
 	std::string m_buildSound;
 	std::string m_textureId;
+	float m_visualScale = 1.0f;
+	float m_muzzleOffset = 0.42f;
 	glm::vec3 m_color;
 
 	std::string m_muzzleParticle;
@@ -130,6 +134,7 @@ private:
 	bool m_isPiston = false;
 	SpriteUV m_cachedTowerUV;
 	SpriteUV m_cachedBulletUV;
+	const Texture2D* m_cachedCustomTexture = nullptr;
 	const Texture2D* m_cachedWhiteTex = nullptr;
 	bool m_hasMuzzleParticle = false;
 	bool m_hasTrailParticle = false;

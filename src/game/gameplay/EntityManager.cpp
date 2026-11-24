@@ -268,9 +268,9 @@ void EntityManager::render(SpriteRenderer* renderer, const Texture2D* mainAtlas,
             }
         }
 
-        // Проход 5: хитбоксы (кроме Coal и Spark)
+        // Проход 5: хитбоксы (кроме Coal, Spark и Mercury)
         for (const Enemy* enemy : m_renderEnemyBuffer) {
-            if (!enemy->isCoal() && !enemy->isSpark()) {
+            if (!enemy->isCoal() && !enemy->isSpark() && !enemy->isMercury()) {
                 enemy->renderDebugHitbox(renderer, radiusTex, gameGrid);
             }
         }

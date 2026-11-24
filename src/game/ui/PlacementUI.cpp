@@ -1,6 +1,7 @@
 #include "PlacementUI.h"
 #include "renderer/SpriteRenderer.h"
 #include "textures/Texture2D.h"
+#include "resources/ResourceManager.h"
 #include "world/Grid.h"
 #include "core/ConfigManager.h"
 #include "gameplay/PlayerStats.h"
@@ -144,11 +145,24 @@ void PlacementUI::renderHologram(
         renderer->drawSprite(radiusTexture, radiusPos, radiusSize, 0.0f, holoColor);
     }
 
-    // вырезаем башню из атласа
-    std::string regionName = "tower_basic";
-    if (selectedTower == "Mercury") regionName = "tower_mercury";
-    else if (selectedTower == "Piston") regionName = "tower_piston";
-    SpriteUV towerUV = ConfigManager::getUV("main_atlas", regionName);
+    // выбираем текстуру башни (кастомный спрайт или регион из атласа)
+    const Texture2D* holoTex = mainAtlas;
+    SpriteUV towerUV;
+    glm::vec2 holoSize(cellSize);
+    if (!towerstats.textureId.empty() && towerstats.textureId != "towerTexture" && towerstats.textureId != "mainAtlas" && ResourceManager::hasTexture(towerstats.textureId)) {
+        holoTex = ResourceManager::getTexture(towerstats.textureId);
+        float vScale = 1.0f;
+        if (towerstats.visualScale > 0.0f) {
+            vScale = towerstats.visualScale;
+        }
+        holoSize = glm::vec2(cellSize * vScale);
+    }
+    else {
+        std::string regionName = "tower_basic";
+        if (selectedTower == "Mercury") regionName = "tower_mercury";
+        else if (selectedTower == "Piston") regionName = "tower_piston";
+        towerUV = ConfigManager::getUV("main_atlas", regionName);
+    }
 
     // угол отрисовки (для поршня поворачиваем спрайт согласно выбранному направлению)
     float drawAngle = 0.0f;
@@ -157,7 +171,8 @@ void PlacementUI::renderHologram(
     }
 
     // отрисовка самой башни
-    renderer->drawSprite(mainAtlas, cellPixelPos, glm::vec2(cellSize), drawAngle, holoColor, towerUV);
+    glm::vec2 holoPos = cellPixelPos + (glm::vec2(cellSize) - holoSize) * 0.5f;
+    renderer->drawSprite(holoTex, holoPos, holoSize, drawAngle, holoColor, towerUV);
 
     // выключаем свечение
     renderer->setAdditiveBlending(false);

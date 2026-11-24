@@ -1,4 +1,5 @@
 #include "EditorToolbarUI.h"
+#include "../../renderer/BackgroundRenderer.h"
 #include "../../renderer/SpriteRenderer.h"
 #include "../../renderer/TextRenderer.h"
 #include "../../textures/Texture2D.h"
@@ -206,12 +207,7 @@ void EditorToolbarUI::updateLayout(TextRenderer* textRenderer, const EditorConte
     std::string resetLabel = isCompact ? "[ Сброс ]" : "[ Сброс в Авто ]";
     float resetBtnW = getTextW(resetLabel, topFontScale) + (isCompact ? 10.0f : 14.0f);
 
-    std::string bgLabel;
-    if (isCompact) {
-        bgLabel = (ctx.background == "mine_entrance") ? "[ Шахта ]" : ((ctx.background == "pipes_canal") ? "[ Канал ]" : "[ Фон ]");
-    } else {
-        bgLabel = (ctx.background == "mine_entrance") ? "[ Фон: Шахта ]" : ((ctx.background == "pipes_canal") ? "[ Фон: Канал ]" : "[ Фон: Стандарт ]");
-    }
+    std::string bgLabel = BackgroundRenderer::getEditorToolbarBgLabel(ctx.background, isCompact);
     float bgBtnW = getTextW(bgLabel, topFontScale) + (isCompact ? 10.0f : 16.0f);
 
     std::string hudLabel = "[ HUD: Выкл ]";
@@ -381,10 +377,19 @@ void EditorToolbarUI::updateLayout(TextRenderer* textRenderer, const EditorConte
     size_t splitIndex2 = 0;
 
     if (m_currentCategory == PaletteCategory::Tiles) {
-        // Категория Tiles: Земля/Асфальт, Стена, Платформа/Трава, Дорога, Шурф, Ластик
-        std::string groundLabel = (ctx.background == "mine_entrance") ? "1:Грунт" : ((ctx.background == "pipes_canal") ? "1:Асфальт" : ("1:" + LOC("EDITOR_GROUND")));
-        std::string wallLabel = (ctx.background == "mine_entrance") ? "2:Ящики" : ("2:" + LOC("EDITOR_WALL"));
-        std::string platformLabel = (ctx.background == "mine_entrance") ? "3:Сланец" : ((ctx.background == "pipes_canal") ? "3:Трава/Обочина" : ("3:" + LOC("EDITOR_PLATFORM")));
+        // Категория Tiles: Земля/Асфальт/Штрек, Стена/Ящики/Киноварь, Платформа/Трава/Уступ, Дорога, Шурф, Ластик
+        std::string groundLabel = "1:" + LOC("EDITOR_GROUND");
+        if (ctx.background == "mine_entrance" || ctx.background == "mine" || BackgroundRenderer::isCinnabarMine(ctx.background) || ctx.background == "pipes_canal" || ctx.background == "channel") {
+            groundLabel = "1:" + BackgroundRenderer::getEditorGroundName(ctx.background);
+        }
+        std::string wallLabel = "2:" + LOC("EDITOR_WALL");
+        if (ctx.background == "mine_entrance" || ctx.background == "mine" || BackgroundRenderer::isCinnabarMine(ctx.background)) {
+            wallLabel = "2:" + BackgroundRenderer::getEditorWallName(ctx.background);
+        }
+        std::string platformLabel = "3:" + LOC("EDITOR_PLATFORM");
+        if (ctx.background == "mine_entrance" || ctx.background == "mine" || BackgroundRenderer::isCinnabarMine(ctx.background) || ctx.background == "pipes_canal" || ctx.background == "channel") {
+            platformLabel = "3:" + BackgroundRenderer::getEditorPlatformName(ctx.background);
+        }
         items.push_back({ groundLabel,     false, EditorBrush::Ground,    0, 0.0f });
         items.push_back({ wallLabel,       false, EditorBrush::Wall,      0, 0.0f });
         items.push_back({ platformLabel,   false, EditorBrush::Platform,  0, 0.0f });
@@ -708,8 +713,13 @@ void EditorToolbarUI::render(SpriteRenderer* renderer, TextRenderer* textRendere
             borderColor = glm::vec3(0.4f, 0.7f, 1.0f);
             btnBg = glm::vec3(0.14f, 0.20f, 0.28f);
         } else if (btn.actionId == 18) { // Background toggle
-            borderColor = glm::vec3(0.35f, 0.85f, 0.45f);
-            btnBg = glm::vec3(0.12f, 0.22f, 0.15f);
+            if (BackgroundRenderer::isCinnabarMine(ctx.background)) {
+                borderColor = glm::vec3(0.92f, 0.30f, 0.32f);
+                btnBg = glm::vec3(0.25f, 0.11f, 0.13f);
+            } else {
+                borderColor = glm::vec3(0.35f, 0.85f, 0.45f);
+                btnBg = glm::vec3(0.12f, 0.22f, 0.15f);
+            }
         } else if (btn.actionId == 19) { // Camera mode toggle
             if (ctx.cameraConfigMode) {
                 borderColor = glm::vec3(0.35f, 0.85f, 1.0f);

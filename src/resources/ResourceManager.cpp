@@ -21,7 +21,7 @@ ShaderProgram* ResourceManager::loadShader(const std::string& name, const std::s
 	return &insertedIt->second;
 }
 
-Texture2D* ResourceManager::loadTexture(const std::string& name, const std::string& path) {
+Texture2D* ResourceManager::loadTexture(const std::string& name, const std::string& path, GLint filter) {
 	auto it = m_textures.find(name);
 	if (it != m_textures.end()) {
 		return &it->second;
@@ -29,7 +29,7 @@ Texture2D* ResourceManager::loadTexture(const std::string& name, const std::stri
 
 	auto [insertedIt, success] = m_textures.emplace(name, Texture2D());
 
-	if (!insertedIt->second.load(path)) {
+	if (!insertedIt->second.load(path, filter)) {
 		std::cerr << "ResourceManager: Failed to load texture " << name << std::endl;
 		m_textures.erase(insertedIt);
 		return nullptr;

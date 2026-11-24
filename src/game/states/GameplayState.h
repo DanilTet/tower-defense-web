@@ -56,6 +56,7 @@ private:
 
     float m_timeScale = 1.0f;
     bool m_isPaused = false;
+    bool m_autoStartWaves = false;
 
     std::map<std::string, int> enemyKillCounts;
 
@@ -79,8 +80,10 @@ public:
     void cycleTimeScale();
     void setTimeScale(float scale);
     void togglePause();
+    void toggleAutoStartWaves();
     float getTimeScale() const { return m_timeScale; }
     bool isPaused() const { return m_isPaused; }
+    bool isAutoStartWaves() const { return m_autoStartWaves; }
 
     void startNextWave();
     void restartGame();

@@ -8,7 +8,8 @@ Enemy* TowerTargetingSystem::selectTarget(
     float rangePixels,
     TargetMode mode,
     const std::vector<std::unique_ptr<Enemy>>& enemies,
-    const Grid& grid)
+    const Grid& grid,
+    bool ignoreMercuryImmune)
 {
     CircleCollider towerCollider = { towerCenter, rangePixels };
 
@@ -20,6 +21,7 @@ Enemy* TowerTargetingSystem::selectTarget(
 
     for (const auto& enemy : enemies) {
         if (!enemy || enemy->isReachedEnd() || enemy->isDead() || enemy->isFalling()) continue;
+        if (ignoreMercuryImmune && enemy->isMercuryImmune()) continue;
 
         CircleCollider enemyCol = enemy->getCollider(grid);
         if (towerCollider.intersects(enemyCol)) {

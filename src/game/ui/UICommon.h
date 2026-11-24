@@ -80,13 +80,14 @@ struct UIRect {
 };
 
 struct TimeControlUI {
-    // Единый верхний правый HUD: Статистика (HP базы, Деньги, Волна) + Управление временем (||, 1x, 2x, 4x) + Кнопка волны
+    // Единый верхний правый HUD: Статистика (HP базы, Деньги, Волна) + Управление временем (||, 1x, 2x, 4x) + Авто-волна + Кнопка волны
     static constexpr float PANEL_W        = 400.0f;
     static constexpr float STATS_ROW_H    = 24.0f;
     static constexpr float ROW_GAP        = 5.0f;
     static constexpr float BTN_H          = 28.0f;
     static constexpr float BTN_GAP        = 4.0f;
     static constexpr float TIME_BTN_W     = 38.0f;
+    static constexpr float AUTO_BTN_W     = 54.0f;
     static constexpr float PANEL_PAD_X    = 8.0f;
     static constexpr float PANEL_PAD_Y    = 6.0f;
     // Полная высота панели: 6 + 24 + 5 + 28 + 6 = 69.0f
@@ -152,16 +153,27 @@ struct TimeControlUI {
         return { p0.x + (p0.width + BTN_GAP * scale) * 3.0f, p0.y, p0.width, p0.height };
     }
 
-    // Кнопка вызова волны (Early Wave Call) справа от 4x под индикатором волны
-    static UIRect getWaveButtonRect(int screenWidth, int screenHeight) {
+    // Кнопка-переключатель автопродолжения волн (Авто / AUTO) справа от 4x
+    static UIRect getAutoWaveButtonRect(int screenWidth, int screenHeight) {
         float scale = GetUIScale(screenWidth, screenHeight);
-        UIRect panel = getPanelRect(screenWidth, screenHeight);
         UIRect s4 = getSpeed4xButtonRect(screenWidth, screenHeight);
         float bx = s4.x + s4.width + BTN_GAP * scale;
         float by = s4.y;
+        float bw = AUTO_BTN_W * scale;
+        float bh = s4.height;
+        return { bx, by, bw, bh };
+    }
+
+    // Кнопка вызова волны (Early Wave Call) справа от кнопки Авто под индикатором волны
+    static UIRect getWaveButtonRect(int screenWidth, int screenHeight) {
+        float scale = GetUIScale(screenWidth, screenHeight);
+        UIRect panel = getPanelRect(screenWidth, screenHeight);
+        UIRect autoBtn = getAutoWaveButtonRect(screenWidth, screenHeight);
+        float bx = autoBtn.x + autoBtn.width + BTN_GAP * scale;
+        float by = autoBtn.y;
         float rightEdge = panel.x + panel.width - PANEL_PAD_X * scale;
         float bw = std::max(0.0f, rightEdge - bx);
-        float bh = s4.height;
+        float bh = autoBtn.height;
         return { bx, by, bw, bh };
     }
 

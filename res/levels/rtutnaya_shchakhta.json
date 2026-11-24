@@ -2064,6 +2064,7 @@
   },
   "waves": [
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 10,
@@ -2086,6 +2087,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 14,
@@ -2108,6 +2110,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 18,
@@ -2139,6 +2142,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 10,
@@ -2161,6 +2165,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 24,
@@ -2192,6 +2197,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 35,
@@ -2214,6 +2220,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 18,
@@ -2245,6 +2252,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 45,
@@ -2276,6 +2284,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 30,
@@ -2298,6 +2307,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 55,
@@ -2329,6 +2339,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 40,
@@ -2369,6 +2380,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 75,
@@ -2391,6 +2403,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 35,
@@ -2422,6 +2435,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 75,
@@ -2453,6 +2467,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 45,
@@ -2484,6 +2499,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 95,
@@ -2515,6 +2531,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 85,
@@ -2555,6 +2572,7 @@
       ]
     },
     {
+      "nextWaveDelay": 12.0,
       "parts": [
         {
           "count": 60,

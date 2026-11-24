@@ -40,7 +40,8 @@ void GameplayInputHandler::processInput(
     std::function<void()> onNextWaveRequested,
     std::function<void()> onTogglePauseRequested,
     std::function<void()> onCycleSpeedRequested,
-    std::function<void(float)> onSetSpeedRequested)
+    std::function<void(float)> onSetSpeedRequested,
+    std::function<void()> onToggleAutoWaveRequested)
 {
     if (isKeyJustPressed(window, GLFW_KEY_ESCAPE)) {
         if (onPauseRequested) onPauseRequested();
@@ -147,6 +148,16 @@ void GameplayInputHandler::processInput(
             if (s4Rect.contains(static_cast<float>(mouseX), static_cast<float>(mouseY))) {
                 if (onSetSpeedRequested) onSetSpeedRequested(4.0f);
                 else if (onCycleSpeedRequested) onCycleSpeedRequested();
+                return;
+            }
+
+            UIRect autoRect = TimeControlUI::getAutoWaveButtonRect(windowWidth, windowHeight);
+            if (autoRect.contains(static_cast<float>(mouseX), static_cast<float>(mouseY))) {
+                if (onToggleAutoWaveRequested) {
+                    onToggleAutoWaveRequested();
+                } else {
+                    world.toggleAutoStartWaves();
+                }
                 return;
             }
 

@@ -197,6 +197,9 @@ void GameplayState::processInput(GLFWwindow* window, float dt) {
         },
         [this](float speed) {
             setTimeScale(speed);
+        },
+        [this]() {
+            toggleAutoStartWaves();
         }
     );
 }
@@ -351,11 +354,21 @@ void GameplayState::togglePause() {
     m_isPaused = !m_isPaused;
 }
 
+void GameplayState::toggleAutoStartWaves() {
+    m_autoStartWaves = !m_autoStartWaves;
+    if (m_world && m_world->waveManager) {
+        m_world->waveManager->setAutoStartWaves(m_autoStartWaves);
+    }
+}
+
 
 void GameplayState::restartGame() {
     enemyKillCounts.clear();
     m_world = std::make_unique<GameWorld>();
     m_world->loadLevel(m_currentLevelPath, this->width, this->height);
+    if (m_world->waveManager) {
+        m_world->waveManager->setAutoStartWaves(m_autoStartWaves);
+    }
     m_selectedTowerType = "";
     m_selectedTowerOnMap = nullptr;
     if (m_buildPanel) {
@@ -417,6 +430,7 @@ bool GameplayState::loadSavedGame(const std::string& saveName) {
     if (m_world->waveManager) {
         m_world->waveManager->setCurrentWaveIndex(loadedWaveIndex);
         m_world->waveManager->setGameStarted(loadedGameStarted);
+        m_world->waveManager->setAutoStartWaves(m_autoStartWaves);
     }
 
     setupUI();

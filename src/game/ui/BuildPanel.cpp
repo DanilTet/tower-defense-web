@@ -1,9 +1,11 @@
 #include "BuildPanel.h"
+#include <algorithm>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "renderer/SpriteRenderer.h"
 #include "renderer/TextRenderer.h"
 #include "textures/Texture2D.h"
+#include "resources/ResourceManager.h"
 #include "core/ConfigManager.h"
 #include "gameplay/PlayerStats.h"
 #include "UICommon.h"
@@ -124,11 +126,25 @@ void Buildpanel::BuildRenderUI(
         float iconY = cardY + 18.0f * scale;
         glm::vec3 drawColor = canAfford ? towerstats.color : glm::vec3(0.35f, 0.35f, 0.38f);
 
-        std::string regionName = "tower_basic";
-        if (currentType == "Mercury") regionName = "tower_mercury";
-        else if (currentType == "Piston") regionName = "tower_piston";
-        SpriteUV towerUV = ConfigManager::getUV("main_atlas", regionName);
-        renderer->drawSprite(mainAtlas, glm::vec2(iconX, iconY), glm::vec2(iconSize), 0.0f, drawColor, towerUV);
+        const Texture2D* iconTex = mainAtlas;
+        SpriteUV towerUV;
+        float finalIconSize = iconSize;
+        if (!towerstats.textureId.empty() && towerstats.textureId != "towerTexture" && towerstats.textureId != "mainAtlas" && ResourceManager::hasTexture(towerstats.textureId)) {
+            iconTex = ResourceManager::getTexture(towerstats.textureId);
+            float vScale = std::clamp(towerstats.visualScale, 1.0f, 1.18f);
+            finalIconSize = iconSize * vScale;
+        }
+        else {
+            std::string regionName = "tower_basic";
+            if (currentType == "Mercury") regionName = "tower_mercury";
+            else if (currentType == "Piston") regionName = "tower_piston";
+            towerUV = ConfigManager::getUV("main_atlas", regionName);
+        }
+        glm::vec2 iconPos(
+            iconX + (iconSize - finalIconSize) * 0.5f,
+            iconY + (iconSize - finalIconSize) * 0.5f
+        );
+        renderer->drawSprite(iconTex, iconPos, glm::vec2(finalIconSize), 0.0f, drawColor, towerUV);
     }
 
     renderer->flush();

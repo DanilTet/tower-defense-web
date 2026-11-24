@@ -14,7 +14,8 @@ public:
         float rangePixels,
         TargetMode mode,
         const std::vector<std::unique_ptr<Enemy>>& enemies,
-        const Grid& grid
+        const Grid& grid,
+        bool ignoreMercuryImmune = false
     );
 
     static bool updateAim(

@@ -1,0 +1,784 @@
+{
+  "allowedTowers": [
+    "Basic",
+    "Mercury"
+  ],
+  "background": "cinnabar_mine",
+  "enemyBountyRules": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ]
+  },
+  "enemyGlobalBounties": {
+    "Coal": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Mercury": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ],
+    "Spark": [
+      {
+        "fromWave": 1,
+        "reward": 1,
+        "rewardStep": 1,
+        "toWave": 99
+      }
+    ]
+  },
+  "hasSidePockets": false,
+  "isCampaign": false,
+  "map": {
+    "allowedTowers": [
+      "Basic",
+      "Mercury"
+    ],
+    "bases": [
+      {
+        "enableFadeOut": true,
+        "id": 0,
+        "visibleInGame": false,
+        "x": 19,
+        "y": 5
+      }
+    ],
+    "cellSize": 99.41666412353516,
+    "enemyBountyRules": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ]
+    },
+    "enemyGlobalBounties": {
+      "Coal": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Mercury": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ],
+      "Spark": [
+        {
+          "fromWave": 1,
+          "reward": 1,
+          "rewardStep": 1,
+          "toWave": 99
+        }
+      ]
+    },
+    "height": 12,
+    "layout": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "maxUpgradeTier": 3,
+    "noBuildMask": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "offsetX": 285.8333740234375,
+    "offsetY": 62.0,
+    "outerCells": [
+      {
+        "noBuild": false,
+        "type": 3,
+        "x": 19,
+        "y": -1
+      }
+    ],
+    "spawners": [
+      {
+        "enableFadeIn": true,
+        "groupId": -1,
+        "targetBaseIndex": -1,
+        "visibleInGame": false,
+        "x": 0,
+        "y": 5
+      }
+    ],
+    "startingHealth": 20,
+    "startingMoney": 50,
+    "towerMaxTiers": {
+      "Basic": 3,
+      "Mercury": 3,
+      "Piston": 1
+    },
+    "width": 20
+  },
+  "maxUpgradeTier": 3,
+  "name": "Киноварь",
+  "startingHealth": 20,
+  "startingMoney": 50,
+  "tags": [
+    "Тест"
+  ],
+  "towerMaxTiers": {
+    "Basic": 3,
+    "Mercury": 3,
+    "Piston": 1
+  },
+  "waves": [
+    {
+      "nextWaveDelay": 12.0,
+      "parts": [
+        {
+          "count": 10,
+          "delayAfter": 2.0,
+          "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
+          "type": "Spark"
+        },
+        {
+          "count": 5,
+          "delayAfter": 2.0,
+          "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
+          "type": "Mercury_Large"
+        }
+      ]
+    },
+    {
+      "nextWaveDelay": 12.0,
+      "parts": [
+        {
+          "count": 10,
+          "delayAfter": 2.0,
+          "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "nextWaveDelay": 12.0,
+      "parts": [
+        {
+          "count": 10,
+          "delayAfter": 2.0,
+          "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "nextWaveDelay": 12.0,
+      "parts": [
+        {
+          "count": 10,
+          "delayAfter": 2.0,
+          "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    },
+    {
+      "nextWaveDelay": 12.0,
+      "parts": [
+        {
+          "count": 10,
+          "delayAfter": 2.0,
+          "interval": 0.800000011920929,
+          "reward": -1,
+          "reward_step": -1,
+          "spawner_id": -1,
+          "type": "Spark"
+        }
+      ]
+    }
+  ]
+}

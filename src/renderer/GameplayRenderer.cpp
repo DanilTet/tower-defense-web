@@ -6,6 +6,7 @@
 #include "../textures/Texture2D.h"
 #include "../resources/ResourceManager.h"
 #include "../game/core/ConfigManager.h"
+#include "../game/core/LocalizationManager.h"
 #include "../game/world/GameWorld.h"
 #include "../game/ui/BuildPanel.h"
 #include "../game/ui/PlacementUI.h"
@@ -15,6 +16,7 @@
 #include "../game/ui/UICommon.h"
 #include "../game/entities/Tower.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <cmath>
 #include <vector>
 
 static std::string getPistonDirectionName(float angle) {
@@ -37,14 +39,13 @@ void GameplayRenderer::loadTextures() {
     ResourceManager::loadTexture("enemyAtlas", "res/textures/enemyAtlas.png");
     ResourceManager::loadTexture("transitionsAtlas", "res/textures/Frame 1 (2).png");
     ResourceManager::loadTexture("towerTexture", "res/textures/test_sprite.png");
+    ResourceManager::loadTexture("classic_tower", "res/textures/towers/classic_tower.png", GL_NEAREST);
     ResourceManager::loadTexture("grassTexture", "res/textures/spr_grass_02.png");
     ResourceManager::loadTexture("radiusTexture", "res/textures/radius2.png");
     ResourceManager::loadTexture("arrowTexture", "res/textures/pathArrow.png");
     ResourceManager::loadTexture("particleTexture", "res/textures/particle.png");
     ResourceManager::loadTexture("uiBaseTexture", "res/textures/ui_space.png");
-    ResourceManager::loadTexture("mercury_slime_large", "res/textures/enemies/mercury_slime_large.png");
-    ResourceManager::loadTexture("mercury_slime_medium", "res/textures/enemies/mercury_slime_medium.png");
-    ResourceManager::loadTexture("mercury_slime_small", "res/textures/enemies/mercury_slime_small.png");
+    ResourceManager::loadTexture("mercury_drop", "res/textures/enemies/mercury_drop.png", GL_NEAREST);
     ResourceManager::loadTexture("enemy_coal", "res/textures/enemies/coal.png");
     ResourceManager::loadTexture("enemy_coal_glow", "res/textures/enemies/coal_glow.png");
     ResourceManager::loadTexture("enemy_spark", "res/textures/enemies/spark.png");
@@ -231,7 +232,8 @@ void GameplayRenderer::renderFrame(
     bool hasPath = !world.paths.empty();
     glm::vec2 currentPanelPos = buildPanel.getUIPanelPos(windowWidth, windowHeight);
 
-    if (world.grid) {
+    bool isMouseOverHUD = TimeControlUI::getPanelRect(windowWidth, windowHeight).contains(mousePos.x, mousePos.y);
+    if (world.grid && !isMouseOverHUD) {
         PlacementPathContext pathContext;
         pathContext.pathfinder = world.pathfinder.get();
         pathContext.spawners = &world.spawners;
@@ -323,6 +325,7 @@ void GameplayRenderer::renderFrame(
         UIRect s1Rect    = TimeControlUI::getSpeed1xButtonRect(windowWidth, windowHeight);
         UIRect s2Rect    = TimeControlUI::getSpeed2xButtonRect(windowWidth, windowHeight);
         UIRect s4Rect    = TimeControlUI::getSpeed4xButtonRect(windowWidth, windowHeight);
+        UIRect autoRect  = TimeControlUI::getAutoWaveButtonRect(windowWidth, windowHeight);
         UIRect waveRect  = TimeControlUI::getWaveButtonRect(windowWidth, windowHeight);
 
         UIRect hpBadge    = TimeControlUI::getStatsBadgeRect(0, windowWidth, windowHeight);
@@ -333,16 +336,27 @@ void GameplayRenderer::renderFrame(
         bool s1Hov    = s1Rect.contains(mousePos.x, mousePos.y);
         bool s2Hov    = s2Rect.contains(mousePos.x, mousePos.y);
         bool s4Hov    = s4Rect.contains(mousePos.x, mousePos.y);
+        bool autoHov  = autoRect.contains(mousePos.x, mousePos.y);
         bool waveHov  = waveRect.contains(mousePos.x, mousePos.y);
 
         bool is1x = (!isPaused && timeScale < 1.5f);
         bool is2x = (!isPaused && timeScale >= 1.5f && timeScale < 3.0f);
         bool is4x = (!isPaused && timeScale >= 3.0f);
 
+        bool isAutoWave = false;
+        if (world.waveManager) {
+            isAutoWave = world.waveManager->isAutoStartWaves();
+        }
+
         bool canCallWave = world.waveManager ? world.waveManager->canCallEarlyWave() : false;
         bool isBeforeStart = world.waveManager ? (!world.waveManager->isGameStarted() && !world.waveManager->isWaveActive()) : false;
         bool isAllWavesDone = world.waveManager ? world.waveManager->isAllWavesCompleted() : false;
         int bonus = world.waveManager ? world.waveManager->getEarlyCallBonus() : 0;
+        float waveCountdown = 0.0f;
+        if (world.waveManager) {
+            waveCountdown = world.waveManager->getEffectiveWaveCountdown();
+        }
+        int countdownSec = static_cast<int>(std::ceil(waveCountdown));
 
         // --- Фоновая плашка панели (тёмный графит с рамкой и верхним акцентом) ---
         m_renderer->drawSprite(m_whiteTexture,
@@ -429,7 +443,24 @@ void GameplayRenderer::renderFrame(
             glm::vec3(1.00f, 0.52f, 0.14f),
             glm::vec3(0.16f, 0.17f, 0.22f));
 
-        // Кнопка раннего вызова волны (справа от 4x под индикатором волны)
+        // Автопродолжение волн (Авто / AUTO) — яркая зелёная подсветка при включении, приглушённая при выключении
+        if (isAutoWave) {
+            glm::vec3 autoActiveBg = glm::vec3(0.10f, 0.32f, 0.16f);
+            if (autoHov) {
+                autoActiveBg = glm::vec3(0.14f, 0.38f, 0.20f);
+            }
+            drawBtn(autoRect, true, autoHov,
+                autoActiveBg,
+                glm::vec3(0.32f, 0.96f, 0.52f),
+                glm::vec3(0.14f, 0.15f, 0.20f));
+        } else {
+            drawBtn(autoRect, false, autoHov,
+                glm::vec3(0.10f, 0.32f, 0.16f),
+                glm::vec3(0.32f, 0.96f, 0.52f),
+                glm::vec3(0.14f, 0.15f, 0.20f));
+        }
+
+        // Кнопка раннего вызова волны (справа от кнопки Авто под индикатором волны)
         if (isAllWavesDone) {
             // Все волны завершены: неактивна (затемнена)
             drawBtn(waveRect, false, false,
@@ -491,6 +522,33 @@ void GameplayRenderer::renderFrame(
         renderBtnLabel("2x",                  s2Rect,   is2x,       glm::vec3(0.40f, 0.88f, 1.00f));
         renderBtnLabel("4x",                  s4Rect,   is4x,       glm::vec3(1.00f, 0.68f, 0.28f));
 
+        // --- Текст кнопки автопродолжения волн ---
+        std::string autoBtnText = LOC("HUD_AUTO_WAVE");
+        glm::vec3 autoBtnTextColor;
+        if (isAutoWave) {
+            if (autoHov) {
+                autoBtnTextColor = glm::vec3(0.88f, 1.00f, 0.92f);
+            } else {
+                autoBtnTextColor = glm::vec3(0.55f, 1.00f, 0.68f);
+            }
+        } else {
+            if (autoHov) {
+                autoBtnTextColor = glm::vec3(0.78f, 0.82f, 0.90f);
+            } else {
+                autoBtnTextColor = glm::vec3(0.50f, 0.54f, 0.64f);
+            }
+        }
+
+        float autoFs = std::clamp(0.40f * scale, 0.28f, 0.54f);
+        float autoTw = m_textRenderer->CalculateTextWidth(autoBtnText, autoFs);
+        if (autoTw > autoRect.width - 6.0f * scale) {
+            autoFs = autoFs * ((autoRect.width - 6.0f * scale) / autoTw);
+            autoTw = m_textRenderer->CalculateTextWidth(autoBtnText, autoFs);
+        }
+        float autoTx = autoRect.x + (autoRect.width - autoTw) * 0.5f;
+        float autoTy = autoRect.y + (autoRect.height - autoFs * 28.0f) * 0.5f + 2.0f;
+        m_textRenderer->RenderText(autoBtnText, autoTx, autoTy, autoFs, autoBtnTextColor);
+
         // --- Текст кнопки вызова волны ---
         std::string waveBtnText;
         glm::vec3 waveBtnTextColor;
@@ -499,10 +557,28 @@ void GameplayRenderer::renderFrame(
             waveBtnTextColor = glm::vec3(0.40f, 0.44f, 0.52f);
         } else if (isBeforeStart) {
             waveBtnText = "Старт";
-            waveBtnTextColor = waveHov ? glm::vec3(1.0f, 1.0f, 1.0f) : glm::vec3(0.60f, 1.00f, 0.70f);
+            if (waveHov) {
+                waveBtnTextColor = glm::vec3(1.0f, 1.0f, 1.0f);
+            } else {
+                waveBtnTextColor = glm::vec3(0.60f, 1.00f, 0.70f);
+            }
         } else if (canCallWave) {
-            waveBtnText = "Волна (+" + std::to_string(bonus) + "$)";
-            waveBtnTextColor = waveHov ? glm::vec3(1.0f, 1.0f, 1.0f) : glm::vec3(0.98f, 0.92f, 0.40f);
+            bool allCleared = true;
+            if (world.waveManager) {
+                allCleared = world.waveManager->areAllEnemiesCleared();
+            }
+            if (!allCleared && countdownSec > 0 && bonus > 0) {
+                waveBtnText = "Ранняя +" + std::to_string(bonus) + "$ (" + std::to_string(countdownSec) + "с)";
+            } else if (!allCleared && countdownSec > 0) {
+                waveBtnText = "Ранняя (" + std::to_string(countdownSec) + "с)";
+            } else {
+                waveBtnText = "След. волна";
+            }
+            if (waveHov) {
+                waveBtnTextColor = glm::vec3(1.0f, 1.0f, 1.0f);
+            } else {
+                waveBtnTextColor = glm::vec3(0.98f, 0.92f, 0.40f);
+            }
         } else {
             waveBtnText = "Волна идет...";
             waveBtnTextColor = glm::vec3(0.45f, 0.48f, 0.56f);

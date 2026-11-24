@@ -229,5 +229,89 @@
     "endSize": 0.8,
     "lifeTime": 0.2,
     "spawnCount": 1
+  },
+  "MercuryMuzzle": {
+    "velocityDir": [
+      0.0,
+      -150.0
+    ],
+    "velocityVariation": 65.0,
+    "startColor": [
+      0.86,
+      0.92,
+      0.98
+    ],
+    "endColor": [
+      0.42,
+      0.56,
+      0.68
+    ],
+    "startSize": 5.0,
+    "endSize": 1.2,
+    "lifeTime": 0.22,
+    "spawnCount": 7
+  },
+  "MercuryTrail": {
+    "velocityDir": [
+      0.0,
+      0.0
+    ],
+    "velocityVariation": 14.0,
+    "startColor": [
+      0.88,
+      0.94,
+      1.0
+    ],
+    "endColor": [
+      0.45,
+      0.58,
+      0.70
+    ],
+    "startSize": 4.2,
+    "endSize": 1.0,
+    "lifeTime": 0.20,
+    "spawnCount": 1
+  },
+  "MercurySplash": {
+    "velocityDir": [
+      0.0,
+      0.0
+    ],
+    "velocityVariation": 120.0,
+    "startColor": [
+      0.88,
+      0.94,
+      1.0
+    ],
+    "endColor": [
+      0.38,
+      0.54,
+      0.66
+    ],
+    "startSize": 5.5,
+    "endSize": 1.5,
+    "lifeTime": 0.42,
+    "spawnCount": 14
+  },
+  "MercurySplatter": {
+    "velocityDir": [
+      0.0,
+      0.0
+    ],
+    "velocityVariation": 105.0,
+    "startColor": [
+      0.90,
+      0.95,
+      1.0
+    ],
+    "endColor": [
+      0.45,
+      0.55,
+      0.65
+    ],
+    "startSize": 5.5,
+    "endSize": 1.5,
+    "lifeTime": 0.65,
+    "spawnCount": 14
   }
 }

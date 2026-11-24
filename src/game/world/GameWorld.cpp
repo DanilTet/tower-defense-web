@@ -1,4 +1,5 @@
 #include "GameWorld.h"
+#include "../../renderer/BackgroundRenderer.h"
 #include "../entities/Enemy.h"
 #include "../ui/BuildPanel.h"
 #include "../ui/UICommon.h"
@@ -30,7 +31,7 @@ bool GameWorld::loadLevel(const std::string& levelPath, int windowWidth, int win
         float topMargin = TimeControlUI::getTopMargin(windowWidth, windowHeight);
         grid->updateCellSize(windowWidth, windowHeight, bottomBarHeight, topMargin);
     }
-    grid->setHasSidePockets(levelData.hasSidePockets || currentBackground == "mine_entrance");
+    grid->setHasSidePockets(levelData.hasSidePockets || BackgroundRenderer::usesSidePocketsByDefault(currentBackground));
 
     if (!levelData.layout.empty()) {
         for (int y = 0; y < levelData.gridHeight; ++y) {
@@ -196,7 +197,7 @@ void GameWorld::resize(int windowWidth, int windowHeight) {
             float topMargin = TimeControlUI::getTopMargin(windowWidth, windowHeight);
             grid->updateCellSize(windowWidth, windowHeight, bottomBarHeight, topMargin);
         }
-        grid->setHasSidePockets(levelData.hasSidePockets || currentBackground == "mine_entrance");
+        grid->setHasSidePockets(levelData.hasSidePockets || BackgroundRenderer::usesSidePocketsByDefault(currentBackground));
         minecartManager.updateCellSize(grid->getCellSize(), grid->getOffset());
 
         for (const auto& enemy : entityManager->getEnemies()) {
@@ -268,6 +269,19 @@ void GameWorld::triggerEarlyWave() {
     if (waveManager && waveManager->canCallEarlyWave()) {
         waveManager->triggerEarlyWave(&playerStats);
     }
+}
+
+void GameWorld::toggleAutoStartWaves() {
+    if (waveManager) {
+        waveManager->toggleAutoStartWaves();
+    }
+}
+
+bool GameWorld::isAutoStartWaves() const {
+    if (waveManager) {
+        return waveManager->isAutoStartWaves();
+    }
+    return false;
 }
 
 glm::vec2 GameWorld::getWorldCamCenter() const {

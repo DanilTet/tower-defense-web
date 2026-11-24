@@ -16,7 +16,8 @@ enum class WaveFocusedField {
     None,
     Count,
     Interval,
-    Delay
+    Delay,
+    NextWaveDelay
 };
 
 struct WaveModalLayout {
@@ -51,6 +52,11 @@ struct WaveModalLayout {
     float rHeaderH = 36.0f;
     glm::vec2 btnAddPartPos{0.0f};
     glm::vec2 btnAddPartSize{0.0f};
+    glm::vec2 btnWaveDelayDecPos{0.0f};
+    glm::vec2 boxWaveDelayPos{0.0f};
+    glm::vec2 boxWaveDelaySize{0.0f};
+    glm::vec2 btnWaveDelayIncPos{0.0f};
+    glm::vec2 waveDelayNudgeSize{0.0f};
 
     // Batches list
     float cardsStartY = 0.0f;

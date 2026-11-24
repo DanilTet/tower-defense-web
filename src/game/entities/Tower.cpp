@@ -76,7 +76,13 @@ void Tower::render(SpriteRenderer* renderer, const Texture2D* atlasTexture, cons
 	}
 
 	// рисуем (добавляем 90 градусов, чтобы выровнять текстуру дула/бойка с направлением)
-	renderer->drawSprite(atlasTexture, drawPos, size, m_angle + 90.0f, color, m_cachedTowerUV);
+	const Texture2D* towerTex = atlasTexture;
+	if (m_cachedCustomTexture != nullptr) {
+		towerTex = m_cachedCustomTexture;
+	}
+	glm::vec2 drawSize = size * m_visualScale;
+	glm::vec2 centeredDrawPos = drawPos + (size - drawSize) * 0.5f;
+	renderer->drawSprite(towerTex, centeredDrawPos, drawSize, m_angle + 90.0f, color, m_cachedTowerUV);
 
 	// Для T3 Поршня ("Шипованный боёк") отрисовываем стальные шипы на передней кромке ударной плиты
 	if (m_isPiston && m_currentLevel >= 3) {
@@ -249,7 +255,8 @@ void Tower::update(float dt, const std::vector<std::unique_ptr<Enemy>>& enemies,
 
 	// Для остальных башен (Basic, Mercury) — классический поиск цели и плавное наведение
 	float currentPixelRange = m_range * cellSize;
-	Enemy* bestTarget = TowerTargetingSystem::selectTarget(towerCenter, currentPixelRange, m_targetMode, enemies, grid);
+	const bool isMercuryTower = (m_type == "Mercury");
+	Enemy* bestTarget = TowerTargetingSystem::selectTarget(towerCenter, currentPixelRange, m_targetMode, enemies, grid, isMercuryTower);
 
 	if (bestTarget != nullptr) {
 		glm::vec2 enemyCenter = bestTarget->getCollider(grid).center;
@@ -257,19 +264,30 @@ void Tower::update(float dt, const std::vector<std::unique_ptr<Enemy>>& enemies,
 
 		if (isAimed) {
 			if (m_shotTimer <= 0.0f) {
+				float angleRad = glm::radians(m_angle);
+				glm::vec2 shootDirection = glm::vec2(std::cos(angleRad), std::sin(angleRad));
+				float barrelTipDist = cellSize * m_visualScale * m_muzzleOffset;
+				glm::vec2 barrelTipPos = towerCenter + shootDirection * barrelTipDist;
+
+				float projSpawnDist = barrelTipDist;
+				float distToEnemy = glm::length(enemyCenter - towerCenter);
+				if (projSpawnDist > distToEnemy) {
+					projSpawnDist = distToEnemy;
+				}
+				glm::vec2 projectileSpawnPos = towerCenter + shootDirection * projSpawnDist;
+
 				Projectile* freeProj = entityManager.getFreeProjectile();
 				if (freeProj) {
 					freeProj->setParticleEffects(m_hasTrailParticle, m_trailProps, m_hasImpactParticle, m_impactProps);
 					freeProj->setVisuals(m_cachedBulletUV, m_bulletBaseSize);
-					freeProj->init(towerCenter, m_angle, m_bulletSpeed, m_damage, bestTarget->getId(), m_splashRadius, currentPixelRange);
+					freeProj->init(projectileSpawnPos, m_angle, m_bulletSpeed, m_damage, bestTarget->getId(), m_splashRadius, currentPixelRange);
 					freeProj->setStatusEffects(m_slowDuration, m_slowPercent, m_poisonDuration, m_poisonInterval, m_poisonDamagePerTick);
+					freeProj->setMercuryDamage(isMercuryTower);
 				}
 
 				if (m_hasMuzzleParticle) {
 					ParticleEmitterProps muzzle = m_muzzleProps;
-					float angleRad = glm::radians(m_angle);
-					glm::vec2 shootDirection = glm::vec2(std::cos(angleRad), std::sin(angleRad));
-					muzzle.position = towerCenter + shootDirection * (cellSize * 0.4f);
+					muzzle.position = barrelTipPos;
 					float force = glm::length(muzzle.velocityDir);
 					muzzle.velocityDir = shootDirection * force;
 					particleSystem.emit(muzzle, muzzle.spawnCount, false);
@@ -337,6 +355,18 @@ void Tower::applyStats(const TowerStats& stats) {
 	m_attackSound = stats.attackSound;
 	m_buildSound = stats.buildSound;
 	m_textureId = stats.textureId;
+	if (stats.visualScale > 0.0f) {
+		m_visualScale = stats.visualScale;
+	}
+	else {
+		m_visualScale = 1.0f;
+	}
+	if (stats.muzzleOffset >= 0.0f) {
+		m_muzzleOffset = stats.muzzleOffset;
+	}
+	else {
+		m_muzzleOffset = 0.42f;
+	}
 	m_color = stats.color;
 	m_muzzleParticle = stats.muzzleParticle;
 	m_trailParticle = stats.trailParticle;
@@ -352,14 +382,21 @@ void Tower::applyStats(const TowerStats& stats) {
 	m_pistonStats = stats.piston;
 
 	// Предвычисление UV и свойств частиц, чтобы не искать их каждый кадр
-	std::string towerRegion = "tower_basic";
-	if (m_type == "Mercury") {
-		towerRegion = "tower_mercury";
+	if (!m_textureId.empty() && m_textureId != "towerTexture" && m_textureId != "mainAtlas" && ResourceManager::hasTexture(m_textureId)) {
+		m_cachedCustomTexture = ResourceManager::getTexture(m_textureId);
+		m_cachedTowerUV = SpriteUV();
 	}
-	else if (m_isPiston) {
-		towerRegion = "tower_piston";
+	else {
+		m_cachedCustomTexture = nullptr;
+		std::string towerRegion = "tower_basic";
+		if (m_type == "Mercury") {
+			towerRegion = "tower_mercury";
+		}
+		else if (m_isPiston) {
+			towerRegion = "tower_piston";
+		}
+		m_cachedTowerUV = ConfigManager::getUV("main_atlas", towerRegion);
 	}
-	m_cachedTowerUV = ConfigManager::getUV("main_atlas", towerRegion);
 
 	std::string bulletRegion = m_bulletTextureId;
 	if (bulletRegion == "bulletBasic") {

@@ -63,6 +63,16 @@ public:
         const std::vector<glm::ivec2>* baseCells = nullptr
     );
 
+    // Метаданные пресетов фона (единый источник правды для мира и редактора)
+    static bool isCinnabarMine(const std::string& backgroundType);
+    static bool usesSidePocketsByDefault(const std::string& backgroundType);
+    static std::string nextBackgroundPreset(const std::string& currentBackground);
+    static std::string getBackgroundToast(const std::string& backgroundType);
+    static std::string getEditorToolbarBgLabel(const std::string& backgroundType, bool isCompact);
+    static std::string getEditorGroundName(const std::string& backgroundType);
+    static std::string getEditorWallName(const std::string& backgroundType);
+    static std::string getEditorPlatformName(const std::string& backgroundType);
+
 private:
     struct MinePortalGeom {
         float mouthX;
@@ -140,6 +150,35 @@ private:
     );
 
     static void renderMineEntranceForeground(
+        SpriteRenderer* renderer,
+        const Texture2D* whiteTexture,
+        const Grid* grid,
+        float screenWidth,
+        float screenHeight,
+        const BackgroundViewRect& viewRect,
+        const std::vector<glm::ivec2>* baseCells
+    );
+
+    static void renderCinnabarMineSubstrate(
+        SpriteRenderer* renderer,
+        const Texture2D* whiteTexture,
+        const Grid* grid,
+        float screenWidth,
+        float screenHeight,
+        const BackgroundViewRect& viewRect
+    );
+
+    static void renderCinnabarMineEnvironment(
+        SpriteRenderer* renderer,
+        const Texture2D* whiteTexture,
+        const Grid* grid,
+        float screenWidth,
+        float screenHeight,
+        const BackgroundViewRect& viewRect,
+        const std::vector<glm::ivec2>* baseCells
+    );
+
+    static void renderCinnabarMineForeground(
         SpriteRenderer* renderer,
         const Texture2D* whiteTexture,
         const Grid* grid,

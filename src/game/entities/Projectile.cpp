@@ -27,6 +27,12 @@ void Projectile::init(glm::vec2 startPos, float startAngle, float speed, int dam
     m_turnSpeed = 540.0f;
     m_originPoint = startPos;
     m_searchRadius = searchRadius;
+    m_slowDuration = 0.0f;
+    m_slowPercent = 0.0f;
+    m_poisonDuration = 0.0f;
+    m_poisonInterval = 0.5f;
+    m_poisonDamagePerTick = 0;
+    m_isMercuryDamage = false;
     m_isActive = true; // и вот тут спящий бизнесмен просыпается
 
     float rad = glm::radians(m_angle);
@@ -70,6 +76,9 @@ bool Projectile::tryHitEnemy(Enemy* enemy, const glm::vec2& prevPos, const glm::
             if (!otherEnemy || otherEnemy->isDead() || otherEnemy->isReachedEnd() || otherEnemy->isFalling()) {
                 continue;
             }
+            if (m_isMercuryDamage && otherEnemy->isMercuryImmune()) {
+                continue;
+            }
             if (explosion.intersects(otherEnemy->getCollider(grid))) {
                 otherEnemy->takeDamage(m_damage);
                 if (m_slowDuration > 0.0f && m_slowPercent > 0.0f) {
@@ -82,12 +91,14 @@ bool Projectile::tryHitEnemy(Enemy* enemy, const glm::vec2& prevPos, const glm::
         }
     }
     else {
-        enemy->takeDamage(m_damage);
-        if (m_slowDuration > 0.0f && m_slowPercent > 0.0f) {
-            enemy->applySlow(m_slowDuration, m_slowPercent);
-        }
-        if (m_poisonDuration > 0.0f && m_poisonDamagePerTick > 0) {
-            enemy->applyPoison(m_poisonDuration, m_poisonInterval, m_poisonDamagePerTick);
+        if (!(m_isMercuryDamage && enemy->isMercuryImmune())) {
+            enemy->takeDamage(m_damage);
+            if (m_slowDuration > 0.0f && m_slowPercent > 0.0f) {
+                enemy->applySlow(m_slowDuration, m_slowPercent);
+            }
+            if (m_poisonDuration > 0.0f && m_poisonDamagePerTick > 0) {
+                enemy->applyPoison(m_poisonDuration, m_poisonInterval, m_poisonDamagePerTick);
+            }
         }
     }
 
